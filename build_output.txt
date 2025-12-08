@@ -1,0 +1,109 @@
+
+> nestar-next@2.2.0 build
+> next build
+
+  ▲ Next.js 14.2.0
+
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./pages/_admin/community/index.tsx
+54:5  Warning: React Hook useEffect has a missing dependency: 'getAllBoardArticlesByAdminRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./pages/_admin/cs/faq.tsx
+93:13  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/_admin/cs/inquiry.tsx
+82:13  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/_admin/cs/notice.tsx
+93:13  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/_admin/index.tsx
+12:5  Warning: React Hook useEffect has a missing dependency: 'router'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./pages/_admin/properties/index.tsx
+54:5  Warning: React Hook useEffect has a missing dependency: 'getAllPropertiesByAdminRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./pages/_admin/users/index.tsx
+56:5  Warning: React Hook useEffect has a missing dependency: 'getAllMembersRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+233:13  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/about/index.tsx
+18:18  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+34:11  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+41:11  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+53:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+83:6  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+88:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+97:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+106:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+115:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+121:33  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+123:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+124:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+125:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+126:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+127:8  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+140:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+143:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/account/join.tsx
+52:5  Warning: React Hook useCallback has a missing dependency: 'router'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+62:5  Warning: React Hook useCallback has a missing dependency: 'router'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+76:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+172:20  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+183:20  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/agent/detail.tsx
+125:5  Warning: React Hook useEffect has missing dependencies: 'commentInquiry' and 'getCommentsRefetch'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+130:5  Warning: React Hook useEffect has a missing dependency: 'getCommentsRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+190:7  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+197:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+230:10  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/agent/index.tsx
+66:5  Warning: React Hook useEffect has a missing dependency: 'searchFilter'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+81:5  Warning: React Hook useEffect has a missing dependency: 'getAgentsRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+179:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/community/detail.tsx
+113:5  Warning: React Hook useEffect has a missing dependency: 'searchFilter'. Either include it or remove the dependency array. You can also do a functional update 'setSearchFilter(s => ...)' if you only need 'searchFilter' in the 'setSearchFilter' call.  react-hooks/exhaustive-deps
+258:9  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+258:9  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+322:13  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+410:15  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/community/index.tsx
+64:5  Warning: React Hook useEffect has missing dependencies: 'query?.articleCategory' and 'router'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+113:10  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+113:10  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+187:14  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+207:14  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+227:14  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+247:14  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./pages/mypage/index.tsx
+43:5  Warning: React Hook useEffect has a missing dependency: 'router'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./pages/property/detail.tsx
+141:5  Warning: React Hook useEffect has missing dependencies: 'commentInquiry' and 'insertCommentData'. Either include them or remove the dependency array. You can also do a functional update 'setCommentInquiry(c => ...)' if you only need 'commentInquiry' in the 'setCommentInquiry' call.  react-hooks/exhaustive-deps
+147:5  Warning: React Hook useEffect has a missing dependency: 'getCommentsRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+263:12  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+266:12  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+269:12  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+297:10  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+307:13  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+333:12  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+333:12  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+450:11  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+540:11  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+540:11  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+549:12  Warning: passHref is missing. See: https://nextjs.org/docs/messages/link-passhref  @next/next/link-passhref
+
+./pages/property/index.tsx
+65:5  Warning: React Hook useEffect has a missing dependency: 'searchFilter.page'. Either include it or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setCurrentPage' needs the current value of 'searchFilter.page'.  react-hooks/exhaustive-deps
+180:11  Warning: Do not use <img>. Use Image from 'next/image' instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules

@@ -1,0 +1,985 @@
+#pc-wrap {
+	.homepage {
+		position: relative;
+		width: 100%;
+		height: auto;
+	}
+
+	.hero-section {
+		min-height: auto;
+		background: linear-gradient(135deg, #f5f7fa 0%, #e8edf2 100%);
+		display: flex;
+		align-items: center;
+		padding: 60px 20px;
+		position: relative;
+		flex-direction: column;
+		padding-bottom: 80px;
+
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+			width: 100%;
+		}
+
+		.hero-content {
+			display: flex;
+			margin-top: 100px;
+			align-items: center;
+			justify-content: space-between;
+			gap: 60px;
+		}
+
+		.hero-left {
+			flex: 1;
+			max-width: 600px;
+			position: relative;
+			z-index: 2;
+
+			h1 {
+				font-size: 3.5rem;
+				font-weight: 800;
+				color: #1a1a1a;
+				line-height: 1.2;
+				margin-bottom: 24px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			p {
+				font-size: 1.15rem;
+				color: #666;
+				line-height: 1.8;
+				margin-bottom: 36px;
+				font-family: 'Poppins', sans-serif;
+			}
+		}
+
+		.cta-button {
+			background: #ff4500;
+			color: white;
+			padding: 16px 42px;
+			font-size: 1.1rem;
+			font-weight: 600;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			display: inline-block;
+			text-decoration: none;
+			font-family: 'Poppins', sans-serif;
+
+			&:hover {
+				background: #e63e00;
+				transform: translateY(-2px);
+				box-shadow: 0 10px 25px rgba(255, 69, 0, 0.3);
+			}
+		}
+
+		.hero-right {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			min-width: 0;
+		}
+
+		.shoe-swiper {
+			width: 600px;
+			height: 600px;
+			position: relative;
+
+			.swiper-slide {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+
+		.shoe-container {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #eaf4fe;
+			border-radius: 50%;
+
+			.shoe-image {
+				width: 100%;
+				height: auto;
+				max-width: 550px;
+				animation: float 3s ease-in-out infinite;
+				filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+			}
+
+			.price-tag {
+				position: absolute;
+				top: 30%;
+				left: 10%;
+				transform: translateY(-50%);
+				display: flex;
+				align-items: center;
+				z-index: 10;
+
+				.ping-circle {
+					width: 14px;
+					height: 14px;
+					background: #e63e00;
+					border-radius: 50%;
+					position: relative;
+					flex-shrink: 0;
+					animation: pingPulse 2s ease-out infinite;
+
+					&::before {
+						content: '';
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						width: 100%;
+						height: 100%;
+						background: rgba(230, 62, 0, 0.4);
+						border-radius: 50%;
+						transform: translate(-50%, -50%);
+						animation: pulse 2s ease-out infinite;
+					}
+				}
+
+				.price-line {
+					width: 0;
+					height: 1px;
+					background: #e63e00;
+					margin: 0;
+					animation: lineExpand 0.8s ease-out 0.3s forwards;
+				}
+
+				.price-value {
+					background: #e63e00;
+					padding: 8px 20px;
+					border-radius: 6px;
+					font-weight: 700;
+					font-size: 1.1rem;
+					color: white;
+					font-family: 'Poppins', sans-serif;
+					white-space: nowrap;
+					margin-left: 0;
+					opacity: 0;
+					transform: translateX(-10px);
+					animation: priceSlideIn 0.5s ease-out 1.1s forwards;
+					letter-spacing: 0.5px;
+				}
+			}
+		}
+
+		// Customizing Swiper Pagination - Centered at bottom of hero section
+		.swiper-pagination {
+			position: absolute !important;
+			bottom: -60px !important;
+			left: 50% !important;
+			transform: translateX(-50%) !important;
+			width: auto !important;
+			display: flex !important;
+			justify-content: center !important;
+			gap: 8px;
+			z-index: 10;
+		}
+
+		.swiper-pagination-bullet {
+			width: 14px;
+			height: 14px;
+			background: #d1d5db;
+			opacity: 1;
+			margin: 0 !important;
+			transition: all 0.4s ease;
+			cursor: pointer;
+
+			&-active {
+				background: #1a1a1a;
+				width: 14px;
+				height: 14px;
+				border-radius: 50%;
+			}
+		}
+
+		// Responsive Styles
+		@media (max-width: 1024px) {
+			.hero-content {
+				flex-direction: column;
+				text-align: center;
+			}
+
+			.hero-left {
+				max-width: 100%;
+
+				h1 {
+					font-size: 2.8rem;
+				}
+			}
+
+			.hero-right {
+				width: 100%;
+			}
+
+			.shoe-swiper {
+				width: 100%;
+				max-width: 500px;
+				height: 500px;
+			}
+		}
+
+		@media (max-width: 768px) {
+			padding: 40px 20px;
+
+			.hero-left {
+				h1 {
+					font-size: 2.2rem;
+				}
+
+				p {
+					font-size: 1rem;
+				}
+			}
+
+			.shoe-swiper {
+				height: 400px;
+			}
+
+			.shoe-container {
+				.price-tag {
+					.price-value {
+						font-size: 0.9rem;
+						padding: 5px 12px;
+					}
+				}
+			}
+		}
+
+		@media (max-width: 480px) {
+			.hero-left h1 {
+				font-size: 1.8rem;
+			}
+
+			.shoe-swiper {
+				height: 320px;
+			}
+
+			.cta-button {
+				padding: 14px 32px;
+				font-size: 1rem;
+			}
+
+			.shoe-container {
+				.price-tag {
+					.price-value {
+						font-size: 0.85rem;
+						padding: 4px 10px;
+					}
+				}
+			}
+		}
+	}
+
+	// Statistics Section
+	.statistics-section {
+		background: #fff;
+		padding: 60px 20px;
+		border-top: 1px solid #e5e7eb;
+		border-bottom: 1px solid #e5e7eb;
+
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+			width: 100%;
+		}
+
+		.statistics-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 40px;
+		}
+
+		.stat-item {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+			padding: 20px;
+			transition: transform 0.3s ease;
+
+			&:hover {
+				transform: translateY(-5px);
+			}
+		}
+
+		.stat-icon {
+			width: 60px;
+			height: 60px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+
+			svg {
+				font-size: 40px;
+				color: #e63e00;
+			}
+		}
+
+		.stat-content {
+			flex: 1;
+
+			h3 {
+				font-size: 0.95rem;
+				font-weight: 700;
+				color: #1a1a1a;
+				margin: 0 0 4px 0;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			p {
+				font-size: 0.85rem;
+				color: #666;
+				margin: 0;
+				font-family: 'Poppins', sans-serif;
+			}
+		}
+
+		@media (max-width: 1024px) {
+			.statistics-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 30px;
+			}
+		}
+
+		@media (max-width: 640px) {
+			padding: 40px 20px;
+
+			.statistics-grid {
+				grid-template-columns: 1fr;
+				gap: 20px;
+			}
+
+			.stat-item {
+				padding: 15px;
+			}
+
+			.stat-icon {
+				width: 50px;
+				height: 50px;
+
+				svg {
+					font-size: 32px;
+				}
+			}
+
+			.stat-content {
+				h3 {
+					font-size: 0.85rem;
+				}
+
+				p {
+					font-size: 0.75rem;
+				}
+			}
+		}
+	}
+
+	// About Section
+	.about-section {
+		background: #fff;
+		padding: 100px 20px;
+		position: relative;
+		overflow: hidden;
+
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+			width: 100%;
+		}
+
+		.about-content {
+			position: relative;
+			min-height: 600px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 60px;
+		}
+
+		.about-images {
+			position: relative;
+			width: 500px;
+			height: 500px;
+			flex-shrink: 0;
+		}
+
+		.shoe-item {
+			position: absolute;
+			background: #f5f7fa;
+			border-radius: 20px;
+			padding: 20px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+			transition: all 0.4s ease;
+
+			&:hover {
+				transform: scale(1.15);
+				box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+				z-index: 5;
+			}
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+				display: block;
+			}
+		}
+
+		// Center shoe (largest)
+		.shoe-3 {
+			top: 50%;
+			left: 20%;
+			transform: translate(-50%, -50%);
+			width: 320px;
+			height: 320px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			z-index: 2;
+			animation: none;
+
+			&:hover {
+				transform: translate(-50%, -50%) scale(1.1);
+			}
+		}
+
+		// Orbit container for rotating shoes - tighter orbit
+		.shoe-orbit {
+			position: absolute;
+			top: 50%;
+			left: 20%;
+			width: 320px;
+			height: 320px;
+			margin-left: -160px;
+			margin-top: -160px;
+			animation: rotateOrbit 15s linear forwards;
+		}
+
+		// Position shoes in a circle around center - evenly distributed
+		.shoe-orbit .shoe-1 {
+			position: absolute;
+			top: -40px;
+			left: 50%;
+			margin-left: -45px;
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: #2a2a2a;
+		}
+
+		.shoe-orbit .shoe-2 {
+			position: absolute;
+			top: 25px;
+			right: -25px;
+			width: 95px;
+			height: 95px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #f5f7fa 0%, #e3e8ef 100%);
+		}
+
+		.shoe-orbit .shoe-4 {
+			position: absolute;
+			top: 50%;
+			right: -40px;
+			margin-top: -45px;
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: #e0e0e0;
+		}
+
+		.shoe-orbit .shoe-5 {
+			position: absolute;
+			bottom: 25px;
+			right: -25px;
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: #f0f0f0;
+		}
+
+		.shoe-orbit .shoe-6 {
+			position: absolute;
+			bottom: -40px;
+			left: 50%;
+			margin-left: -47px;
+			width: 95px;
+			height: 95px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+		}
+
+		.shoe-orbit .shoe-7 {
+			position: absolute;
+			top: 50%;
+			left: -40px;
+			margin-top: -45px;
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background: #e8e8e8;
+		}
+
+		.about-text {
+			position: relative;
+			z-index: 10;
+			text-align: left;
+			max-width: 500px;
+			flex: 1;
+
+			h2 {
+				font-size: 2.8rem;
+				font-weight: 800;
+				color: #1a1a1a;
+				margin-bottom: 20px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			p {
+				font-size: 1rem;
+				color: #808080;
+				line-height: 1.8;
+				margin-bottom: 30px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			.about-button {
+				background: transparent;
+				color: #e63e00;
+				padding: 14px 36px;
+				font-size: 1rem;
+				font-weight: 600;
+				border: 2px solid #e63e00;
+				border-radius: 8px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				font-family: 'Poppins', sans-serif;
+
+				&:hover {
+					background: #e63e00;
+					color: white;
+					transform: translateY(-2px);
+					box-shadow: 0 8px 20px rgba(230, 62, 0, 0.3);
+				}
+			}
+		}
+
+		@media (max-width: 1024px) {
+			padding: 80px 20px;
+
+			.about-content {
+				flex-direction: column;
+				text-align: center;
+				min-height: auto;
+			}
+
+			.about-images {
+				width: 400px;
+				height: 400px;
+			}
+
+			.shoe-orbit {
+				width: 320px;
+				height: 320px;
+			}
+
+			.shoe-3 {
+				width: 180px;
+				height: 180px;
+			}
+
+			.shoe-1,
+			.shoe-2,
+			.shoe-4,
+			.shoe-5,
+			.shoe-6,
+			.shoe-7 {
+				width: 85px !important;
+				height: 85px !important;
+			}
+
+			.about-text {
+				max-width: 100%;
+
+				h2 {
+					font-size: 2.2rem;
+				}
+
+				p {
+					font-size: 0.95rem;
+				}
+			}
+		}
+
+		@media (max-width: 768px) {
+			padding: 60px 20px;
+
+			.about-images {
+				width: 350px;
+				height: 350px;
+			}
+
+			.shoe-orbit {
+				width: 280px;
+				height: 280px;
+			}
+
+			.shoe-3 {
+				width: 150px;
+				height: 150px;
+			}
+
+			.shoe-1,
+			.shoe-2,
+			.shoe-4,
+			.shoe-5,
+			.shoe-6,
+			.shoe-7 {
+				width: 70px !important;
+				height: 70px !important;
+				padding: 12px;
+			}
+
+			.about-text {
+				h2 {
+					font-size: 1.9rem;
+				}
+
+				p {
+					font-size: 0.9rem;
+				}
+
+				.about-button {
+					padding: 12px 28px;
+					font-size: 0.95rem;
+				}
+			}
+		}
+
+		@media (max-width: 480px) {
+			.about-images {
+				width: 280px;
+				height: 280px;
+			}
+
+			.shoe-orbit {
+				width: 220px;
+				height: 220px;
+			}
+
+			.shoe-3 {
+				width: 120px;
+				height: 120px;
+			}
+
+			.shoe-1,
+			.shoe-2,
+			.shoe-4,
+			.shoe-5,
+			.shoe-6,
+			.shoe-7 {
+				width: 55px !important;
+				height: 55px !important;
+				padding: 8px;
+			}
+
+			.about-text {
+				h2 {
+					font-size: 1.6rem;
+				}
+			}
+		}
+	}
+
+	// Latest Shoes Section
+	.latest-section {
+		background: #fff;
+		padding: 100px 20px;
+		position: relative;
+
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+			width: 100%;
+		}
+
+		.latest-header {
+			text-align: center;
+			margin-bottom: 60px;
+
+			h2 {
+				font-size: 2.8rem;
+				font-weight: 800;
+				color: #1a1a1a;
+				margin-bottom: 16px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			p {
+				font-size: 1rem;
+				color: #808080;
+				line-height: 1.8;
+				font-family: 'Poppins', sans-serif;
+			}
+		}
+
+		.latest-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 30px;
+		}
+
+		.shoe-card {
+			background: #fff;
+			border-radius: 12px;
+			overflow: hidden;
+			transition: all 0.3s ease;
+			position: relative;
+			opacity: 0;
+			transform: translateY(60px);
+
+			&:hover {
+				transform: translateY(-10px);
+				box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+			}
+
+			.sale-badge {
+				position: absolute;
+				top: 16px;
+				left: 16px;
+				background: #e63e00;
+				color: white;
+				padding: 6px 16px;
+				border-radius: 20px;
+				font-size: 0.85rem;
+				font-weight: 600;
+				z-index: 2;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			.shoe-image-container {
+				background: #f5f7fa;
+				padding: 40px 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 250px;
+				position: relative;
+
+				.shoe-image {
+					width: 100%;
+					max-width: 200px;
+					height: auto;
+					object-fit: contain;
+					transition: transform 0.3s ease;
+				}
+			}
+
+			&:hover .shoe-image {
+				transform: scale(1.1);
+			}
+
+			.shoe-info {
+				padding: 24px;
+				text-align: left;
+
+				h3 {
+					font-size: 1.25rem;
+					font-weight: 700;
+					color: #1a1a1a;
+					margin-bottom: 8px;
+					font-family: 'Poppins', sans-serif;
+				}
+
+				.brand {
+					font-size: 0.9rem;
+					color: #999;
+					margin-bottom: 12px;
+					font-family: 'Poppins', sans-serif;
+				}
+
+				.price {
+					font-size: 1.1rem;
+					font-weight: 700;
+					color: #e63e00;
+					font-family: 'Poppins', sans-serif;
+				}
+			}
+		}
+
+		// Staggered slide-up animation for each card
+		.shoe-card-1 {
+			animation: slideUpFromBottom 0.8s ease-out 0.2s forwards;
+		}
+
+		.shoe-card-2 {
+			animation: slideUpFromBottom 0.8s ease-out 0.4s forwards;
+		}
+
+		.shoe-card-3 {
+			animation: slideUpFromBottom 0.8s ease-out 0.6s forwards;
+		}
+
+		.shoe-card-4 {
+			animation: slideUpFromBottom 0.8s ease-out 0.8s forwards;
+		}
+
+		@media (max-width: 1024px) {
+			padding: 80px 20px;
+
+			.latest-header {
+				margin-bottom: 50px;
+
+				h2 {
+					font-size: 2.2rem;
+				}
+			}
+
+			.latest-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 25px;
+			}
+		}
+
+		@media (max-width: 640px) {
+			padding: 60px 20px;
+
+			.latest-header {
+				margin-bottom: 40px;
+
+				h2 {
+					font-size: 1.9rem;
+				}
+
+				p {
+					font-size: 0.9rem;
+				}
+			}
+
+			.latest-grid {
+				grid-template-columns: 1fr;
+				gap: 20px;
+			}
+
+			.shoe-card {
+				.shoe-image-container {
+					min-height: 200px;
+					padding: 30px 15px;
+				}
+
+				.shoe-info {
+					padding: 20px;
+
+					h3 {
+						font-size: 1.1rem;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Animations
+@keyframes float {
+
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+
+	50% {
+		transform: translateY(-25px);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		width: 100%;
+		height: 100%;
+		opacity: 1;
+	}
+
+	100% {
+		width: 300%;
+		height: 300%;
+		opacity: 0;
+	}
+}
+
+@keyframes pingPulse {
+
+	0%,
+	100% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+@keyframes lineExpand {
+	0% {
+		width: 0;
+	}
+
+	100% {
+		width: 100px;
+	}
+}
+
+@keyframes priceSlideIn {
+	0% {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes floatSlow {
+
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+
+	50% {
+		transform: translateY(-15px);
+	}
+}
+
+@keyframes rotateOrbit {
+	0% {
+		transform: translate(-50%, -50%) rotate(-0deg);
+	}
+
+	100% {
+		transform: translate(-50%, -50%) rotate(-360deg);
+	}
+}
+
+@keyframes slideUpFromBottom {
+	0% {
+		opacity: 0;
+		transform: translateY(60px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

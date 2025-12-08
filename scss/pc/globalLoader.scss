@@ -1,0 +1,224 @@
+/* Page Loader Overlay */
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Text Container - Always stays in CENTER */
+    .text-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        white-space: nowrap;
+        will-change: transform;
+
+        /* Move to left - stays centered vertically */
+        &.move-left {
+            animation: moveToLeftSmooth 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Exit upward - disappear to top */
+        &.exit-up {
+            animation: exitUpwardFast 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+    }
+
+    .professional-text {
+        font-size: 48px;
+        font-weight: 300;
+        color: #fff;
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(50px);
+        will-change: transform, opacity;
+
+        &.appear {
+            animation: slideUpSmooth 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        &.hide-up {
+            animation: hideUpwardFast 0.5s cubic-bezier(0.6, 0, 1, 0.4) forwards;
+        }
+    }
+
+    .shoe-selling {
+        font-size: 48px;
+        font-weight: 700;
+        color: #ff3333;
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(50px);
+        will-change: transform, opacity;
+        gap: 90px;
+
+        &.appear {
+            animation: slideUpSmooth 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.15s;
+        }
+
+        &.hide-up {
+            animation: hideUpwardFast 0.5s cubic-bezier(0.6, 0, 1, 0.4) forwards;
+        }
+    }
+
+    .platform-text {
+        font-size: 48px;
+        font-weight: 300;
+        color: #fff;
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(50px);
+        will-change: transform, opacity;
+        gap: 90px;
+
+        &.appear {
+            animation: slideUpSmooth 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.3s;
+        }
+
+        &.hide {
+            animation: hideUpwardFast 0.5s cubic-bezier(0.6, 0, 1, 0.4) forwards;
+        }
+    }
+
+    /* Logo Container with Red Wipe Effect */
+    .logo-container {
+        position: absolute;
+        opacity: 0;
+        will-change: opacity, transform;
+
+        &.show {
+            animation: fadeInLogo 0.5s ease forwards;
+        }
+
+        &.hide {
+            animation: logoExitUpFast 0.5s cubic-bezier(0.6, 0, 1, 0.4) forwards;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-text {
+            font-size: 100px;
+            font-weight: 300;
+            color: #fff;
+            letter-spacing: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Red Wipe Box */
+        .red-wipe {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff3333;
+            z-index: 2;
+            will-change: width, right;
+
+            &.animate {
+                animation: wipeLeftSmooth 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .professional-text,
+        .shoe-selling,
+        .platform-text {
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-size: 50px;
+            letter-spacing: 4px;
+        }
+    }
+}
+
+/** KEYFRAMES **/
+@keyframes moveToLeftSmooth {
+    to {
+        left: 25%;
+        transform: translate(0, -50%);
+    }
+}
+
+@keyframes exitUpwardFast {
+    to {
+        top: -30%;
+        opacity: 0;
+    }
+}
+
+@keyframes slideUpSmooth {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hideUpwardFast {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+@keyframes fadeInLogo {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes wipeLeftSmooth {
+    0% {
+        width: 100%;
+        right: 0;
+    }
+
+    100% {
+        width: 0%;
+        right: 0;
+    }
+}
+
+@keyframes logoExitUpFast {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-60px);
+    }
+}
