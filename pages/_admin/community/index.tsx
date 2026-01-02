@@ -8,7 +8,8 @@ import Divider from '@mui/material/Divider';
 import Select from '@mui/material/Select';
 import { TabContext } from '@mui/lab';
 import TablePagination from '@mui/material/TablePagination';
-import CommunityArticleList from '../../../libs/components/admin/community/CommunityArticleList';
+import CommunityCardGrid from '../../../libs/components/admin/community/CommunityCardGrid';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { AllBoardArticlesInquiry } from '../../../libs/types/board-article/board-article.input';
 import { BoardArticle } from '../../../libs/types/board-article/board-article';
 import { BoardArticleCategory, BoardArticleStatus } from '../../../libs/enums/board-article.enum';
@@ -18,6 +19,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { REMOVE_BOARD_ARTICLE_BY_ADMIN, UPDATE_BOARD_ARTICLE_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { GET_ALL_BOARD_ARTICLES_BY_ADMIN } from '../../../apollo/admin/query';
 import { T } from '../../../libs/types/common';
+import { Button } from '@mui/material';
 
 const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 	const [anchorEl, setAnchorEl] = useState<any>([]);
@@ -163,31 +165,58 @@ const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 				<Box component={'div'} sx={{ width: '100%', typography: 'body1' }}>
 					<TabContext value={value}>
 						<Box component={'div'}>
-							<List className={'tab-menu'}>
+							<List className={'tab-menu'} sx={{ display: 'flex', flexDirection: 'row', gap: '10px', mb: 3 }}>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'ALL')}
 									value="ALL"
-									className={value === 'ALL' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'ALL' ? '#1a1f36' : 'transparent',
+										color: value === 'ALL' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'ALL' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									All
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'ACTIVE')}
 									value="ACTIVE"
-									className={value === 'ACTIVE' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'ACTIVE' ? '#1a1f36' : 'transparent',
+										color: value === 'ACTIVE' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'ACTIVE' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Active
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'DELETE')}
 									value="DELETE"
-									className={value === 'DELETE' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'DELETE' ? '#1a1f36' : 'transparent',
+										color: value === 'DELETE' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'DELETE' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Delete
 								</ListItem>
 							</List>
 							<Divider />
-							<Stack className={'search-area'} sx={{ m: '24px' }}>
+							<Stack className={'search-area'} sx={{ m: '24px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 								<Select sx={{ width: '160px', mr: '20px' }} value={searchType}>
 									<MenuItem value={'ALL'} onClick={() => searchTypeHandler('ALL')}>
 										ALL
@@ -198,10 +227,20 @@ const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 										</MenuItem>
 									))}
 								</Select>
+
+								<Button
+									variant="contained"
+									color="primary"
+									startIcon={<AddCircleRoundedIcon />}
+									sx={{ height: '56px', borderRadius: '8px', textTransform: 'none', fontWeight: 'bold' }}
+									onClick={() => console.log('Add Article Clicked')}
+								>
+									Add Article
+								</Button>
 							</Stack>
 							<Divider />
 						</Box>
-						<CommunityArticleList
+						<CommunityCardGrid
 							articles={articles}
 							anchorEl={anchorEl}
 							menuIconClickHandler={menuIconClickHandler}

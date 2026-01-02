@@ -15,6 +15,9 @@ interface PropertyCardProps {
 	deletePropertyHandler?: any;
 	memberPage?: boolean;
 	updatePropertyHandler?: any;
+	likePropertyHandler?: any;
+	myFavorites?: boolean;
+	recentlyVisited?: boolean;
 }
 
 export const PropertyCard = (props: PropertyCardProps) => {

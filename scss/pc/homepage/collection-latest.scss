@@ -1,0 +1,255 @@
+.collection-latest-section {
+    background: #fff;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+
+    .container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .section-header {
+        margin-left: 450px;
+        text-align: center;
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin: 0;
+        }
+    }
+
+    .collection-content {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+    }
+
+    // Sidebar
+    .category-sidebar {
+        width: 280px;
+        flex-shrink: 0;
+        background: #f8f9fa;
+        border-radius: 12px;
+        overflow: hidden;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                padding: 18px 25px;
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: #1a1a1a;
+                cursor: pointer;
+                border-bottom: 1px solid #e9ecef;
+                transition: all 0.3s ease;
+                font-family: 'Poppins', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &:hover {
+                    background: #fff;
+                    padding-left: 30px;
+                    color: #ce3102;
+                }
+
+                &.active {
+                    background: #ce3102;
+                    color: white;
+                    padding-left: 30px;
+
+                    &:hover {
+                        background: #ce3102;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+
+    // Product Grid
+    .product-grid {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+
+        .collection-shoe-card {
+            background: transparent;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+            }
+
+            .card-image {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 1;
+                background: #f8f9fa;
+                border-radius: 12px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 20px;
+
+                &.bg-blue-light {
+                    background: #eaf4fe;
+                }
+
+                &.bg-gray-light {
+                    background: #e9ecef;
+                }
+
+                &.bg-white {
+                    background: #ffffff;
+                    border: 1px solid #f0f0f0;
+                }
+
+                .sale-badge {
+                    position: absolute;
+                    top: 15px;
+                    left: 15px;
+                    background: #ff4757;
+                    color: white;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    z-index: 10;
+                }
+
+                a {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                }
+
+                .shoe-img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    padding: 30px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    transition: all 0.5s ease;
+
+                    &.hover-image {
+                        opacity: 0;
+                    }
+                }
+
+                &:hover {
+                    .base-image {
+                        opacity: 0;
+                    }
+
+                    .hover-image {
+                        opacity: 1;
+                        transform: scale(1.05);
+                    }
+                }
+            }
+
+            .card-info {
+                padding: 0 5px;
+
+                .shoe-title {
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: #1a1a1a;
+                    margin: 0 0 5px 0;
+                    font-family: 'Poppins', sans-serif;
+                }
+
+                .price-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 8px;
+                }
+
+                .shoe-category {
+                    font-size: 0.85rem;
+                    color: #999;
+                    display: block;
+                }
+
+                .shoe-price {
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    color: #ce3102;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .collection-content {
+            flex-direction: column;
+        }
+
+        .category-sidebar {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+
+            ul {
+                display: flex;
+                width: max-content;
+
+                li {
+                    border-bottom: none;
+                    border-right: 1px solid #e9ecef;
+                    white-space: nowrap;
+
+                    &:last-child {
+                        border-right: none;
+                    }
+
+                    &:hover,
+                    &.active {
+                        padding-left: 25px; // Reset padding for horizontal view or keep minimal
+                        padding: 18px 25px;
+                    }
+                }
+            }
+        }
+
+        .product-grid {
+            width: 100%;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-header .title {
+            font-size: 2rem;
+        }
+    }
+}

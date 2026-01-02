@@ -16,7 +16,17 @@ const MyMenu = () => {
 	const router = useRouter();
 	const pathname = router.query.category ?? 'myProfile';
 	const category: any = router.query?.category ?? 'myProfile';
-	const user = useReactiveVar(userVar);
+	// const user = useReactiveVar(userVar);
+	const userVarData = useReactiveVar(userVar);
+	const user = userVarData?._id
+		? userVarData
+		: {
+			_id: 'mock_id',
+			memberNick: 'Mock User',
+			memberImage: '',
+			memberType: 'AGENT', // Mocking Agent
+			memberPhone: '010-1234-5678',
+		};
 
 	/** HANDLERS **/
 	const logoutHandler = async () => {
@@ -55,7 +65,7 @@ const MyMenu = () => {
 					</Stack>
 				</Stack>
 				<Stack className={'sections'}>
-					<Stack className={'section'} style={{ height: user.memberType === 'AGENT' ? '228px' : '153px' }}>
+					<Stack className={'section'}>
 						<Typography className="title" variant={'h5'}>
 							MANAGE LISTINGS
 						</Typography>
@@ -71,17 +81,10 @@ const MyMenu = () => {
 											scroll={false}
 										>
 											<div className={'flex-box'}>
-												{category === 'addProperty' ? (
-													<img className={'com-icon'} src={'/img/icons/whiteTab.svg'} alt={'com-icon'} />
-												) : (
-													<img className={'com-icon'} src={'/img/icons/newTab.svg'} alt={'com_icon'} />
-												)}
+												<img className={'com-icon'} src={'/img/icons/newTab.svg'} alt={'com-icon'} />
 												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-													Add Property
+													Add Product
 												</Typography>
-												<IconButton aria-label="delete" sx={{ ml: '40px' }}>
-													<PortraitIcon style={{ color: 'red' }} />
-												</IconButton>
 											</div>
 										</Link>
 									</ListItem>
@@ -94,17 +97,10 @@ const MyMenu = () => {
 											scroll={false}
 										>
 											<div className={'flex-box'}>
-												{category === 'myProperties' ? (
-													<img className={'com-icon'} src={'/img/icons/homeWhite.svg'} alt={'com-icon'} />
-												) : (
-													<img className={'com-icon'} src={'/img/icons/home.svg'} alt={'com-icon'} />
-												)}
+												<img className={'com-icon'} src={'/img/icons/home.svg'} alt={'com-icon'} />
 												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-													My Properties
+													My Products
 												</Typography>
-												<IconButton aria-label="delete" sx={{ ml: '36px' }}>
-													<PortraitIcon style={{ color: 'red' }} />
-												</IconButton>
 											</div>
 										</Link>
 									</ListItem>
@@ -119,11 +115,7 @@ const MyMenu = () => {
 									scroll={false}
 								>
 									<div className={'flex-box'}>
-										{category === 'myFavorites' ? (
-											<img className={'com-icon'} src={'/img/icons/likeWhite.svg'} alt={'com-icon'} />
-										) : (
-											<img className={'com-icon'} src={'/img/icons/like.svg'} alt={'com-icon'} />
-										)}
+										<img className={'com-icon'} src={'/img/icons/like.svg'} alt={'com-icon'} />
 
 										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 											My Favorites
@@ -140,11 +132,7 @@ const MyMenu = () => {
 									scroll={false}
 								>
 									<div className={'flex-box'}>
-										{category === 'recentlyVisited' ? (
-											<img className={'com-icon'} src={'/img/icons/searchWhite.svg'} alt={'com-icon'} />
-										) : (
-											<img className={'com-icon'} src={'/img/icons/search.svg'} alt={'com-icon'} />
-										)}
+										<img className={'com-icon'} src={'/img/icons/search.svg'} alt={'com-icon'} />
 
 										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 											Recently Visited
@@ -264,11 +252,7 @@ const MyMenu = () => {
 										scroll={false}
 									>
 										<div className={'flex-box'}>
-											{category === 'myArticles' ? (
-												<img className={'com-icon'} src={'/img/icons/discoveryWhite.svg'} alt={'com-icon'} />
-											) : (
-												<img className={'com-icon'} src={'/img/icons/discovery.svg'} alt={'com-icon'} />
-											)}
+											<img className={'com-icon'} src={'/img/icons/discovery.svg'} alt={'com-icon'} />
 
 											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 												Articles
@@ -285,11 +269,7 @@ const MyMenu = () => {
 										scroll={false}
 									>
 										<div className={'flex-box'}>
-											{category === 'writeArticle' ? (
-												<img className={'com-icon'} src={'/img/icons/whiteTab.svg'} alt={'com-icon'} />
-											) : (
-												<img className={'com-icon'} src={'/img/icons/newTab.svg'} alt={'com_icon'} />
-											)}
+											<img className={'com-icon'} src={'/img/icons/newTab.svg'} alt={'com_icon'} />
 											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 												Write Article
 											</Typography>
@@ -313,11 +293,7 @@ const MyMenu = () => {
 									scroll={false}
 								>
 									<div className={'flex-box'}>
-										{category === 'myProfile' ? (
-											<img className={'com-icon'} src={'/img/icons/userWhite.svg'} alt={'com-icon'} />
-										) : (
-											<img className={'com-icon'} src={'/img/icons/user.svg'} alt={'com-icon'} />
-										)}
+										<img className={'com-icon'} src={'/img/icons/user.svg'} alt={'com-icon'} />
 										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 											My Profile
 										</Typography>

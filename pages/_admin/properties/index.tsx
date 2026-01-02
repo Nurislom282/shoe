@@ -8,7 +8,9 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { TabContext } from '@mui/lab';
 import TablePagination from '@mui/material/TablePagination';
-import { PropertyPanelList } from '../../../libs/components/admin/properties/PropertyList';
+import { PropertyCardGrid } from '../../../libs/components/admin/properties/PropertyCardGrid';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { AllPropertiesInquiry } from '../../../libs/types/property/property.input';
 import { Property } from '../../../libs/types/property/property';
 import { PropertyLocation, PropertyStatus } from '../../../libs/enums/property.enum';
@@ -18,6 +20,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { REMOVE_PROPERTY_BY_ADMIN, UPDATE_PROPERTY_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { GET_ALL_PROPERTIES_BY_ADMIN } from '../../../apollo/admin/query';
 import { T } from '../../../libs/types/common';
+import { Button } from '@mui/material';
 
 const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 	const [anchorEl, setAnchorEl] = useState<[] | HTMLElement[]>([]);
@@ -157,45 +160,81 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 
 	return (
 		<Box component={'div'} className={'content'}>
-			<Typography variant={'h2'} className={'tit'} sx={{ mb: '24px' }}>
-				Property List
-			</Typography>
+			<Box component={'div'} className={'title flex_space'}>
+				<Typography variant={'h2'}>Product Management</Typography>
+			</Box>
 			<Box component={'div'} className={'table-wrap'}>
 				<Box component={'div'} sx={{ width: '100%', typography: 'body1' }}>
 					<TabContext value={value}>
 						<Box component={'div'}>
-							<List className={'tab-menu'}>
+							<List className={'tab-menu'} sx={{ display: 'flex', flexDirection: 'row', gap: '10px', mb: 3 }}>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'ALL')}
 									value="ALL"
-									className={value === 'ALL' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'ALL' ? '#1a1f36' : 'transparent',
+										color: value === 'ALL' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'ALL' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									All
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'ACTIVE')}
 									value="ACTIVE"
-									className={value === 'ACTIVE' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'ACTIVE' ? '#1a1f36' : 'transparent',
+										color: value === 'ACTIVE' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'ACTIVE' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Active
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'SOLD')}
 									value="SOLD"
-									className={value === 'SOLD' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'SOLD' ? '#1a1f36' : 'transparent',
+										color: value === 'SOLD' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'SOLD' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
-									Sold
+									Out of Stock
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'DELETE')}
 									value="DELETE"
-									className={value === 'DELETE' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'DELETE' ? '#1a1f36' : 'transparent',
+										color: value === 'DELETE' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'DELETE' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Delete
 								</ListItem>
 							</List>
 							<Divider />
-							<Stack className={'search-area'} sx={{ m: '24px' }}>
+							<Stack className={'search-area'} sx={{ m: '24px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 								<Select sx={{ width: '160px', mr: '20px' }} value={searchType}>
 									<MenuItem value={'ALL'} onClick={() => searchTypeHandler('ALL')}>
 										ALL
@@ -206,10 +245,19 @@ const AdminProperties: NextPage = ({ initialInquiry, ...props }: any) => {
 										</MenuItem>
 									))}
 								</Select>
+								<Button
+									variant="contained"
+									color="primary"
+									sx={{ height: '56px', borderRadius: '8px', textTransform: 'none', fontWeight: 'bold' }}
+									onClick={() => console.log('Add Property Clicked')}
+								>
+									<AddRoundedIcon sx={{ mr: '8px' }} />
+									ADD PRODUCT
+								</Button>
 							</Stack>
 							<Divider />
 						</Box>
-						<PropertyPanelList
+						<PropertyCardGrid
 							properties={properties}
 							anchorEl={anchorEl}
 							menuIconClickHandler={menuIconClickHandler}

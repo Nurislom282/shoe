@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
@@ -11,8 +11,7 @@ import { userVar } from '../../apollo/store';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import ChatIcon from '@mui/icons-material/Chat';
-import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
+import SearchIcon from '@mui/icons-material/Search';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { Comment } from '../../libs/types/comment/comment';
 import dynamic from 'next/dynamic';
@@ -39,6 +38,41 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
+// Helper component for scroll animations
+const FadeInWhenVisible = ({ children, delay = 0, animation = 'animate__fadeInUp' }: { children: React.ReactNode, delay?: number, animation?: string }) => {
+	const [isVisible, setIsVisible] = useState(false);
+	const domRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					setIsVisible(true);
+					observer.unobserve(entry.target); // Trigger once
+				}
+			});
+		});
+		if (domRef.current) observer.observe(domRef.current);
+		return () => {
+			if (domRef.current) observer.unobserve(domRef.current);
+		};
+	}, []);
+
+	return (
+		<div
+			ref={domRef}
+			className={`animate__animated ${isVisible ? animation : ''}`}
+			style={{
+				opacity: isVisible ? 1 : 0,
+				animationDelay: `${delay}ms`,
+				transition: 'opacity 0.1s' // Let animate.css handle main transition, this prevents FOUC
+			}}
+		>
+			{children}
+		</div>
+	);
+};
+
 const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -57,14 +91,41 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 		...initialInput,
 	});
 	const [memberImage, setMemberImage] = useState<string>('/img/community/articleImg.png');
-	const [anchorEl, setAnchorEl] = useState<any | null>(null);
-	const open = Boolean(anchorEl);
-	const id = open ? 'simple-popover' : undefined;
 	const [openBackdrop, setOpenBackdrop] = useState<boolean>(false);
 	const [updatedComment, setUpdatedComment] = useState<string>('');
 	const [updatedCommentId, setUpdatedCommentId] = useState<string>('');
 	const [likeLoading, setLikeLoading] = useState<boolean>(false);
-	const [boardArticle, setBoardArticle] = useState<BoardArticle>();
+
+	// MOCK DATA INITIALIZATION
+	const [boardArticle, setBoardArticle] = useState<BoardArticle>({
+		_id: 'mock-id',
+		articleCategory: 'NEWS',
+		articleTitle: 'Step into Style: Your Guide to Perfect Shoes',
+		articleContent: `Finding the perfect pair of shoes can be a daunting task, but it doesn't have to be. Whether you're looking for comfort, style, or a mix of both, there are a few key things to keep in mind.
+
+## Understanding Your Lifestyle
+
+The first step in finding the perfect shoes is to consider your lifestyle. Do you spend most of your day on your feet? Are you an avid runner? Or do you work in a corporate environment? Your daily activities will dictate the type of support and cushioning you need.
+
+## Balancing Aesthetics with Functionality
+
+It's easy to get caught up in the latest trends, but it's important to remember that functionality is just as important as aesthetics. Detailed attention to the fit and material can prevent long-term foot issues.
+`,
+		articleImage: '/img/community/articleImg.png',
+		articleLikes: 35,
+		articleViews: 120,
+		articleStatus: 'ACTIVE',
+		articleComments: 0,
+		memberId: 'mock-member',
+		memberData: {
+			_id: 'mock-member',
+			memberNick: 'Harold Kozey',
+			memberImage: '',
+		},
+		meLiked: [],
+		createdAt: new Date('2024-01-28'),
+		updatedAt: new Date('2024-01-28'),
+	} as any);
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetBoardArticle] = useMutation(LIKE_TARGET_BOARD_ARTICLE);
@@ -74,7 +135,6 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	const {
 		loading: boardArticleLoading,
 		data: boardArticleData,
-		error: boardArticleError,
 		refetch: boardArticleRefetch,
 	} = useQuery(GET_BOARD_ARTICLE, {
 		fetchPolicy: 'network-only',
@@ -83,9 +143,11 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 		},
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: any) => {
-			setBoardArticle(data?.getBoardArticle);
-			if (data?.getBoardArticle?.memberData?.memberImage) {
-				setMemberImage(`${process.env.REACT_APP_API_URL}/${data?.getBoardArticle?.memberData?.memberImage}`);
+			if (data?.getBoardArticle) {
+				setBoardArticle(data?.getBoardArticle);
+				if (data?.getBoardArticle?.memberData?.memberImage) {
+					setMemberImage(`${process.env.REACT_APP_API_URL}/${data?.getBoardArticle?.memberData?.memberImage}`);
+				}
 			}
 		},
 	});
@@ -93,7 +155,6 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	const {
 		loading: getCommentsLoading,
 		data: getCommentsData,
-		error: getCommentsError,
 		refetch: getCommentsRefetch,
 	} = useQuery(GET_COMMENTS, {
 		fetchPolicy: 'cache-and-network',
@@ -127,7 +188,7 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	const likeBoardArticleHandler = async (user: any, id: any) => {
 		try {
 			if (likeLoading) return;
-			if (!id) return;
+			// if (!id) return; // Allow mock id
 			if (!user._id) throw new Error(Messages.error2);
 
 			setLikeLoading(true);
@@ -174,8 +235,6 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 		}
 	};
 
-	////
-
 	const updateButtonHandler = async (commentId: string, commentStatus?: CommentStatus.DELETE) => {
 		try {
 			if (!user?._id) throw new Error(Messages.error2);
@@ -218,7 +277,6 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 			setUpdatedCommentId('');
 		}
 	};
-	////
 
 	const getCommentMemberImage = (imageUrl: string | undefined) => {
 		if (imageUrl) return `${process.env.REACT_APP_API_URL}/${imageUrl}`;
@@ -253,123 +311,66 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 			<div id="community-detail-page">
 				<div className="container">
 					<Stack className="main-box">
-						<Stack className="left-config">
-							<Stack className={'image-info'}>
-								<img src={'/img/logo/logoText.svg'} />
-								<Stack className={'community-name'}>
-									<Typography className={'name'}>Community Board Article</Typography>
-								</Stack>
-							</Stack>
-							<Tabs
-								orientation="vertical"
-								aria-label="lab API tabs example"
-								TabIndicatorProps={{
-									style: { display: 'none' },
-								}}
-								onChange={tabChangeHandler}
-								value={articleCategory}
-							>
-								<Tab
-									value={'FREE'}
-									label={'Free Board'}
-									className={`tab-button ${articleCategory === 'FREE' ? 'active' : ''}`}
-								/>
-								<Tab
-									value={'RECOMMEND'}
-									label={'Recommendation'}
-									className={`tab-button ${articleCategory === 'RECOMMEND' ? 'active' : ''}`}
-								/>
-								<Tab
-									value={'NEWS'}
-									label={'News'}
-									className={`tab-button ${articleCategory === 'NEWS' ? 'active' : ''}`}
-								/>
-								<Tab
-									value={'HUMOR'}
-									label={'Humor'}
-									className={`tab-button ${articleCategory === 'HUMOR' ? 'active' : ''}`}
-								/>
-							</Tabs>
-						</Stack>
 						<div className="community-detail-config">
-							<Stack className="title-box">
-								<Stack className="left">
-									<Typography className="title">{articleCategory} BOARD</Typography>
-									<Typography className="sub-title">
-										Express your opinions freely here without content restrictions
-									</Typography>
-								</Stack>
-								<Button
-									onClick={() =>
-										router.push({
-											pathname: '/mypage',
-											query: {
-												category: 'writeArticle',
-											},
-										})
-									}
-									className="right"
-								>
-									Write
-								</Button>
-							</Stack>
-							<div className="config">
+							<Stack className="config">
 								<Stack className="first-box-config">
-									<Stack className="content-and-info">
-										<Stack className="content">
-											<Typography className="content-data">{boardArticle?.articleTitle}</Typography>
-											<Stack className="member-info">
-												<img
-													src={memberImage}
-													alt=""
-													className="member-img"
-													onClick={() => goMemberPage(boardArticle?.memberData?._id)}
-												/>
-												<Typography className="member-nick" onClick={() => goMemberPage(boardArticle?.memberData?._id)}>
+									<FadeInWhenVisible>
+										<Stack className="article-header">
+											<Stack className="category-and-date">
+												<span className="category-tag">{articleCategory || 'NEWS'}</span>
+												<span className="date-text">
+													<Moment format={'MMM DD, YYYY'}>{boardArticle?.createdAt}</Moment>
+												</span>
+											</Stack>
+											<Typography className="article-title">{boardArticle?.articleTitle}</Typography>
+											<div className="author-info">
+												<span className="by-text">By</span>
+												<span className="author-name" onClick={() => goMemberPage(boardArticle?.memberData?._id)}>
 													{boardArticle?.memberData?.memberNick}
-												</Typography>
-												<Stack className="divider"></Stack>
-												<Moment className={'time-added'} format={'DD.MM.YY HH:mm'}>
-													{boardArticle?.createdAt}
-												</Moment>
-											</Stack>
+												</span>
+											</div>
 										</Stack>
-										<Stack className="info">
-											<Stack className="icon-info">
+									</FadeInWhenVisible>
+									<FadeInWhenVisible delay={100}>
+										<Stack className="image-box">
+											<img
+												src={
+													boardArticle?.articleImage
+														? (boardArticle.articleImage.startsWith('/') ? boardArticle.articleImage : `${process.env.REACT_APP_API_URL}/${boardArticle?.articleImage}`)
+														: '/img/community/articleImg.png'
+												}
+												alt="Article Hero"
+												className="article-hero-img"
+											/>
+										</Stack>
+									</FadeInWhenVisible>
+									<FadeInWhenVisible delay={200}>
+										<Stack className="content-box">
+											<ToastViewerComponent markdown={boardArticle?.articleContent} className={'ytb_play'} />
+										</Stack>
+									</FadeInWhenVisible>
+									<FadeInWhenVisible delay={300}>
+										<div className="article-footer-actions">
+											<div className="like-action">
 												{boardArticle?.meLiked && boardArticle?.meLiked[0]?.myFavorite ? (
-													<ThumbUpAltIcon onClick={() => likeBoardArticleHandler(user, boardArticle?._id)} />
+													<ThumbUpAltIcon
+														onClick={() => likeBoardArticleHandler(user, boardArticle?._id)}
+														className="like-icon liked"
+													/>
 												) : (
-													<ThumbUpOffAltIcon onClick={() => likeBoardArticleHandler(user, boardArticle?._id)} />
+													<ThumbUpOffAltIcon
+														onClick={() => likeBoardArticleHandler(user, boardArticle?._id)}
+														className="like-icon"
+													/>
 												)}
-
-												<Typography className="text">{boardArticle?.articleLikes}</Typography>
-											</Stack>
-											<Stack className="divider"></Stack>
-											<Stack className="icon-info">
-												<VisibilityIcon />
-												<Typography className="text">{boardArticle?.articleViews}</Typography>
-											</Stack>
-											<Stack className="divider"></Stack>
-											<Stack className="icon-info">
-												{total > 0 ? <ChatIcon /> : <ChatBubbleOutlineRoundedIcon />}
-												<Typography className="text">{total}</Typography>
-											</Stack>
-										</Stack>
-									</Stack>
-									<Stack>
-										<ToastViewerComponent markdown={boardArticle?.articleContent} className={'ytb_play'} />
-									</Stack>
-									<Stack className="like-and-dislike">
-										<Stack className="top">
-											<Button>
-												{boardArticle?.meLiked && boardArticle?.meLiked[0]?.myFavorite ? (
-													<ThumbUpAltIcon onClick={() => likeBoardArticleHandler(user, boardArticle?._id)} />
-												) : (
-													<ThumbUpOffAltIcon onClick={() => likeBoardArticleHandler(user, boardArticle?._id)} />
-												)}
-											</Button>
-										</Stack>
-									</Stack>
+												<span>{boardArticle?.articleLikes} Likes</span>
+											</div>
+											<div className="view-action">
+												<VisibilityIcon className="view-icon" />
+												<span>{boardArticle?.articleViews} Views</span>
+											</div>
+										</div>
+									</FadeInWhenVisible>
 								</Stack>
 								<Stack
 									className="second-box-config"
@@ -389,7 +390,7 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 										/>
 										<Stack className="button-box">
 											<Typography>{wordsCnt}/100</Typography>
-											<Button onClick={createCommentHandler}>comment</Button>
+											<Button onClick={createCommentHandler}>Post Comment</Button>
 										</Stack>
 									</Stack>
 								</Stack>
@@ -524,8 +525,96 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 										/>
 									</Stack>
 								)}
-							</div>
+							</Stack>
 						</div>
+						<Stack className="right-config">
+							<FadeInWhenVisible delay={400}>
+								<Stack className="search-box">
+									<input type="text" placeholder="Search" />
+									<IconButton className="search-icon">
+										<SearchIcon />
+									</IconButton>
+								</Stack>
+							</FadeInWhenVisible>
+							<FadeInWhenVisible delay={500}>
+								<Stack className="sidebar-section">
+									<Typography className="sidebar-title">Categories</Typography>
+									<Tabs
+										orientation="vertical"
+										aria-label="lab API tabs example"
+										TabIndicatorProps={{
+											style: { display: 'none' },
+										}}
+										onChange={tabChangeHandler}
+										value={articleCategory}
+										className="category-tabs"
+									>
+										<Tab
+											value={'FREE'}
+											label={'Free Board'}
+											className={`tab-button ${articleCategory === 'FREE' ? 'active' : ''}`}
+										/>
+										<Tab
+											value={'RECOMMEND'}
+											label={'Recommendation'}
+											className={`tab-button ${articleCategory === 'RECOMMEND' ? 'active' : ''}`}
+										/>
+										<Tab
+											value={'NEWS'}
+											label={'News'}
+											className={`tab-button ${articleCategory === 'NEWS' ? 'active' : ''}`}
+										/>
+										<Tab
+											value={'HUMOR'}
+											label={'Humor'}
+											className={`tab-button ${articleCategory === 'HUMOR' ? 'active' : ''}`}
+										/>
+									</Tabs>
+								</Stack>
+							</FadeInWhenVisible>
+							<FadeInWhenVisible delay={600}>
+								<Stack className="sidebar-section">
+									<Typography className="sidebar-title">Related Posts</Typography>
+									<Stack className="related-posts-list">
+										<div className="related-post-item">
+											<img src="/img/community/articleImg.png" alt="" />
+											<div className="info">
+												<div className="date">Jan 28, 2024</div>
+												<div className="title">Comfort in Style: Best Shoes...</div>
+											</div>
+										</div>
+										<div className="related-post-item">
+											<img src="/img/community/articleImg.png" alt="" />
+											<div className="info">
+												<div className="date">Jan 25, 2024</div>
+												<div className="title">Top 10 Sneakers for Running...</div>
+											</div>
+										</div>
+										<div className="related-post-item">
+											<img src="/img/community/articleImg.png" alt="" />
+											<div className="info">
+												<div className="date">Jan 20, 2024</div>
+												<div className="title">Why You Need Specialized Shoe...</div>
+											</div>
+										</div>
+									</Stack>
+								</Stack>
+							</FadeInWhenVisible>
+							<FadeInWhenVisible delay={700}>
+								<Stack className="sidebar-section">
+									<Typography className="sidebar-title">Popular Tags</Typography>
+									<div className="tags-cloud">
+										<span className="tag-item">Shoes</span>
+										<span className="tag-item">Fashion</span>
+										<span className="tag-item">Style</span>
+										<span className="tag-item">Comfort</span>
+										<span className="tag-item">Running</span>
+										<span className="tag-item">Sport</span>
+										<span className="tag-item">Casual</span>
+									</div>
+								</Stack>
+							</FadeInWhenVisible>
+						</Stack>
 					</Stack>
 				</div>
 			</div>

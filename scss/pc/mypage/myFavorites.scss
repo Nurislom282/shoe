@@ -1,222 +1,192 @@
+@import "../../variables";
+
 #pc-wrap {
 	#my-page {
 		#my-favorites-page {
 			width: 100%;
-			height: auto;
 			display: flex;
 			flex-direction: column;
-			gap: 57px;
+			gap: 30px;
+
+			// Header
 			.main-title-box {
-				width: auto;
-				height: auto;
-				flex-direction: row;
+				display: flex;
 				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 20px;
+
 				.right-box {
-					width: 315px;
 					.main-title {
 						color: #181a20;
 						font-family: $font;
-						font-size: 30px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-						letter-spacing: 0.6px;
-						text-transform: capitalize;
+						font-size: 28px;
+						font-weight: 700;
+						letter-spacing: -0.5px;
+						margin-bottom: 5px;
 					}
+
 					.sub-title {
-						color: #181a20;
+						color: #717171;
 						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
+						font-size: 15px;
 						font-weight: 400;
-						line-height: 26px;
 					}
 				}
 			}
+
 			.favorites-list-box {
 				width: 100%;
-				height: auto;
+				display: flex;
 				flex-wrap: wrap;
-				flex-direction: row;
-				gap: 22px;
+				gap: 20px;
+
 				.card-config {
-					width: 296px;
-					height: 413px;
-					margin-bottom: 7px;
+					width: calc(33.333% - 14px); // 3 per row
 					border-radius: 12px;
 					background: #fff;
-					box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+					border: 1px solid #eee;
+					box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.02);
+					overflow: hidden;
+					transition: transform 0.2s, box-shadow 0.2s;
+					cursor: pointer;
+
+					&:hover {
+						transform: translateY(-5px);
+						box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+					}
+
 					.top {
+						height: 220px;
 						position: relative;
-						width: 100%;
-						height: 240px;
-						a {
-							height: 100%;
-						}
+
 						img {
 							width: 100%;
 							height: 100%;
 							object-fit: cover;
-							border-radius: 12px 12px 0 0;
 						}
+
 						.top-badge {
 							position: absolute;
-							top: 20px;
-							left: 16px;
-							display: flex;
-							width: 80px;
-							height: 30px;
-							justify-content: center;
-							align-items: center;
-							border-radius: 6px;
-							padding: 6px 20px;
-							background: #eb6753;
+							top: 12px;
+							left: 12px;
+							background: #181a20;
 							color: #fff;
-							text-align: center;
-							text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-							font-family: $font;
-							font-size: 12px;
-							font-style: normal;
+							padding: 4px 12px;
+							border-radius: 6px;
+							font-size: 11px;
 							font-weight: 600;
-							line-height: normal;
-							img {
-								height: 16px;
-							}
+							text-transform: uppercase;
 						}
+
 						.price-box {
 							position: absolute;
-							bottom: 20px;
-							left: 20px;
-							padding: 8px 15px;
-							align-items: center;
+							bottom: 12px;
+							left: 12px;
+							background: rgba(255, 255, 255, 0.95);
+							padding: 6px 12px;
 							border-radius: 6px;
-							border: 1px solid rgba(255, 255, 255, 0.5);
-							background: #fff;
+
 							p {
-								color: #181a20;
-								font-family: $font;
 								font-size: 15px;
-								font-style: normal;
-								font-weight: 600;
-								line-height: normal;
+								font-weight: 700;
+								color: #181a20;
 							}
 						}
 					}
+
 					.bottom {
-						width: 100%;
-						height: 173px;
-						padding: 20px 16px 10px 16px;
+						padding: 16px;
+
 						.name-address {
-							width: 100%;
-							height: 48px;
-							gap: 5px;
-							margin-bottom: 20px;
-							.name {
-								width: 100%;
-								height: 23px;
+							margin-bottom: 15px;
+
+							.name p {
+								font-size: 16px;
+								font-weight: 600;
+								color: #181a20;
+								white-space: nowrap;
 								overflow: hidden;
-								p {
-									color: #181a20;
-									font-family: $font;
-									font-size: 15px;
-									font-style: normal;
-									font-weight: 600;
-									line-height: normal;
-									text-transform: capitalize;
-								}
+								text-overflow: ellipsis;
+								margin-bottom: 4px;
 							}
-							.address {
-								width: 100%;
-								overflow: hidden;
-								p {
-									color: #717171;
-									font-family: $font;
-									font-size: 13px;
-									font-style: normal;
-									font-weight: 400;
-									line-height: normal;
-								}
+
+							.address p {
+								font-size: 13px;
+								color: #717171;
 							}
 						}
+
 						.options {
-							flex-direction: row;
-							width: 100%;
-							height: 20px;
-							gap: 20px;
-							margin-bottom: 10px;
+							display: flex;
+							gap: 15px;
+							margin-bottom: 15px;
+
 							.option {
-								flex-direction: row;
-								gap: 5px;
+								display: flex;
 								align-items: center;
+								gap: 6px;
+
 								p {
-									color: #181a20;
-									font-family: $font;
 									font-size: 13px;
-									font-style: normal;
-									font-weight: 400;
-									line-height: normal;
+									color: #555;
 								}
 							}
 						}
+
 						.divider {
-							width: 100%;
 							height: 1px;
-							background: #ddd;
-							margin-bottom: 17px;
+							background: #f0f0f0;
+							margin-bottom: 12px;
 						}
+
 						.type-buttons {
-							flex-direction: row;
-							width: 100%;
+							display: flex;
 							justify-content: space-between;
 							align-items: center;
-							.type {
-								flex-direction: row;
-								align-items: center;
-								gap: 7px;
-								p {
-									color: #181a20;
-									font-family: $font;
-									font-style: normal;
-									line-height: normal;
-								}
-								.disabled-type {
-									color: rgba(143, 143, 143, 0.54);
-									font-family: $font;
-									font-style: normal;
-									line-height: normal;
-								}
+
+							.type p {
+								font-size: 13px;
+								font-weight: 500;
+								color: #181a20;
 							}
-							.buttons {
-								flex-direction: row;
-								width: auto;
-								gap: 12px;
-								justify-content: center;
-								align-items: center;
-								padding-right: 10px;
-								svg {
-									cursor: pointer;
+
+							.buttons svg {
+								fill: #eb6753; // Heart color
+								transition: transform 0.2s;
+
+								&:hover {
+									transform: scale(1.1);
 								}
 							}
 						}
 					}
 				}
-			}
-			.pagination-config {
-				width: 100%;
-				height: auto;
-				justify-content: center;
-				align-items: center;
-				margin-top: 30px;
-				.total-result {
+
+				.no-data {
+					width: 100%;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					gap: 20px;
+					padding: 50px;
+
 					p {
-						color: #181a20;
-						text-align: center;
-						font-family: $font;
-						font-size: 14px;
-						font-style: normal;
-						font-weight: 400;
-						line-height: 26px;
+						font-size: 16px;
+						color: #717171;
 					}
+				}
+			}
+
+			.pagination-config {
+				margin-top: 40px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 10px;
+
+				.total-result p {
+					font-size: 14px;
+					color: #999;
 				}
 			}
 		}

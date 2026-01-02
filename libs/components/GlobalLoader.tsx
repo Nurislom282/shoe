@@ -21,16 +21,16 @@ const GlobalLoader = ({ open }: GlobalLoaderProps) => {
                 setTimeout(() => setClasses((prev) => ({ ...prev, professional: 'appear' })), 300),
                 setTimeout(() => setClasses((prev) => ({ ...prev, shoeSelling: 'appear' })), 350),
                 setTimeout(() => setClasses((prev) => ({ ...prev, platform: 'appear' })), 600),
-                setTimeout(() => setClasses((prev) => ({ ...prev, platform: 'hide' })), 2600),
+                setTimeout(() => setClasses((prev) => ({ ...prev, platform: 'hide' })), 1800),
                 setTimeout(
                     () =>
                         setClasses((prev) => ({ ...prev, professional: 'hide-up', shoeSelling: 'hide-up' })),
-                    2600,
+                    1800,
                 ),
-                setTimeout(() => setClasses((prev) => ({ ...prev, logoContainer: 'show' })), 3000),
-                setTimeout(() => setClasses((prev) => ({ ...prev, redWipe: 'animate' })), 4000),
-                setTimeout(() => setClasses((prev) => ({ ...prev, logoContainer: 'show hide' })), 6100),
-                setTimeout(() => setClasses((prev) => ({ ...prev, pageLoader: 'fade-out' })), 6600),
+                setTimeout(() => setClasses((prev) => ({ ...prev, logoContainer: 'show' })), 2000),
+                setTimeout(() => setClasses((prev) => ({ ...prev, redWipe: 'animate' })), 2600),
+                setTimeout(() => setClasses((prev) => ({ ...prev, logoContainer: 'show hide' })), 3500),
+                setTimeout(() => setClasses((prev) => ({ ...prev, pageLoader: 'fade-out' })), 4000),
             ];
 
             return () => sequences.forEach(clearTimeout);

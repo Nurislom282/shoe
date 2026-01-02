@@ -11,9 +11,8 @@ import Chat from '../Chat';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import Hero from '../homepage/Hero';
-import Statistics from '../homepage/Statistics';
-import About from '../common/About';
+
+
 
 const withLayoutMain = (Component: any) => {
 	return (props: any) => {
@@ -68,17 +67,15 @@ const withLayoutMain = (Component: any) => {
 						</Stack>
 
 						<Stack id={'main'}>
-							<Hero />
-							<Statistics />
-							<About />
+
 							<Component {...props} />
 						</Stack>
 
 						<Chat />
 
-						{/* <Stack id={'footer'}>
+						<Stack id={'footer'}>
 							<Footer />
-						</Stack> */}
+						</Stack>
 					</Stack>
 				</>
 			);

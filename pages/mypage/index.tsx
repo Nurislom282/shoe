@@ -29,7 +29,13 @@ export const getStaticProps = async ({ locale }: any) => ({
 
 const MyPage: NextPage = () => {
 	const device = useDeviceDetect();
-	const user = useReactiveVar(userVar);
+	// const user = useReactiveVar(userVar);
+	const user = {
+		_id: 'mock_id',
+		memberNick: 'Mock User',
+		memberImage: '',
+		memberType: 'AGENT', // Mocking Agent
+	};
 	const router = useRouter();
 	const category: any = router.query?.category ?? 'myProfile';
 

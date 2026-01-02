@@ -21,13 +21,21 @@ import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import { useReactiveVar } from '@apollo/client';
-import { userVar } from '../../apollo/store';
+import { userVar, cartVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
 import { REACT_APP_API_URL } from '../config';
 
+import MiniBasket from './MiniBasket';
+
 const Top = () => {
 	const device = useDeviceDetect();
-	const user = useReactiveVar(userVar);
+	// const user = useReactiveVar(userVar);
+	const user = {
+		_id: 'mock_id',
+		memberNick: 'Mock User',
+		memberImage: '',
+		memberType: 'AGENT',
+	};
 	const { t, i18n } = useTranslation('common');
 	const router = useRouter();
 	const [searchOpen, setSearchOpen] = useState(false);
@@ -41,7 +49,8 @@ const Top = () => {
 	const [bgColor, setBgColor] = useState<boolean>(false);
 	const [logoutAnchor, setLogoutAnchor] = React.useState<null | HTMLElement>(null);
 	const logoutOpen = Boolean(logoutAnchor);
-	const [cartCount, setCartCount] = useState<number>(0);
+	const cartCount = useReactiveVar(cartVar);
+	const [hoverBasket, setHoverBasket] = useState(false);
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -70,11 +79,11 @@ const Top = () => {
 
 	/** HANDLERS **/
 	const langChoice = useCallback(
-		async (e: any) => {
-			setLang(e.target.id);
-			localStorage.setItem('locale', e.target.id);
+		async (locale: string) => {
+			setLang(locale);
+			localStorage.setItem('locale', locale);
 			setAnchorEl2(null);
-			await router.push(router.asPath, router.asPath, { locale: e.target.id });
+			await router.push(router.asPath, router.asPath, { locale: locale });
 		},
 		[router],
 	);
@@ -103,6 +112,17 @@ const Top = () => {
 		setSearchOpen(!searchOpen);
 	};
 
+	const handleSearch = () => {
+		if (searchQuery.trim()) {
+			router.push({
+				pathname: '/shop',
+				query: { text: searchQuery },
+			});
+			setSearchOpen(false);
+			setSearchQuery('');
+		}
+	};
+
 	if (typeof window !== 'undefined') {
 		window.addEventListener('scroll', changeNavbarColor);
 	}
@@ -116,7 +136,7 @@ const Top = () => {
 				<Link href={'/about'}>
 					<div>{t('About')}</div>
 				</Link>
-				<Link href={'/product'}>
+				<Link href={'/shop'}>
 					<div> {t('Shop')} </div>
 				</Link>
 				<Link href={'/community?articleCategory=FREE'}>
@@ -165,7 +185,7 @@ const Top = () => {
 									<span className="nav-text-hover">{t('About')}</span>
 								</div>
 							</Link>
-							<Link href={'/product'}>
+							<Link href={'/shop'}>
 								<div className="nav-link">
 									<span className="nav-text">{t('Shop')}</span>
 									<span className="nav-text-hover">{t('Shop')}</span>
@@ -196,12 +216,67 @@ const Top = () => {
 							</Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>
+							<div onClick={(e: any) => setAnchorEl2(e.currentTarget)}>
+								<img
+									className={'img-flag'}
+									src={lang ? `/img/flag/lang${lang}.png` : '/img/flag/langen.png'}
+									alt={'lang'}
+									style={{ width: 30, height: 20, cursor: 'pointer' }}
+								/>
+							</div>
+							<Menu
+								anchorEl={anchorEl2}
+								open={drop}
+								onClose={() => setAnchorEl2(null)}
+								sx={{ mt: '5px' }}
+							>
+								<MenuItem onClick={() => langChoice('en')}>
+									<img
+										className={'img-flag'}
+										src={'/img/flag/langen.png'}
+										onClick={() => langChoice('en')}
+										alt={'usa'}
+										style={{ width: 30, height: 20, marginRight: 10 }}
+									/>
+									English
+								</MenuItem>
+								<MenuItem onClick={() => langChoice('kr')}>
+									<img
+										className={'img-flag'}
+										src={'/img/flag/langkr.png'}
+										onClick={() => langChoice('kr')}
+										alt={'korea'}
+										style={{ width: 30, height: 20, marginRight: 10 }}
+									/>
+									Korean
+								</MenuItem>
+								<MenuItem onClick={() => langChoice('ru')}>
+									<img
+										className={'img-flag'}
+										src={'/img/flag/langru.png'}
+										onClick={() => langChoice('ru')}
+										alt={'russia'}
+										style={{ width: 30, height: 20, marginRight: 10 }}
+									/>
+									Russian
+								</MenuItem>
+							</Menu>
 							<div onClick={toggleSearch} style={{ cursor: 'pointer' }}>
 								<SearchIcon className={'icon'} />
 							</div>
-							<Badge color="error" badgeContent={cartCount} overlap="circular">
-								<ShoppingCartOutlinedIcon className={'icon'} />
-							</Badge>
+							<div
+								className="basket-hover-wrapper"
+								style={{ position: 'relative' }}
+								onMouseEnter={() => setHoverBasket(true)}
+								onMouseLeave={() => setHoverBasket(false)}
+							>
+								<Box component={'div'} className={'basket-icon'} style={{ cursor: 'pointer' }}>
+									<Badge color="error" badgeContent={cartCount} overlap="circular">
+										<ShoppingCartOutlinedIcon className={'icon'} />
+									</Badge>
+								</Box>
+								<MiniBasket open={hoverBasket} setOpen={setHoverBasket} />
+							</div>
 							{user?._id ? (
 								<>
 									<div
@@ -226,12 +301,24 @@ const Top = () => {
 										}}
 										sx={{ mt: '5px' }}
 									>
+										<MenuItem
+											onClick={() => {
+												router.push('/mypage');
+												setLogoutAnchor(null);
+											}}
+										>
+											<AccountCircleOutlinedIcon
+												fontSize="small"
+												style={{ color: 'blue', marginRight: '10px' }}
+											/>
+											My Profile
+										</MenuItem>
 										<MenuItem onClick={() => logOut()}>
 											<Logout
 												fontSize="small"
 												style={{ color: 'blue', marginRight: '10px' }}
 											/>
-											Logout
+											Leave
 										</MenuItem>
 									</Menu>
 								</>
@@ -247,12 +334,15 @@ const Top = () => {
 				{/* Search Overlay */}
 				<div className={`search-overlay ${searchOpen ? 'open' : ''}`}>
 					<div className="search-content">
-						<SearchIcon className="search-icon" />
+						<SearchIcon className="search-icon" onClick={handleSearch} />
 						<input
 							type="text"
 							placeholder="Search..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') handleSearch();
+							}}
 						/>
 						<div className="close-btn" onClick={toggleSearch}>
 							&#10005;

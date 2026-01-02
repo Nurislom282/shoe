@@ -69,24 +69,35 @@ const Join: NextPage = () => {
 		return (
 			<Stack className={'join-page'}>
 				<Stack className={'container'}>
-					<Stack className={'main'}>
+					<Stack className={'main'} flexDirection={'row'}>
 						<Stack className={'left'}>
-							{/* @ts-ignore */}
-							<Box className={'logo'}>
-								<img src="/img/logo/logoText.svg" alt="" />
-								<span>Nestar</span>
-							</Box>
-							<Box className={'info'}>
-								<span>{loginView ? 'login' : 'signup'}</span>
-								<p>{loginView ? 'Login' : 'Sign'} in with this account across the following sites.</p>
-							</Box>
-							<Box className={'input-wrap'}>
+							{/* Background Image Area */}
+						</Stack>
+						<Stack className={'right animate__animated animate__fadeInRight'}>
+							<div className={'info'}>
+								<span className={'title'}>{loginView ? 'Log in' : 'Sign up'}</span>
+							</div>
+							<div className={'input-wrap'}>
+								{!loginView && (
+									<div className={'input-box'}>
+										<span>Name</span>
+										<input
+											type="text"
+											placeholder={'Enter Nickname'}
+											onChange={(e) => handleInput('nick', e.target.value)}
+											required={true}
+											onKeyDown={(event) => {
+												if (event.key == 'Enter') doSignUp();
+											}}
+										/>
+									</div>
+								)}
 								<div className={'input-box'}>
-									<span>Nickname</span>
+									<span>{loginView ? 'Username' : 'Phone'}</span>
 									<input
 										type="text"
-										placeholder={'Enter Nickname'}
-										onChange={(e) => handleInput('nick', e.target.value)}
+										placeholder={loginView ? 'Enter Username' : 'Enter Phone'}
+										onChange={(e) => handleInput(loginView ? 'nick' : 'phone', e.target.value)}
 										required={true}
 										onKeyDown={(event) => {
 											if (event.key == 'Enter' && loginView) doLogin();
@@ -97,7 +108,7 @@ const Join: NextPage = () => {
 								<div className={'input-box'}>
 									<span>Password</span>
 									<input
-										type="text"
+										type="password"
 										placeholder={'Enter Password'}
 										onChange={(e) => handleInput('password', e.target.value)}
 										required={true}
@@ -107,22 +118,8 @@ const Join: NextPage = () => {
 										}}
 									/>
 								</div>
-								{!loginView && (
-									<div className={'input-box'}>
-										<span>Phone</span>
-										<input
-											type="text"
-											placeholder={'Enter Phone'}
-											onChange={(e) => handleInput('phone', e.target.value)}
-											required={true}
-											onKeyDown={(event) => {
-												if (event.key == 'Enter') doSignUp();
-											}}
-										/>
-									</div>
-								)}
-							</Box>
-							<Box className={'register'}>
+							</div>
+							<div className={'register'}>
 								{!loginView && (
 									<div className={'type-option'}>
 										<span className={'text'}>I want to be registered as:</span>
@@ -159,54 +156,49 @@ const Join: NextPage = () => {
 
 								{loginView && (
 									<div className={'remember-info'}>
-										<FormGroup>
-											<FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Remember me" />
-										</FormGroup>
-										<a>Lost your password?</a>
+										<a href="#">Forgot your Password?</a>
 									</div>
 								)}
 
 								{loginView ? (
 									<Button
 										variant="contained"
-										endIcon={<img src="/img/icons/rightup.svg" alt="" />}
+										className={'login-btn'}
 										disabled={input.nick == '' || input.password == ''}
 										onClick={doLogin}
 									>
-										LOGIN
+										Log In
 									</Button>
 								) : (
 									<Button
 										variant="contained"
+										className={'signup-btn'}
 										disabled={input.nick == '' || input.password == '' || input.phone == '' || input.type == ''}
 										onClick={doSignUp}
-										endIcon={<img src="/img/icons/rightup.svg" alt="" />}
 									>
-										SIGNUP
+										Sign Up
 									</Button>
 								)}
-							</Box>
-							<Box className={'ask-info'}>
+							</div>
+							<div className={'ask-info'}>
 								{loginView ? (
 									<p>
-										Not registered yet?
+										Don&apos;t have an account?
 										<b
 											onClick={() => {
 												viewChangeHandler(false);
 											}}
 										>
-											SIGNUP
+											Create an account
 										</b>
 									</p>
 								) : (
 									<p>
-										Have account?
-										<b onClick={() => viewChangeHandler(true)}> LOGIN</b>
+										Already have an account? <span onClick={() => router.push('/account/login')}>Log In</span>
 									</p>
 								)}
-							</Box>
+							</div>
 						</Stack>
-						<Stack className={'right'}></Stack>
 					</Stack>
 				</Stack>
 			</Stack>

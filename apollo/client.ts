@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApolloClient, ApolloLink, InMemoryCache, split, from, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache, split, from, NormalizedCacheObject, createHttpLink } from '@apollo/client';
 import createUploadLink from 'apollo-upload-client/public/createUploadLink.js';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -10,11 +10,11 @@ import { sweetErrorAlert } from '../libs/sweetAlert';
 import { socketVar } from './store';
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function getHeaders() {
+function getHeaders(token?: string) {
 	const headers = {} as HeadersInit;
-	const token = getJwtToken();
+	const jwtToken = token || getJwtToken();
 	// @ts-ignore
-	if (token) headers['Authorization'] = `Bearer ${token}`;
+	if (jwtToken) headers['Authorization'] = `Bearer ${jwtToken}`;
 	return headers;
 }
 
@@ -58,13 +58,13 @@ class LoggingWebSocket {
 	}
 }
 
-function createIsomorphicLink() {
+function createIsomorphicLink(token?: string) {
 	if (typeof window !== 'undefined') {
 		const authLink = new ApolloLink((operation, forward) => {
 			operation.setContext(({ headers = {} }) => ({
 				headers: {
 					...headers,
-					...getHeaders(),
+					...getHeaders(token),
 				},
 			}));
 			console.warn('requesting.. ', operation);
@@ -83,7 +83,7 @@ function createIsomorphicLink() {
 				reconnect: false,
 				timeout: 30000,
 				connectionParams: () => {
-					return { headers: getHeaders() };
+					return { headers: getHeaders(token) };
 				},
 			},
 			webSocketImpl: LoggingWebSocket,
@@ -112,20 +112,26 @@ function createIsomorphicLink() {
 		);
 
 		return from([errorLink, tokenRefreshLink, splitLink]);
+	} else {
+		// Server-side link
+		return createHttpLink({
+			uri: process.env.REACT_APP_API_GRAPHQL_URL,
+			headers: getHeaders(token) as Record<string, string>,
+		});
 	}
 }
 
-function createApolloClient() {
+function createApolloClient(token?: string) {
 	return new ApolloClient({
 		ssrMode: typeof window === 'undefined',
-		link: createIsomorphicLink(),
+		link: createIsomorphicLink(token),
 		cache: new InMemoryCache(),
 		resolvers: {},
 	});
 }
 
-export function initializeApollo(initialState = null) {
-	const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(initialState = null, token?: string) {
+	const _apolloClient = apolloClient ?? createApolloClient(token);
 	if (initialState) _apolloClient.cache.restore(initialState);
 	if (typeof window === 'undefined') return _apolloClient;
 	if (!apolloClient) apolloClient = _apolloClient;
@@ -133,8 +139,8 @@ export function initializeApollo(initialState = null) {
 	return _apolloClient;
 }
 
-export function useApollo(initialState: any) {
-	return useMemo(() => initializeApollo(initialState), [initialState]);
+export function useApollo(initialState: any, token?: string) {
+	return useMemo(() => initializeApollo(initialState, token), [initialState, token]);
 }
 
 /**

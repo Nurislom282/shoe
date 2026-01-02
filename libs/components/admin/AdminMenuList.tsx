@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { ChatsCircle, Headset, User, UserCircleGear } from 'phosphor-react';
+import { ChatsCircle, Headset, User, Tag, SquaresFour } from 'phosphor-react';
 import cookies from 'js-cookie';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 
@@ -14,9 +15,9 @@ const AdminMenuList = (props: any) => {
 	const router = useRouter();
 	const device = useDeviceDetect();
 	const [mobileLayout, setMobileLayout] = useState(false);
-	const [openSubMenu, setOpenSubMenu] = useState('Users');
+	const [openSubMenu, setOpenSubMenu] = useState('Overview');
 	const [openMenu, setOpenMenu] = useState(typeof window === 'object' ? cookies.get('admin_menu') === 'true' : false);
-	const [clickMenu, setClickMenu] = useState<any>([]);
+	const [clickMenu, setClickMenu] = useState<any>(['Overview']);
 	const [clickSubMenu, setClickSubMenu] = useState('');
 
 	const {
@@ -31,7 +32,7 @@ const AdminMenuList = (props: any) => {
 
 		switch (pathnames[1]) {
 			case 'properties':
-				setClickMenu(['Properties']);
+				setClickMenu(['Products']);
 				break;
 			case 'community':
 				setClickMenu(['Community']);
@@ -39,8 +40,11 @@ const AdminMenuList = (props: any) => {
 			case 'cs':
 				setClickMenu(['Cs']);
 				break;
-			default:
+			case 'users':
 				setClickMenu(['Users']);
+				break;
+			default:
+				setClickMenu(['Overview']);
 				break;
 		}
 
@@ -79,30 +83,38 @@ const AdminMenuList = (props: any) => {
 
 	const menu_set = [
 		{
+			title: 'Overview',
+			icon: <SquaresFour size={20} color={clickMenu[0] === 'Overview' ? '#fff' : '#94a3b8'} weight="fill" />,
+			on_click: () => {
+				router.push('/_admin');
+				subMenuChangeHandler('Overview');
+			},
+		},
+		{
 			title: 'Users',
-			icon: <User size={20} color="#bdbdbd" weight="fill" />,
+			icon: <User size={20} color={clickMenu[0] === 'Users' ? '#fff' : '#94a3b8'} weight="fill" />,
 			on_click: () => subMenuChangeHandler('Users'),
 		},
 		{
-			title: 'Properties',
-			icon: <UserCircleGear size={20} color="#bdbdbd" weight="fill" />,
-			on_click: () => subMenuChangeHandler('Properties'),
+			title: 'Products',
+			icon: <Tag size={20} color={clickMenu[0] === 'Products' ? '#fff' : '#94a3b8'} weight="fill" />,
+			on_click: () => subMenuChangeHandler('Products'),
 		},
 		{
 			title: 'Community',
-			icon: <ChatsCircle size={20} color="#bdbdbd" weight="fill" />,
+			icon: <ChatsCircle size={20} color={clickMenu[0] === 'Community' ? '#fff' : '#94a3b8'} weight="fill" />,
 			on_click: () => subMenuChangeHandler('Community'),
 		},
 		{
 			title: 'Cs',
-			icon: <Headset size={20} color="#bdbdbd" weight="fill" />,
+			icon: <Headset size={20} color={clickMenu[0] === 'Cs' ? '#fff' : '#94a3b8'} weight="fill" />,
 			on_click: () => subMenuChangeHandler('Cs'),
 		},
 	];
 
 	const sub_menu_set: any = {
 		Users: [{ title: 'List', url: '/_admin/users' }],
-		Properties: [{ title: 'List', url: '/_admin/properties' }],
+		Products: [{ title: 'List', url: '/_admin/properties' }],
 		Community: [{ title: 'List', url: '/_admin/community' }],
 		Cs: [
 			{ title: 'FAQ', url: '/_admin/cs/faq' },
@@ -122,6 +134,11 @@ const AdminMenuList = (props: any) => {
 							minHeight: 48,
 							justifyContent: openMenu ? 'initial' : 'center',
 							px: 2.5,
+							color: clickMenu[0] === item.title ? '#fff' : '#94a3b8',
+							'&:hover': {
+								backgroundColor: 'rgba(255, 255, 255, 0.08)',
+								color: '#fff',
+							},
 						}}
 					>
 						<ListItemIcon
@@ -134,7 +151,8 @@ const AdminMenuList = (props: any) => {
 							{item.icon}
 						</ListItemIcon>
 						<ListItemText>{item.title}</ListItemText>
-						{clickMenu.find((menu: string) => item.title === menu) ? <ExpandLess /> : <ExpandMore />}
+						{item.title !== 'Overview' &&
+							(clickMenu.find((menu: string) => item.title === menu) ? <ExpandLess /> : <ExpandMore />)}
 					</ListItemButton>
 					<Collapse
 						in={!!clickMenu.find((menu: string) => menu === item.title)}
@@ -150,10 +168,32 @@ const AdminMenuList = (props: any) => {
 										<ListItemButton
 											component="li"
 											className={clickMenu[0] === item.title && clickSubMenu === sub.title ? 'li on' : 'li'}
+											sx={{
+												pl: 4,
+												'&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' },
+												backgroundColor: clickMenu[0] === item.title && clickSubMenu === sub.title ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+											}}
 										>
-											<Typography variant={sub.title} component={'span'}>
-												{sub.title}
-											</Typography>
+											<Box
+												component={'div'}
+												sx={{
+													width: '4px',
+													height: '4px',
+													borderRadius: '50%',
+													bgcolor: clickMenu[0] === item.title && clickSubMenu === sub.title ? '#fff' : '#94a3b8',
+													mr: 2,
+												}}
+											/>
+											<ListItemText
+												primary={sub.title}
+												primaryTypographyProps={{
+													variant: 'body2',
+													sx: {
+														color: clickMenu[0] === item.title && clickSubMenu === sub.title ? '#fff' : '#94a3b8',
+														fontWeight: clickMenu[0] === item.title && clickSubMenu === sub.title ? 600 : 400,
+													},
+												}}
+											/>
 										</ListItemButton>
 									</Link>
 								))}

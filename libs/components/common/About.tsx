@@ -6,6 +6,7 @@ const About = () => {
         <div className="about-section">
             <div className="container">
                 <div className="about-content">
+
                     <div className="about-images">
                         {/* Center shoe */}
                         <div className="shoe-item shoe-3">
@@ -14,22 +15,19 @@ const About = () => {
 
                         {/* Orbiting shoes */}
                         <div className="shoe-orbit">
-                            <div className="shoe-item shoe-1">
+
+                            <div id="orbit-1" className="orbit">
                                 <img src="/img/banner/shoe.png" alt="Shoe 1" />
-                            </div>
-                            <div className="shoe-item shoe-2">
                                 <img src="/img/banner/shoe2.png" alt="Shoe 2" />
                             </div>
-                            <div className="shoe-item shoe-4">
+
+                            <div id="orbit-2" className="orbit" >
                                 <img src="/img/banner/shoe.png" alt="Shoe 4" />
-                            </div>
-                            <div className="shoe-item shoe-5">
                                 <img src="/img/banner/shoe2.png" alt="Shoe 5" />
                             </div>
-                            <div className="shoe-item shoe-6">
+
+                            <div id="orbit-3" className='orbit'>
                                 <img src="/img/banner/shoe3.png" alt="Shoe 6" />
-                            </div>
-                            <div className="shoe-item shoe-7">
                                 <img src="/img/banner/shoe.png" alt="Shoe 7" />
                             </div>
                         </div>

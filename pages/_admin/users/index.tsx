@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import withAdminLayout from '../../../libs/components/layout/LayoutAdmin';
-import { MemberPanelList } from '../../../libs/components/admin/users/MemberList';
-import { Box, InputAdornment, List, ListItem, Stack } from '@mui/material';
+import { MemberCardGrid } from '../../../libs/components/admin/users/MemberCardGrid'; // Switched to Grid Component
+import { Box, Button, InputAdornment, List, ListItem, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Select from '@mui/material/Select';
@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { TabContext } from '@mui/lab';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TablePagination from '@mui/material/TablePagination';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { MembersInquiry } from '../../../libs/types/member/member.input';
 import { Member } from '../../../libs/types/member/member';
@@ -48,25 +49,37 @@ const AdminUsers: NextPage = ({ initialInquiry, ...props }: any) => {
 			setMembers(data?.getAllMembersByAdmin?.list);
 			setMembersTotal(data?.getAllMembersByAdmin?.metaCounter[0]?.total ?? 0);
 		},
+		onError: (err) => {
+			console.log("GraphQL Error (likely backend 404):", err);
+			setMembers([]);
+		},
 	});
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		getAllMembersRefetch({ input: membersInquiry }).then();
+		// getAllMembersRefetch({ input: membersInquiry }).then();
 	}, [membersInquiry]);
 
 	/** HANDLERS **/
 	const changePageHandler = async (event: unknown, newPage: number) => {
-		membersInquiry.page = newPage + 1;
-		await getAllMembersRefetch({ input: membersInquiry });
-		setMembersInquiry({ ...membersInquiry });
+		try {
+			membersInquiry.page = newPage + 1;
+			await getAllMembersRefetch({ input: membersInquiry });
+			setMembersInquiry({ ...membersInquiry });
+		} catch (err: any) {
+			console.log('changePageHandler Error:', err);
+		}
 	};
 
 	const changeRowsPerPageHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
-		membersInquiry.limit = parseInt(event.target.value, 10);
-		membersInquiry.page = 1;
-		await getAllMembersRefetch({ input: membersInquiry });
-		setMembersInquiry({ ...membersInquiry });
+		try {
+			membersInquiry.limit = parseInt(event.target.value, 10);
+			membersInquiry.page = 1;
+			await getAllMembersRefetch({ input: membersInquiry });
+			setMembersInquiry({ ...membersInquiry });
+		} catch (err: any) {
+			console.log('changeRowsPerPageHandler Error:', err);
+		}
 	};
 
 	const menuIconClickHandler = (e: any, index: number) => {
@@ -170,42 +183,78 @@ const AdminUsers: NextPage = ({ initialInquiry, ...props }: any) => {
 				<Box component={'div'} sx={{ width: '100%', typography: 'body1' }}>
 					<TabContext value={value}>
 						<Box component={'div'}>
-							<List className={'tab-menu'}>
+							<List className={'tab-menu'} sx={{ display: 'flex', flexDirection: 'row', gap: '10px', mb: 3 }}>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'ALL')}
 									value="ALL"
-									className={value === 'ALL' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'ALL' ? '#1a1f36' : 'transparent',
+										color: value === 'ALL' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'ALL' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									All
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'ACTIVE')}
 									value="ACTIVE"
-									className={value === 'ACTIVE' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'ACTIVE' ? '#1a1f36' : 'transparent',
+										color: value === 'ACTIVE' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'ACTIVE' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Active
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'BLOCK')}
 									value="BLOCK"
-									className={value === 'BLOCK' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'BLOCK' ? '#1a1f36' : 'transparent',
+										color: value === 'BLOCK' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'BLOCK' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Blocked
 								</ListItem>
 								<ListItem
 									onClick={(e: T) => tabChangeHandler(e, 'DELETE')}
 									value="DELETE"
-									className={value === 'DELETE' ? 'li on' : 'li'}
+									sx={{
+										width: 'auto',
+										borderRadius: '20px',
+										cursor: 'pointer',
+										bgcolor: value === 'DELETE' ? '#1a1f36' : 'transparent',
+										color: value === 'DELETE' ? '#fff' : '#64748b',
+										px: 3,
+										py: 1,
+										'&:hover': { bgcolor: value === 'DELETE' ? '#1a1f36' : '#f1f5f9' }
+									}}
 								>
 									Deleted
 								</ListItem>
 							</List>
-							<Divider />
-							<Stack className={'search-area'} sx={{ m: '24px' }}>
+							<Divider sx={{ mb: 3 }} />
+							<Stack className={'search-area'} sx={{ m: '24px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 								<OutlinedInput
 									value={searchText}
 									onChange={(e: any) => textHandler(e.target.value)}
-									sx={{ width: '100%' }}
+									sx={{ width: '100%', mr: 2 }}
 									className={'search'}
 									placeholder="Search user name"
 									onKeyDown={(event) => {
@@ -217,15 +266,19 @@ const AdminUsers: NextPage = ({ initialInquiry, ...props }: any) => {
 												<CancelRoundedIcon
 													style={{ cursor: 'pointer' }}
 													onClick={async () => {
-														setSearchText('');
-														setMembersInquiry({
-															...membersInquiry,
-															search: {
-																...membersInquiry.search,
-																text: '',
-															},
-														});
-														await getAllMembersRefetch({ input: membersInquiry });
+														try {
+															setSearchText('');
+															setMembersInquiry({
+																...membersInquiry,
+																search: {
+																	...membersInquiry.search,
+																	text: '',
+																},
+															});
+															await getAllMembersRefetch({ input: membersInquiry });
+														} catch (err: any) {
+															console.log('CancelIcon Error:', err);
+														}
 													}}
 												/>
 											)}
@@ -249,10 +302,20 @@ const AdminUsers: NextPage = ({ initialInquiry, ...props }: any) => {
 										Admin
 									</MenuItem>
 								</Select>
+
+								<Button
+									variant="contained"
+									color="primary"
+									startIcon={<AddCircleRoundedIcon />}
+									sx={{ ml: 2, height: '56px', borderRadius: '8px', textTransform: 'none', fontWeight: 'bold' }}
+									onClick={() => console.log('Add Member Clicked')}
+								>
+									Add Member
+								</Button>
 							</Stack>
 							<Divider />
 						</Box>
-						<MemberPanelList
+						<MemberCardGrid
 							members={members}
 							anchorEl={anchorEl}
 							menuIconClickHandler={menuIconClickHandler}

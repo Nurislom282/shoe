@@ -19,7 +19,13 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	const [searchFilter, setSearchFilter] = useState<AgentPropertiesInquiry>(initialInput);
 	const [agentProperties, setAgentProperties] = useState<Property[]>([]);
 	const [total, setTotal] = useState<number>(0);
-	const user = useReactiveVar(userVar);
+	// const user = useReactiveVar(userVar);
+	const user = {
+		_id: 'mock_id',
+		memberNick: 'Mock User',
+		memberImage: '',
+		memberType: 'AGENT',
+	};
 	const router = useRouter();
 
 	/** APOLLO REQUESTS **/
@@ -51,7 +57,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 
 	const deletePropertyHandler = async (id: string) => {
 		try {
-			if (await sweetConfirmAlert('Are you sure to delete this property?')) {
+			if (await sweetConfirmAlert('Are you sure to delete this product?')) {
 				await updateProperty({
 					variables: {
 						input: {
@@ -96,7 +102,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 			<div id="my-property-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">My Properties</Typography>
+						<Typography className="main-title">My Products</Typography>
 						<Typography className="sub-title">We are glad to see you again!</Typography>
 					</Stack>
 				</Stack>
@@ -129,7 +135,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 						{agentProperties?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Property found!</p>
+								<p>No Product found!</p>
 							</div>
 						) : (
 							agentProperties.map((property: Property) => {
@@ -155,7 +161,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="total-result">
-									<Typography>{total} property available</Typography>
+									<Typography>{total} product available</Typography>
 								</Stack>
 							</Stack>
 						)}

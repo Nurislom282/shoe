@@ -1,14 +1,19 @@
+@import "../../variables";
+
 #pc-wrap {
 	#my-articles-page {
 		width: 100%;
 		height: auto;
+
 		.main-title-box {
 			width: auto;
 			height: auto;
 			flex-direction: row;
 			justify-content: space-between;
+
 			.right-box {
 				width: 315px;
+
 				.main-title {
 					color: #181a20;
 					font-family: $font;
@@ -19,6 +24,7 @@
 					letter-spacing: 0.6px;
 					text-transform: capitalize;
 				}
+
 				.sub-title {
 					color: #181a20;
 					font-family: $font;
@@ -29,6 +35,7 @@
 				}
 			}
 		}
+
 		.article-list-box {
 			width: 100%;
 			height: auto;
@@ -38,12 +45,14 @@
 			margin-top: 55px;
 			margin-bottom: 87px;
 		}
+
 		.pagination-conf {
 			width: 100%;
 			height: auto;
 			justify-content: center;
 			align-items: center;
 			margin-top: 30px;
+
 			.total {
 				p {
 					color: #181a20;

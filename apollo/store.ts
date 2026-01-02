@@ -26,3 +26,9 @@ export const userVar = makeVar<CustomJwtPayload>({
 
 // @ts-ignore
 export const socketVar = makeVar<WebSocket>();
+
+export const cartVar = makeVar<number>(0);
+
+import { CartItem } from '../libs/types/cart';
+export const cartItemsVar = makeVar<CartItem[]>([]);
+

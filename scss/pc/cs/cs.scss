@@ -1,222 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@500;700;800;900&family=Lato:wght@300;400;700&display=swap');
+
+$font-header: 'Alegreya Sans', sans-serif;
+$font-body: 'Lato', sans-serif;
+
+$color-primary: #da2700;
+$color-primary-light: #EB6753; // From previous code, seemingly used
+$color-dark: #292F36;
+$color-text: #4D5053;
+$color-bg-light: #f5fbff;
+$color-border: #EEEEEE;
+
 #pc-wrap {
-  .cs-page {
+  #cs-page {
     position: relative;
-    padding: 60px 0px 60px;
     width: 100%;
-    height: auto;
-    .container {
+    background-color: #ffffff;
+    padding-bottom: 100px;
+
+    .hero-section {
+      width: 100%;
+      height: 400px;
+      background-image: url('/img/banner/header1.svg'); // Valid image
+      background-size: cover;
+      background-position: center;
       display: flex;
       flex-direction: column;
-      .cs-main-info {
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 0;
+      margin-bottom: 80px;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2); // generic overlay
+      }
+
+      .breadcrumb-box {
+        position: relative;
+        z-index: 2;
+        background: white;
+        padding: 40px 80px;
+        border-radius: 20px 20px 0 0; // rounded top only? or floating? Reference looks like a box.
+        // If it's the white box from reference:
+        border-radius: 12px 12px 0 0;
         display: flex;
         flex-direction: column;
-        .info {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          span {
-            color: #000;
-            font-family: $font;
-            font-size: 35px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
-            letter-spacing: 0.525px;
-          }
-          p {
-            color: #757575;
-            font-family: $font;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-          }
+        align-items: center;
+        gap: 10px;
+        width: 340px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+        .page-title {
+          font-family: $font-header;
+          font-size: 36px;
+          font-weight: 900;
+          color: $color-dark;
+          text-transform: uppercase;
+          line-height: 1;
         }
-        .btns {
-          margin-top: 50px;
+
+        .breadcrumb-links {
           display: flex;
-          flex-direction: row;
-          justify-content: center;
-          :first-child {
-            border-radius: 4px 0 0 4px;
-          }
-          :last-child {
-            border-radius: 0 4px 4px 0;
-          }
-          div {
-            width: 204px;
-            height: 46px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #EEE;
-            cursor: pointer;
-            color: #BDBDBD;
-            font-family: $font;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
-            letter-spacing: 0.42px;
-            &.active {
-              border: 1px solid #725CE8;
-              background: #EB6753;
-              color: #FFF;
-            }
+          gap: 10px;
+          font-family: $font-body;
+          font-size: 16px;
+          font-weight: 700;
+          color: $color-dark;
+          align-items: center;
+
+          .separator {
+            color: $color-primary;
           }
         }
       }
-      .cs-content {
-        margin-top: 25px;
+    }
+
+    .container {
+      max-width: 1368px; // Matching other pages
+      padding: 0 20px;
+      margin: 0 auto;
+      width: 100%;
+
+      .contact-container {
         display: flex;
-        flex-direction: column;
-        .title {
-          margin-bottom: 25px;
-          color: #000;
-          font-family: $font;
-          font-size: 27px;
-          font-style: normal;
-          font-weight: 700;
-          line-height: normal;
-          letter-spacing: 0.54px;
-        }
-        .pagination {
-          margin-top: 50px;
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-        }
-        .notice-content {
-          .main {
-            border: 1px solid #EEE;
-            .top {
-              padding: 25px 33px;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              span {
-                color: #000;
-                font-family: $font;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: normal;
-                text-transform: capitalize;
-              }
-            }
-            .bottom {
-              display: flex;
-              flex-direction: column;
-              .notice-card {
-                padding: 20px 14px 20px 30px;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                border: 1px solid #EEE;
-                &.event {
-                  background: #F6D79A;
-                }
-                div {
-                  padding: 6px 9px;
-                  border-radius: 12px;
-                  border: 1px solid #EB6753;
-                  color: #EB6753;
-                  font-family: $font;
-                  font-size: 12px;
-                  font-style: normal;
-                  font-weight: 400;
-                }
-                .notice-number {
-                  margin-left: 18px;
-                  width: 39px;
-                  color: #BDBDBD;
-                  font-family: $font;
-                  font-size: 14px;
-                  font-style: normal;
-                  font-weight: 400;
-                  line-height: normal;
-                }
-                .notice-title {
-                  width: 1060px;
-                  color: #000;
-                  font-family: $font;
-                  font-size: 16px;
-                  font-style: normal;
-                  font-weight: 400;
-                  line-height: normal;
-                }
-                .notice-date {
-                  color: #BDBDBD;
-                  font-family: $font;
-                  font-size: 14px;
-                  font-style: normal;
-                  font-weight: 400;
-                  line-height: normal;
-                }
-              }
-            }
+        flex-direction: row;
+        gap: 60px; // Reference says ~108px but lets start safe
+        align-items: flex-start;
+        justify-content: space-between;
 
-          }
-
-        }
-        .faq-content {
-          margin-top: 25px;
+        // Left Column
+        .contact-info-grid {
+          flex: 0 0 480px;
           display: flex;
           flex-direction: column;
-          .categories {
+          gap: 30px;
+
+          .contact-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
             display: flex;
             flex-direction: row;
-            justify-content: center;
-            div {
-              width: 14%;
-              height: 40px;
+            align-items: center;
+            text-align: left;
+            gap: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+              transform: translateY(-5px);
+            }
+
+            .icon-box {
+              width: 70px;
+              height: 70px;
+              background: $color-primary;
+              border-radius: 50%;
               display: flex;
-              justify-content: center;
               align-items: center;
-              color: #BDBDBD;
-              text-align: center;
-              font-family: $font;
-              font-size: 15px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: normal;
-              letter-spacing: -0.225px;
-              cursor: pointer;
-              &.active {
-                border-bottom: 1px solid #EB6753;
-                color: #EB6753;
+              justify-content: center;
+              color: white;
+              flex-shrink: 0;
+
+              svg {
+                font-size: 28px;
+              }
+            }
+
+            .card-text {
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+
+              .card-title {
+                font-family: $font-header;
+                font-size: 22px;
+                font-weight: 700;
+                color: $color-dark;
+              }
+
+              .card-desc {
+                font-family: $font-body;
+                font-size: 16px;
+                color: $color-text;
+                line-height: 1.4;
+              }
+            }
+
+            &.active-red {
+              background: $color-primary;
+
+              .icon-box {
+                background: white;
+                color: $color-primary;
+              }
+
+              .card-text {
+
+                .card-title,
+                .card-desc {
+                  color: white;
+                }
               }
             }
           }
-          .wrap {
-            margin-top: 50px;
-            .MuiAccordionDetails-root {
-              padding: 30px 20px;
-              background: #FAFAFA;
-            }
-            .badge {
-              margin: 0 24px;
-              display: inline-block;
-              padding: 4px 10px;
-              border: 1px solid #725CE8;
-              border-radius: 7px;
-              color: #725CE8;
-            }
-            .question {
-              .badge {
-                background: #e92C28;
-                color: #fff;
+        }
+
+        // Right Column
+        .contact-form-section {
+          flex: 1;
+          // padding-left removed as padding shorthand covers it
+          background: white;
+          padding: 50px;
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+          // The uploaded image shows the form in a white box. The previous specific section was generic.
+
+          .form-title {
+            font-family: $font-header;
+            font-size: 24px;
+            font-weight: 800;
+            color: $color-dark;
+            margin-bottom: 30px;
+          }
+
+          .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 20px;
+            row-gap: 20px;
+
+            .input-group {
+              position: relative;
+              width: 100%;
+
+              .input-icon {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #707070;
+                font-size: 18px;
+                z-index: 1;
+              }
+
+              input,
+              textarea {
+                width: 100%;
+                background: #F5F9FA; // Light blueish
+                border: none;
+                padding: 15px 20px 15px 50px; // Space for icon
+                border-radius: 4px;
+                font-family: $font-body;
+                font-size: 14px;
+                color: $color-dark;
+                outline: none;
+                transition: 0.3s;
+
+                &::placeholder {
+                  color: #888;
+                }
+
+                &:focus {
+                  background: #EBF1F5;
+                }
+              }
+
+              &.textarea-group {
+                grid-column: 1 / -1; // Span full width
+
+                .input-icon {
+                  top: 25px; // Adjust for textarea
+                  transform: none;
+                }
+
+                textarea {
+                  height: 150px;
+                  resize: none;
+                  padding-left: 50px;
+                }
               }
             }
-            .answer {
-              margin-left: 80px;
-              display: flex;
-              white-space: nowrap;
-              align-items: center;
-              flex-direction: row;
-              .badge {
-                color: #EB6753;
-                border: 1px solid #EB6753;
+
+            .submit-btn {
+              grid-column: 1 / -1;
+              background: $color-primary;
+              color: white;
+              padding: 15px 40px;
+              border-radius: 50px;
+              font-family: $font-header;
+              font-size: 16px;
+              font-weight: 700;
+              text-transform: capitalize;
+              box-shadow: 0 5px 15px rgba(218, 39, 0, 0.3);
+              margin-top: 10px;
+              width: 200px; // Or fit content
+
+              &:hover {
+                background: darken($color-primary, 5%);
               }
             }
           }

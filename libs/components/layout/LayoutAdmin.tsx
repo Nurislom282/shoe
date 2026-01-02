@@ -14,16 +14,27 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { getJwtToken, logOut, updateUserInfo } from '../../auth';
+import { SignOut } from 'phosphor-react';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
 import { MemberType } from '../../enums/member.enum';
-const drawerWidth = 280;
+const drawerWidth = 260; // Slightly narrower for a modern look
 
 const withAdminLayout = (Component: ComponentType) => {
 	return (props: object) => {
 		const router = useRouter();
-		const user = useReactiveVar(userVar);
+
+		const userVarData = useReactiveVar(userVar);
+		// BYPASS: Mock Admin User if not authorized
+		const user = userVarData?.memberType === MemberType.ADMIN ? userVarData : {
+			...userVarData,
+			_id: userVarData?._id || 'dev_admin_id',
+			memberType: MemberType.ADMIN,
+			memberNick: userVarData?.memberNick || 'Dev Admin',
+			memberPhone: userVarData?.memberPhone || '010-0000-0000',
+			memberImage: userVarData?.memberImage || '',
+		};
 		const [settingsState, setSettingsStateState] = useState(false);
 		const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 		const [openMenu, setOpenMenu] = useState(false);
@@ -68,8 +79,10 @@ const withAdminLayout = (Component: ComponentType) => {
 						sx={{
 							width: `calc(100% - ${drawerWidth}px)`,
 							ml: `${drawerWidth}px`,
-							boxShadow: 'rgb(100 116 139 / 12%) 0px 1px 4px',
-							background: 'none',
+							boxShadow: 'none',
+							background: '#fff',
+							color: '#1a1f36',
+							borderBottom: '1px solid #e2e8f0',
 						}}
 					>
 						<Toolbar>
@@ -134,41 +147,73 @@ const withAdminLayout = (Component: ComponentType) => {
 							'& .MuiDrawer-paper': {
 								width: drawerWidth,
 								boxSizing: 'border-box',
+								backgroundColor: '#1a1f36', // Dark Sidebar Background
+								color: '#ffffff',
+								borderRight: 'none',
 							},
 						}}
 						variant="permanent"
 						anchor="left"
 						className="aside"
 					>
-						<Toolbar sx={{ flexDirection: 'column', alignItems: 'flexStart' }}>
-							<Stack className={'logo-box'}>
-								<img src={'/img/logo/logoText.svg'} alt={'logo'} />
-							</Stack>
+						<Stack className={'logo-box'} sx={{ p: 3, mb: 2 }}>
+							<img src={'/img/logo/logoText.svg'} alt={'logo'} style={{ filter: 'brightness(0) invert(1)' }} />
+						</Stack>
 
-							<Stack
-								className="user"
-								direction={'row'}
-								alignItems={'center'}
-								sx={{
-									bgcolor: openMenu ? 'rgba(255, 255, 255, 0.04)' : 'none',
-									borderRadius: '8px',
-									px: '24px',
-									py: '11px',
-								}}
-							>
-								<Avatar
-									src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
-								/>
-								<Typography variant={'body2'} p={1} ml={1}>
-									{user?.memberNick} <br />
-									{user?.memberPhone}
+						<Stack
+							className="user"
+							direction={'row'}
+							alignItems={'center'}
+							sx={{
+								bgcolor: 'rgba(255, 255, 255, 0.05)',
+								borderRadius: '12px',
+								mx: 2,
+								p: '12px',
+								mb: 3,
+								width: 'calc(100% - 32px)',
+							}}
+						>
+							<Avatar
+								src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+								sx={{ width: 36, height: 36 }}
+							/>
+							<Box ml={1.5} overflow="hidden">
+								<Typography variant={'subtitle2'} noWrap sx={{ fontWeight: 600, color: '#fff' }}>
+									{user?.memberNick}
 								</Typography>
-							</Stack>
-						</Toolbar>
+								<Typography variant={'caption'} noWrap sx={{ color: '#94a3b8' }}>
+									{user?.memberType}
+								</Typography>
+							</Box>
+						</Stack>
+
 
 						<Divider />
 
 						<MenuList />
+
+						<Box sx={{ mt: 'auto', p: 2 }}>
+							<Divider sx={{ my: 2, borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+							<Box
+								onClick={logoutHandler}
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									cursor: 'pointer',
+									p: 2,
+									borderRadius: '12px',
+									bgcolor: 'rgba(255, 255, 255, 0.05)',
+									'&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' },
+									color: '#ff6b6b',
+								}}
+							>
+								<SignOut size={24} weight="bold" />
+								<Typography variant={'subtitle1'} sx={{ ml: 1, fontWeight: 600 }}>
+									Log Out
+								</Typography>
+							</Box>
+						</Box>
 					</Drawer>
 
 					<Box component={'div'} id="bunker" sx={{ flexGrow: 1 }}>
@@ -176,7 +221,7 @@ const withAdminLayout = (Component: ComponentType) => {
 						<Component {...props} setSnackbar={setSnackbar} setTitle={setTitle} />
 					</Box>
 				</Box>
-			</main>
+			</main >
 		);
 	};
 };

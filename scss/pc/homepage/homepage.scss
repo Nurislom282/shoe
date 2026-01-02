@@ -1,4 +1,10 @@
+@import 'adds';
+@import 'collection-latest';
+@import 'banner';
+
 #pc-wrap {
+
+	.home-page,
 	.homepage {
 		position: relative;
 		width: 100%;
@@ -116,7 +122,7 @@
 			.price-tag {
 				position: absolute;
 				top: 30%;
-				left: 10%;
+				left: 55%;
 				transform: translateY(-50%);
 				display: flex;
 				align-items: center;
@@ -408,6 +414,9 @@
 		}
 
 		.about-images {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			position: relative;
 			width: 500px;
 			height: 500px;
@@ -437,14 +446,15 @@
 		}
 
 		// Center shoe (largest)
+		// Center shoe (largest)
 		.shoe-3 {
+			position: absolute;
 			top: 50%;
-			left: 20%;
+			left: 50%;
 			transform: translate(-50%, -50%);
 			width: 320px;
 			height: 320px;
 			border-radius: 50%;
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 			z-index: 2;
 			animation: none;
 
@@ -453,81 +463,68 @@
 			}
 		}
 
-		// Orbit container for rotating shoes - tighter orbit
+		// Orbit container for rotating shoes - centered relative to parent
 		.shoe-orbit {
 			position: absolute;
 			top: 50%;
-			left: 20%;
-			width: 320px;
-			height: 320px;
-			margin-left: -160px;
-			margin-top: -160px;
-			animation: rotateOrbit 15s linear forwards;
-		}
-
-		// Position shoes in a circle around center - evenly distributed
-		.shoe-orbit .shoe-1 {
-			position: absolute;
-			top: -40px;
 			left: 50%;
-			margin-left: -45px;
-			width: 90px;
-			height: 90px;
-			border-radius: 50%;
-			background: #2a2a2a;
+			transform: translate(-50%, -50%);
+			width: 0;
+			height: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			animation: rotateOrbit 15s linear forwards; // Rotate once for 15s then stop
 		}
 
-		.shoe-orbit .shoe-2 {
-			position: absolute;
-			top: 25px;
-			right: -25px;
-			width: 95px;
-			height: 95px;
-			border-radius: 50%;
-			background: linear-gradient(135deg, #f5f7fa 0%, #e3e8ef 100%);
-		}
-
-		.shoe-orbit .shoe-4 {
+		.orbit {
 			position: absolute;
 			top: 50%;
-			right: -40px;
-			margin-top: -45px;
-			width: 90px;
-			height: 90px;
-			border-radius: 50%;
-			background: #e0e0e0;
-		}
-
-		.shoe-orbit .shoe-5 {
-			position: absolute;
-			bottom: 25px;
-			right: -25px;
-			width: 90px;
-			height: 90px;
-			border-radius: 50%;
-			background: #f0f0f0;
-		}
-
-		.shoe-orbit .shoe-6 {
-			position: absolute;
-			bottom: -40px;
 			left: 50%;
-			margin-left: -47px;
-			width: 95px;
-			height: 95px;
-			border-radius: 50%;
-			background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			width: 600px;
+			height: 150px;
+			pointer-events: none; // let clicks pass through the frame
+
+			img {
+				width: 150px;
+				height: 150px;
+				object-fit: contain;
+				transform: rotate(-45deg); // Counter-rotate images so they appear upright if needed, or leave as is. 
+				// The user image shows them aligned with the box. Let's assume standard behavior first.
+				transform: none;
+				pointer-events: auto;
+			}
 		}
 
-		.shoe-orbit .shoe-7 {
-			position: absolute;
-			top: 50%;
-			left: -40px;
-			margin-top: -45px;
-			width: 90px;
-			height: 90px;
-			border-radius: 50%;
-			background: #e8e8e8;
+		#orbit-1 {
+			transform: translate(-50%, -50%) rotate(45deg);
+		}
+
+		#orbit-2 {
+			transform: translate(-50%, -50%) rotate(-45deg);
+		}
+
+		#orbit-3 {
+			transform: translate(-50%, -50%) rotate(90deg); // Optional vertical bar or 3rd star arm
+		}
+
+		// Clean up old classes if they aren't used in TSX logic, or map them if they are.
+		// The TSX didn't use className="shoe-1" on images, but just in case, we nullify their positioning
+		// so they don't break the flex layout of .orbit
+		.shoe-1,
+		.shoe-2,
+		.shoe-4,
+		.shoe-5,
+		.shoe-6,
+		.shoe-7 {
+			position: static;
+			width: 150px;
+			height: 150px;
+			border-radius: 0; // Images might be rectangular
 		}
 
 		.about-text {
@@ -573,317 +570,209 @@
 				}
 			}
 		}
+	}
 
-		@media (max-width: 1024px) {
-			padding: 80px 20px;
+	// Latest Shoes Section
+	.latest-section {
 
-			.about-content {
-				flex-direction: column;
+		height: 860px;
+		background: #fafafa;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+		.container {
+			margin: 0 auto;
+			max-width: 1600px;
+			width: 100%;
+
+			.header {
+				margin-top: 60px;
 				text-align: center;
-				min-height: auto;
-			}
+				margin-bottom: 60px;
+				width: 100%;
+				display: block;
 
-			.about-images {
-				width: 400px;
-				height: 400px;
-			}
-
-			.shoe-orbit {
-				width: 320px;
-				height: 320px;
-			}
-
-			.shoe-3 {
-				width: 180px;
-				height: 180px;
-			}
-
-			.shoe-1,
-			.shoe-2,
-			.shoe-4,
-			.shoe-5,
-			.shoe-6,
-			.shoe-7 {
-				width: 85px !important;
-				height: 85px !important;
-			}
-
-			.about-text {
-				max-width: 100%;
-
-				h2 {
-					font-size: 2.2rem;
+				.main-title {
+					position: relative;
+					font-size: 2.5rem;
+					font-weight: 800;
+					color: #1a1a1a;
+					margin-bottom: 15px;
+					font-family: 'Poppins', sans-serif;
 				}
 
-				p {
-					font-size: 0.95rem;
+				.subtitle {
+					font-size: 1rem;
+					color: #666;
+					font-weight: 400;
 				}
 			}
-		}
 
-		@media (max-width: 768px) {
-			padding: 60px 20px;
+			.shoe-grid {
+				display: grid;
+				grid-template-columns: repeat(4, 480px);
+				justify-content: center;
+				margin-left: -150px;
+				gap: 30px;
+				margin-top: 50px;
 
-			.about-images {
-				width: 350px;
-				height: 350px;
-			}
+				.shoe-card {
+					background: transparent;
+					border-radius: 0;
+					overflow: visible;
+					box-shadow: none;
+					transition: transform 0.3s ease;
+					position: relative;
+					cursor: pointer;
 
-			.shoe-orbit {
-				width: 280px;
-				height: 280px;
-			}
+					&:hover {
+						transform: translateY(-8px);
 
-			.shoe-3 {
-				width: 150px;
-				height: 150px;
-			}
+						.shoe-image {
+							box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+						}
+					}
 
-			.shoe-1,
-			.shoe-2,
-			.shoe-4,
-			.shoe-5,
-			.shoe-6,
-			.shoe-7 {
-				width: 70px !important;
-				height: 70px !important;
-				padding: 12px;
-			}
+					.sale-badge {
+						position: absolute;
+						top: 20px;
+						left: 20px;
+						background: #ff4757;
+						color: white;
+						padding: 4px 12px;
+						border-radius: 20px;
+						font-size: 0.75rem;
+						font-weight: 500;
+						z-index: 10;
+						box-shadow: none;
+					}
 
-			.about-text {
-				h2 {
-					font-size: 1.9rem;
+					.shoe-image {
+						height: 380px;
+						width: 100%;
+						background: #f8f9fa;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						overflow: hidden;
+						position: relative;
+						border-radius: 20px;
+						transition: box-shadow 0.3s ease;
+
+						&.bg-default {
+							background: #f9f9f9;
+						}
+
+						&.bg-split {
+							background: linear-gradient(90deg, #2d3436 50%, #ff4757 50%);
+						}
+
+						&.bg-grey {
+							background: #e5e5e5;
+						}
+
+						&.bg-blue {
+							background: #eaf4fe;
+						}
+
+						.shoe-img {
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100%;
+							height: 100%;
+							object-fit: contain;
+							padding: 20px;
+							transition: all 0.5s ease;
+						}
+
+						.base-image {
+							opacity: 1;
+							z-index: 1;
+						}
+
+						.hover-image {
+							opacity: 0;
+							z-index: 2;
+						}
+
+						&:hover {
+							.base-image {
+								opacity: 0;
+							}
+
+							.hover-image {
+								opacity: 1;
+								transform: scale(1.05);
+							}
+						}
+					}
+
+					.hover-overlay {
+						display: none; // Hiding overlay as per new design implication or keeping minimal
+					}
 				}
 
-				p {
-					font-size: 0.9rem;
-				}
+				.shoe-info {
+					padding: 20px 5px 0;
+					text-align: left;
 
-				.about-button {
-					padding: 12px 28px;
-					font-size: 0.95rem;
-				}
-			}
-		}
+					.shoe-title {
+						font-size: 1.1rem;
+						font-weight: 700;
+						color: #1a1a1a;
+						margin-bottom: 8px;
+						font-family: 'Poppins', sans-serif;
+					}
 
-		@media (max-width: 480px) {
-			.about-images {
-				width: 280px;
-				height: 280px;
-			}
+					.shoe-details {
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+						gap: 5px;
 
-			.shoe-orbit {
-				width: 220px;
-				height: 220px;
-			}
+						.shoe-category {
+							color: #999;
+							font-size: 0.85rem;
+							text-transform: capitalize;
+						}
 
-			.shoe-3 {
-				width: 120px;
-				height: 120px;
-			}
-
-			.shoe-1,
-			.shoe-2,
-			.shoe-4,
-			.shoe-5,
-			.shoe-6,
-			.shoe-7 {
-				width: 55px !important;
-				height: 55px !important;
-				padding: 8px;
-			}
-
-			.about-text {
-				h2 {
-					font-size: 1.6rem;
+						.shoe-price {
+							color: #ff4757;
+							font-size: 0.95rem;
+							font-weight: 600;
+							margin-top: 5px;
+						}
+					}
 				}
 			}
 		}
 	}
 
-	// Latest Shoes Section
-	.latest-section {
-		background: #fff;
-		padding: 100px 20px;
-		position: relative;
-
+	// Responsive Design
+	@media (max-width: 1024px) {
 		.container {
-			max-width: 1400px;
-			margin: 0 auto;
-			width: 100%;
-		}
-
-		.latest-header {
-			text-align: center;
-			margin-bottom: 60px;
-
-			h2 {
-				font-size: 2.8rem;
-				font-weight: 800;
-				color: #1a1a1a;
-				margin-bottom: 16px;
-				font-family: 'Poppins', sans-serif;
-			}
-
-			p {
-				font-size: 1rem;
-				color: #808080;
-				line-height: 1.8;
-				font-family: 'Poppins', sans-serif;
-			}
-		}
-
-		.latest-grid {
-			display: grid;
-			grid-template-columns: repeat(4, 1fr);
-			gap: 30px;
-		}
-
-		.shoe-card {
-			background: #fff;
-			border-radius: 12px;
-			overflow: hidden;
-			transition: all 0.3s ease;
-			position: relative;
-			opacity: 0;
-			transform: translateY(60px);
-
-			&:hover {
-				transform: translateY(-10px);
-				box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-			}
-
-			.sale-badge {
-				position: absolute;
-				top: 16px;
-				left: 16px;
-				background: #e63e00;
-				color: white;
-				padding: 6px 16px;
-				border-radius: 20px;
-				font-size: 0.85rem;
-				font-weight: 600;
-				z-index: 2;
-				font-family: 'Poppins', sans-serif;
-			}
-
-			.shoe-image-container {
-				background: #f5f7fa;
-				padding: 40px 20px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				min-height: 250px;
-				position: relative;
-
-				.shoe-image {
-					width: 100%;
-					max-width: 200px;
-					height: auto;
-					object-fit: contain;
-					transition: transform 0.3s ease;
-				}
-			}
-
-			&:hover .shoe-image {
-				transform: scale(1.1);
-			}
-
-			.shoe-info {
-				padding: 24px;
-				text-align: left;
-
-				h3 {
-					font-size: 1.25rem;
-					font-weight: 700;
-					color: #1a1a1a;
-					margin-bottom: 8px;
-					font-family: 'Poppins', sans-serif;
-				}
-
-				.brand {
-					font-size: 0.9rem;
-					color: #999;
-					margin-bottom: 12px;
-					font-family: 'Poppins', sans-serif;
-				}
-
-				.price {
-					font-size: 1.1rem;
-					font-weight: 700;
-					color: #e63e00;
-					font-family: 'Poppins', sans-serif;
-				}
-			}
-		}
-
-		// Staggered slide-up animation for each card
-		.shoe-card-1 {
-			animation: slideUpFromBottom 0.8s ease-out 0.2s forwards;
-		}
-
-		.shoe-card-2 {
-			animation: slideUpFromBottom 0.8s ease-out 0.4s forwards;
-		}
-
-		.shoe-card-3 {
-			animation: slideUpFromBottom 0.8s ease-out 0.6s forwards;
-		}
-
-		.shoe-card-4 {
-			animation: slideUpFromBottom 0.8s ease-out 0.8s forwards;
-		}
-
-		@media (max-width: 1024px) {
-			padding: 80px 20px;
-
-			.latest-header {
-				margin-bottom: 50px;
-
-				h2 {
-					font-size: 2.2rem;
-				}
-			}
-
-			.latest-grid {
+			.shoe-grid {
 				grid-template-columns: repeat(2, 1fr);
 				gap: 25px;
 			}
 		}
+	}
 
-		@media (max-width: 640px) {
-			padding: 60px 20px;
-
-			.latest-header {
-				margin-bottom: 40px;
-
-				h2 {
-					font-size: 1.9rem;
+	@media (max-width: 768px) {
+		.container {
+			.header {
+				.main-title {
+					font-size: 2rem;
 				}
 
-				p {
-					font-size: 0.9rem;
+				.subtitle {
+					font-size: 1rem;
 				}
 			}
 
-			.latest-grid {
+			.shoe-grid {
 				grid-template-columns: 1fr;
 				gap: 20px;
-			}
-
-			.shoe-card {
-				.shoe-image-container {
-					min-height: 200px;
-					padding: 30px 15px;
-				}
-
-				.shoe-info {
-					padding: 20px;
-
-					h3 {
-						font-size: 1.1rem;
-					}
-				}
 			}
 		}
 	}
@@ -934,7 +823,7 @@
 	}
 
 	100% {
-		width: 100px;
+		width: 160px;
 	}
 }
 
@@ -981,5 +870,168 @@
 	100% {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+// Offer Section
+.offer-section {
+	padding: 80px;
+	background: #fff;
+
+	.container {
+		max-width: 1900px;
+		width: 100%;
+		margin: 0 auto;
+
+
+		.header {
+			align-items: center;
+			text-align: center;
+			margin-left: 350px;
+			margin-bottom: 50px;
+
+			.main-title {
+				font-size: 2.5rem;
+				font-weight: 800;
+				color: #1a1a1a;
+				margin-bottom: 15px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			.subtitle {
+				font-size: 1rem;
+				color: #666;
+				line-height: 1.6;
+			}
+		}
+
+		.offer-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			gap: 30px;
+			height: 600px;
+
+			.offer-col {
+				display: flex;
+				flex-direction: column;
+				gap: 30px;
+				height: 100%;
+
+				&.tall {
+					height: 100%;
+				}
+
+				&.stacked {
+					justify-content: space-between;
+				}
+			}
+
+			.offer-card {
+				position: relative;
+				border-radius: 20px;
+				overflow: hidden;
+				cursor: pointer;
+				width: 100%;
+				height: 100%; // Fill column
+				background: #f0f0f0;
+
+				&.small {
+					height: calc(50% - 15px); // Half height minus half gap
+				}
+
+				.bg-img {
+					width: 100%;
+					height: 100%;
+					object-fit: contain;
+					transition: all 0.5s ease;
+
+					&.flipped {
+						transform: scaleX(-1);
+					}
+				}
+
+				.overlay {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.2);
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					padding: 30px;
+					opacity: 0;
+					transition: all 0.3s ease;
+
+					.content {
+						color: white;
+						transform: translateY(20px);
+						transition: all 0.3s ease;
+						text-align: center;
+						width: 100%;
+
+						h3 {
+							font-size: 1.8rem;
+							font-weight: 700;
+							margin-bottom: 10px;
+							font-family: 'Poppins', sans-serif;
+							text-transform: uppercase;
+							letter-spacing: 1px;
+						}
+
+						p {
+							font-size: 1rem;
+							opacity: 0.9;
+							margin: 0;
+							letter-spacing: 0.5px;
+						}
+					}
+				}
+
+				&:hover {
+					.bg-img {
+						transform: scale(1.1);
+
+						&.flipped {
+							transform: scale(-1.1, 1.1);
+						}
+					}
+
+					.overlay {
+						background: rgba(0, 0, 0, 0.5);
+						opacity: 1;
+
+						.content {
+							transform: translateY(0);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.container {
+			.offer-grid {
+				grid-template-columns: 1fr;
+				height: auto;
+
+				.offer-col {
+					height: auto;
+					gap: 20px;
+				}
+
+				.offer-card {
+					height: 400px;
+
+					&.small {
+						height: 300px;
+					}
+				}
+			}
+		}
+
 	}
 }

@@ -1,66 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
-const Latest = () => {
+interface ShoeCardProps {
+    id: number;
+    image: string;
+    hoverImage: string;
+    title: string;
+    category: string;
+    price: string;
+    onSale: boolean;
+    className?: string;
+}
+
+const ShoeCard: React.FC<ShoeCardProps> = ({ id, image, hoverImage, title, category, price, onSale, className }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <div
+            className="shoe-card"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {onSale && <span className="sale-badge">Sale</span>}
+            <div className={`shoe-image ${className || ''}`}>
+                <img
+                    src={image}
+                    alt={title}
+                    className={`shoe-img base-image ${isHovered ? 'fade-out' : ''}`}
+                />
+                <img
+                    src={hoverImage}
+                    alt={title}
+                    className={`shoe-img hover-image ${isHovered ? 'fade-in' : ''}`}
+                />
+                <div className="hover-overlay">
+                    <Link href={`/property/detail?id=${id}`}>
+                        <button className="view-product-btn">View Product</button>
+                    </Link>
+                </div>
+            </div>
+            <div className="shoe-info">
+                <h3 className="shoe-title">{title}</h3>
+                <div className="shoe-details">
+                    <span className="shoe-category">{category}</span>
+                    <span className="shoe-price">{price}</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ShoeCollection: React.FC = () => {
     const shoes = [
         {
             id: 1,
-            name: 'Eclipse Stride',
-            brand: 'Oxford',
-            price: '95.00',
-            image: '/img/banner/shoe.png',
-            sale: true
+            title: "Eclipse Stride",
+            category: "Oxford",
+            price: "$ 95.00 USD",
+            onSale: true,
+            image: "/img/banner/shoe.png",
+            hoverImage: "/img/banner/shoe2.png",
+            className: "bg-default"
         },
         {
             id: 2,
-            name: 'LunarPulse',
-            brand: 'Oxford',
-            price: '80.00',
-            image: '/img/banner/shoe2.png',
-            sale: true
+            title: "LunarPulse",
+            category: "Oxford",
+            price: "$ 80.00 USD",
+            onSale: false,
+            image: "/img/banner/shoe2.png",
+            hoverImage: "/img/banner/shoe3.png",
+            className: "bg-split"
         },
         {
             id: 3,
-            name: 'Mystic Glide',
-            brand: 'Oxford',
-            price: '95.00',
-            image: '/img/banner/shoe3.png',
-            sale: true
+            title: "Mystic Glide",
+            category: "Oxford",
+            price: "$ 95.00 USD",
+            onSale: true,
+            image: "/img/banner/shoe3.png",
+            hoverImage: "/img/banner/shoe.png",
+            className: "bg-grey"
         },
         {
             id: 4,
-            name: 'NovaGrip Blaze',
-            brand: 'Oxford',
-            price: '95.00',
-            image: '/img/banner/shoe.png',
-            sale: true
+            title: "NovaGrip Blaze",
+            category: "Oxford",
+            price: "$ 95.00 USD",
+            onSale: true,
+            image: "/img/banner/shoe.png",
+            hoverImage: "/img/banner/shoe3.png",
+            className: "bg-blue"
         }
     ];
 
     return (
         <div className="latest-section">
             <div className="container">
-                <div className="latest-header">
-                    <h2>Latest Shoes</h2>
-                    <p>
-                        Explore our latest shoe collection - blending fashion and functionality
-                        <br />
+                <header className="header">
+                    <h1 className="main-title">Latest Shoes</h1>
+                    <p className="subtitle">
+                        Explore our latest shoe collection - blending fashion and functionality<br />
                         for every step you take.
                     </p>
-                </div>
-
-                <div className="latest-grid">
-                    {shoes.map((shoe, index) => (
-                        <div key={shoe.id} className={`shoe-card shoe-card-${index + 1}`}>
-                            {shoe.sale && <span className="sale-badge">Sale</span>}
-                            <div className="shoe-image-container">
-                                <img src={shoe.image} alt={shoe.name} className="shoe-image" />
-                            </div>
-                            <div className="shoe-info">
-                                <h3>{shoe.name}</h3>
-                                <p className="brand">{shoe.brand}</p>
-                                <p className="price">$ {shoe.price} USD</p>
-                            </div>
-                        </div>
+                </header>
+            </div>
+            <div className="container">
+                <div className="shoe-grid">
+                    {shoes.map(shoe => (
+                        <ShoeCard key={shoe.id} {...shoe} />
                     ))}
                 </div>
             </div>
@@ -68,4 +116,4 @@ const Latest = () => {
     );
 };
 
-export default Latest;
+export default ShoeCollection;
