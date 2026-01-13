@@ -29,13 +29,7 @@ import MiniBasket from './MiniBasket';
 
 const Top = () => {
 	const device = useDeviceDetect();
-	// const user = useReactiveVar(userVar);
-	const user = {
-		_id: 'mock_id',
-		memberNick: 'Mock User',
-		memberImage: '',
-		memberType: 'AGENT',
-	};
+	const user = useReactiveVar(userVar);
 	const { t, i18n } = useTranslation('common');
 	const router = useRouter();
 	const [searchOpen, setSearchOpen] = useState(false);
@@ -323,8 +317,10 @@ const Top = () => {
 									</Menu>
 								</>
 							) : (
-								<Link href={'/account/join'}>
-									<AccountCircleOutlinedIcon className={'icon'} />
+								<Link href={'/account/login'}>
+									<Button variant="contained" className="btn-login">
+										Login / Register
+									</Button>
 								</Link>
 							)}
 						</Box>

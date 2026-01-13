@@ -317,14 +317,12 @@
         }
 
         .team-grid {
-          display: flex;
-          flex-direction: row; // Explicitly set row
-          justify-content: center;
-          gap: 30px;
-          flex-wrap: wrap;
+          width: 100%;
+          // Swiper needs block-like container
 
           .team-card {
-            width: 350px; // Back to fixed width which fits (350*3 + 60 = 1110 < 1200)
+            width: 100%; // SwiperSlide handles width
+
             max-width: 100%;
             background: #fff;
             text-align: center;

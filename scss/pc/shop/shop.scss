@@ -138,32 +138,66 @@ body {
 
 	.category-list {
 		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
 
 		li {
-			border-bottom: 1px solid $border-color;
-
-			&:last-child {
-				border-bottom: none;
-			}
+			border-bottom: none;
+			background: #ffffff;
+			border-radius: 12px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+			cursor: pointer;
+			transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+			position: relative;
+			overflow: hidden;
 
 			a {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				padding: 15px 10px;
+				padding: 16px 20px;
 				color: $text-color;
+				font-size: 15px;
+				font-weight: 600;
+				transition: all 0.3s ease;
 				text-decoration: none;
-				transition: $transition;
-				font-size: 14px;
-				font-weight: 500;
-
-				&:hover {
-					color: $accent-color;
-					padding-left: 15px;
-				}
+				width: 100%;
 
 				.arrow {
-					font-size: 12px;
+					font-size: 14px;
+					opacity: 0.5;
+					transition: all 0.3s ease;
+				}
+			}
+
+			&:after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 0%;
+				height: 3px;
+				background-color: $accent-color;
+				transition: width 0.3s ease;
+			}
+
+			&:hover {
+				transform: translateX(5px);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+				a {
+					color: $primary-color;
+
+					.arrow {
+						opacity: 1;
+						transform: translateX(3px);
+						color: $accent-color;
+					}
+				}
+
+				&:after {
+					width: 100%;
 				}
 			}
 		}

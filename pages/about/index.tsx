@@ -6,6 +6,14 @@ import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack, Box, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Adds from '../../libs/components/homepage/adds';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Autoplay, Pagination, Navigation } from 'swiper';
+import { useQuery } from '@apollo/client';
+import { GET_AGENTS } from '../../apollo/user/query';
+import { REACT_APP_API_URL } from '../../libs/config';
 
 // Helper component for scroll animations
 const FadeInWhenVisible = ({ children, delay = 0, animation = 'animate__fadeInUp' }: { children: React.ReactNode, delay?: number, animation?: string }) => {
@@ -83,6 +91,9 @@ const About: NextPage = () => {
 	const [isVisible, setIsVisible] = useState(false);
 	// counts state removed
 	const sectionRef = useRef(null);
+	const { loading, data, error } = useQuery(GET_AGENTS, {
+		variables: { input: { page: 1, limit: 10, sort: 'createdAt', direction: 'DESC', search: {} } },
+	});
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -573,44 +584,45 @@ const About: NextPage = () => {
 					</Stack>
 					<Stack className={'container'}>
 						<div className={'team-grid'}>
-							{[
-								{
-									img: "/img/banner/agents.webp",
-									name: "Olivia Martinez",
-									role: "Model 01",
-									quote: "Design is not just what it looks like and feels like. Design is how it works."
-								},
-								{
-									img: "/img/banner/properties.png",
-									name: "Michael Reynolds",
-									role: "Model 02",
-									quote: "Simplicity is the ultimate sophistication. We strive for it in every detail."
-								},
-								{
-									img: "/img/banner/header2.svg",
-									name: "Jasmine Patel",
-									role: "Model 03",
-									quote: "Innovation distinguishes between a leader and a follower."
-								}
-							].map((member, i) => (
-								<FadeInWhenVisible key={i} delay={i * 150}>
-									<div className={'team-card'}>
-										<div className={'image-wrapper'}>
-											<img src={member.img} alt={member.name} />
-											<div className={'overlay'}>
-												<div className={'overlay-content'}>
-													<span className={'badge'}>{member.role}</span>
-													<p className={'quote'}>&quot;{member.quote}&quot;</p>
+							<Swiper
+								className={'team-swiper'}
+								modules={[Autoplay, Pagination, Navigation]}
+								spaceBetween={30}
+								slidesPerView={3}
+								loop={true}
+								autoplay={{ delay: 3000, disableOnInteraction: false }}
+								pagination={{ clickable: true }}
+								breakpoints={{
+									320: { slidesPerView: 1, spaceBetween: 20 },
+									768: { slidesPerView: 2, spaceBetween: 30 },
+									1024: { slidesPerView: 3, spaceBetween: 30 },
+								}}
+							>
+								{data?.getAgents?.list?.map((member: any) => (
+									<SwiperSlide key={member._id}>
+										<FadeInWhenVisible delay={0}>
+											<div className={'team-card'}>
+												<div className={'image-wrapper'}>
+													<img
+														src={member.memberImage ? `${REACT_APP_API_URL}/${member.memberImage}` : "/img/profile/defaultUser.svg"}
+														alt={member.memberNick}
+													/>
+													<div className={'overlay'}>
+														<div className={'overlay-content'}>
+															<span className={'badge'}>{member.memberType}</span>
+															<p className={'quote'}>&quot;{member.memberDesc || "No description provided."}&quot;</p>
+														</div>
+													</div>
+												</div>
+												<div className={'info'}>
+													<h4>{member.memberNick}</h4>
+													<span>{member.memberType}</span>
 												</div>
 											</div>
-										</div>
-										<div className={'info'}>
-											<h4>{member.name}</h4>
-											<span>{member.role}</span>
-										</div>
-									</div>
-								</FadeInWhenVisible>
-							))}
+										</FadeInWhenVisible>
+									</SwiperSlide>
+								))}
+							</Swiper>
 						</div>
 					</Stack>
 

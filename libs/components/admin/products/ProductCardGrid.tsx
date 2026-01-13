@@ -14,32 +14,32 @@ import {
     Typography,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import { Property } from '../../../types/property/property';
+import { Product } from '../../../types/product/product';
 import { REACT_APP_API_URL } from '../../../config';
-import { PropertyStatus } from '../../../enums/property.enum';
+import { ProductStatus } from '../../../enums/product.enum';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-interface PropertyPanelListType {
-    properties: Property[];
+interface ProductPanelListType {
+    products: Product[];
     anchorEl: any;
     menuIconClickHandler: any;
     menuIconCloseHandler: any;
-    updatePropertyHandler: any;
-    removePropertyHandler: any;
+    updateProductHandler: any;
+    removeProductHandler: any;
 }
 
-export const PropertyCardGrid = (props: PropertyPanelListType) => {
+export const ProductCardGrid = (props: ProductPanelListType) => {
     const {
-        properties,
+        products,
         anchorEl,
         menuIconClickHandler,
         menuIconCloseHandler,
-        updatePropertyHandler,
-        removePropertyHandler,
+        updateProductHandler,
+        removeProductHandler,
     } = props;
 
-    if (properties.length === 0) {
+    if (products.length === 0) {
         return (
             <Box p={4} textAlign="center">
                 <Typography variant="body1" color="textSecondary">
@@ -51,11 +51,11 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
 
     return (
         <Grid container spacing={3}>
-            {properties.map((property: Property, index: number) => {
-                const propertyImage = `${REACT_APP_API_URL}/${property?.propertyImages[0]}`;
+            {products.map((product: Product, index: number) => {
+                const productImage = `${REACT_APP_API_URL}/${product?.productImages[0]}`;
 
                 return (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={property._id}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
                         <Card
                             sx={{
                                 height: '100%',
@@ -72,10 +72,10 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                             }}
                         >
                             <Box sx={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
-                                <Link href={`/property/detail?id=${property?._id}`}>
+                                <Link href={`/product/detail?id=${product?._id}`}>
                                     <img
-                                        src={propertyImage}
-                                        alt={property.propertyTitle}
+                                        src={productImage}
+                                        alt={product.productTitle}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
                                 </Link>
@@ -84,7 +84,7 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                                         position: 'absolute',
                                         top: 10,
                                         right: 10,
-                                        bgcolor: property.propertyStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
+                                        bgcolor: product.productStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
                                         color: '#white',
                                         px: 1,
                                         py: 0.5,
@@ -94,11 +94,11 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                                     }}
                                 >
-                                    {property.propertyStatus}
+                                    {product.productStatus}
                                 </Box>
                             </Box>
                             <CardContent sx={{ flexGrow: 1, pt: 2, pb: 1 }}>
-                                <Link href={`/property/detail?id=${property?._id}`}>
+                                <Link href={`/product/detail?id=${product?._id}`}>
                                     <Typography
                                         variant="h6"
                                         component="div"
@@ -112,16 +112,16 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                                             whiteSpace: 'nowrap',
                                         }}
                                     >
-                                        {property.propertyTitle}
+                                        {product.productTitle}
                                     </Typography>
                                 </Link>
                                 <Typography variant="body1" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                    ${Number(property.propertyPrice).toLocaleString()}
+                                    ${Number(product.productPrice).toLocaleString()}
                                 </Typography>
                                 {/* <Stack direction="row" alignItems="center" spacing={0.5}>
                                     <LocationOnIcon sx={{ fontSize: 16, color: '#64748b' }} />
                                     <Typography variant="body2" color="textSecondary" noWrap>
-                                        {property.propertyLocation}
+                                        {product.productLocation}
                                     </Typography>
                                 </Stack> */}
                             </CardContent>
@@ -135,23 +135,23 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                             >
                                 <Stack direction="row" spacing={1} alignItems="center">
                                     {/* <Avatar
-                                        src={property.memberData?.memberImage ? `${REACT_APP_API_URL}/${property.memberData.memberImage}` : '/img/profile/defaultUser.svg'}
+                                        src={product.memberData?.memberImage ? `${REACT_APP_API_URL}/${product.memberData.memberImage}` : '/img/profile/defaultUser.svg'}
                                         sx={{ width: 24, height: 24 }}
                                     />
                                     <Typography variant="caption" color="textSecondary">
-                                        {property.memberData?.memberNick || 'Unknown Agent'}
+                                        {product.memberData?.memberNick || 'Unknown Agent'}
                                     </Typography> */}
                                     <Typography variant="caption" color="textSecondary">
-                                        ID: {property._id.slice(0, 8).toUpperCase()}
+                                        ID: {product._id.slice(0, 8).toUpperCase()}
                                     </Typography>
                                 </Stack>
                                 <Box>
                                     <IconButton
                                         size="small"
-                                        onClick={(e: any) => menuIconClickHandler(e, property._id)}
-                                        aria-controls={Boolean(anchorEl[property._id]) ? 'account-menu' : undefined}
+                                        onClick={(e: any) => menuIconClickHandler(e, product._id)}
+                                        aria-controls={Boolean(anchorEl[product._id]) ? 'account-menu' : undefined}
                                         aria-haspopup="true"
-                                        aria-expanded={Boolean(anchorEl[property._id]) ? 'true' : undefined}
+                                        aria-expanded={Boolean(anchorEl[product._id]) ? 'true' : undefined}
                                     >
                                         <MoreVertIcon fontSize="small" />
                                     </IconButton>
@@ -159,8 +159,8 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                             </CardActions>
 
                             <Menu
-                                anchorEl={anchorEl[property._id]}
-                                open={Boolean(anchorEl[property._id])}
+                                anchorEl={anchorEl[product._id]}
+                                open={Boolean(anchorEl[product._id])}
                                 onClose={menuIconCloseHandler}
                                 onClick={menuIconCloseHandler}
                                 PaperProps={{
@@ -191,30 +191,30 @@ export const PropertyCardGrid = (props: PropertyPanelListType) => {
                                         onClick={() => {
                                             menuIconCloseHandler();
                                             // Mock edit redirect
-                                            console.log('Edit clicked for', property._id);
+                                            console.log('Edit clicked for', product._id);
                                         }}
                                     >
                                         <Typography variant={'body2'}>Edit Product</Typography>
                                     </MenuItem>
 
-                                    {property.propertyStatus !== PropertyStatus.SOLD && (
+                                    {product.productStatus !== ProductStatus.SOLD && (
                                         <MenuItem
-                                            onClick={() => updatePropertyHandler({ _id: property._id, propertyStatus: PropertyStatus.SOLD })}
+                                            onClick={() => updateProductHandler({ _id: product._id, productStatus: ProductStatus.SOLD })}
                                         >
                                             <Typography variant={'body2'}>Mark as Sold</Typography>
                                         </MenuItem>
                                     )}
 
-                                    {property.propertyStatus === PropertyStatus.SOLD && (
+                                    {product.productStatus === ProductStatus.SOLD && (
                                         <MenuItem
-                                            onClick={() => updatePropertyHandler({ _id: property._id, propertyStatus: PropertyStatus.ACTIVE })}
+                                            onClick={() => updateProductHandler({ _id: product._id, productStatus: ProductStatus.ACTIVE })}
                                         >
                                             <Typography variant={'body2'}>Mark as Active</Typography>
                                         </MenuItem>
                                     )}
 
                                     <MenuItem
-                                        onClick={() => removePropertyHandler(property._id)}
+                                        onClick={() => removeProductHandler(product._id)}
                                     >
                                         <Typography variant={'body2'} color={'error'}>Delete Product</Typography>
                                     </MenuItem>

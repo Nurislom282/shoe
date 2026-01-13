@@ -1,27 +1,27 @@
-import { PropertyLocation, PropertyStatus, PropertyType } from '../../enums/property.enum';
+import { ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
 import { Direction } from '../../enums/common.enum';
 
-export interface PropertyInput {
-	propertyType: PropertyType;
-	propertyLocation: PropertyLocation;
-	propertyAddress: string;
-	propertyTitle: string;
-	propertyPrice: number;
-	propertySquare: number;
-	propertyBeds: number;
-	propertyRooms: number;
-	propertyImages: string[];
-	propertyDesc?: string;
-	propertyBarter?: boolean;
-	propertyRent?: boolean;
+export interface ProductInput {
+	productType: ProductType;
+	productLocation: ProductLocation;
+	productAddress: string;
+	productTitle: string;
+	productPrice: number;
+	productSquare: number;
+	productBeds: number;
+	productRooms: number;
+	productImages: string[];
+	productDesc?: string;
+	productBarter?: boolean;
+	productRent?: boolean;
 	memberId?: string;
 	constructedAt?: Date;
 }
 
 interface PISearch {
 	memberId?: string;
-	locationList?: PropertyLocation[];
-	typeList?: PropertyType[];
+	locationList?: ProductLocation[];
+	typeList?: ProductType[];
 	roomsList?: Number[];
 	options?: string[];
 	bedsList?: Number[];
@@ -31,7 +31,7 @@ interface PISearch {
 	text?: string;
 }
 
-export interface PropertiesInquiry {
+export interface ProductsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
@@ -40,10 +40,10 @@ export interface PropertiesInquiry {
 }
 
 interface APISearch {
-	propertyStatus?: PropertyStatus;
+	productStatus?: ProductStatus;
 }
 
-export interface AgentPropertiesInquiry {
+export interface AgentProductsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
@@ -52,11 +52,11 @@ export interface AgentPropertiesInquiry {
 }
 
 interface ALPISearch {
-	propertyStatus?: PropertyStatus;
-	propertyLocationList?: PropertyLocation[];
+	productStatus?: ProductStatus;
+	productLocationList?: ProductLocation[];
 }
 
-export interface AllPropertiesInquiry {
+export interface AllProductsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;

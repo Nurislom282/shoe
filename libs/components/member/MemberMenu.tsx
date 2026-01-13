@@ -128,8 +128,6 @@ const MemberMenu = (props: MemberMenuProps) => {
 										<svg
 											className={'com-icon'}
 											fill={category === 'followers' ? 'white' : 'black'}
-											height="800px"
-											width="800px"
 											version="1.1"
 											id="Layer_1"
 											xmlns="http://www.w3.org/2000/svg"
@@ -179,8 +177,6 @@ const MemberMenu = (props: MemberMenuProps) => {
 										<svg
 											className={'com-icon'}
 											fill={category === 'followings' ? 'white' : 'black'}
-											height="800px"
-											width="800px"
 											version="1.1"
 											id="Layer_1"
 											xmlns="http://www.w3.org/2000/svg"

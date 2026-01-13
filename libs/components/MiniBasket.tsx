@@ -1,6 +1,7 @@
 import React from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { cartItemsVar, cartVar } from '../../apollo/store';
+import { useRouter } from 'next/router';
+import { cartItemsVar, cartVar, userVar } from '../../apollo/store';
 import Link from 'next/link';
 import Image from 'next/image';
 import { DeleteOutline } from '@mui/icons-material';
@@ -14,9 +15,20 @@ interface MiniBasketProps {
 const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
     const cartItems = useReactiveVar(cartItemsVar);
     const cartTotal = useReactiveVar(cartVar);
+    const user = useReactiveVar(userVar);
+    const router = useRouter();
 
     const calculateTotal = () => {
         return cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    };
+
+    const checkoutHandler = () => {
+        setOpen(false);
+        if (user?._id) {
+            router.push('/shop/checkout');
+        } else {
+            router.push('/account/login');
+        }
     };
 
     const removeItem = (id: string | number) => {
@@ -69,11 +81,9 @@ const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
                             View Cart
                         </button>
                     </Link>
-                    <Link href="/shop/checkout">
-                        <button className="checkout" disabled={cartItems.length === 0} onClick={() => setOpen(false)}>
-                            Checkout
-                        </button>
-                    </Link>
+                    <button className="checkout" disabled={cartItems.length === 0} onClick={checkoutHandler}>
+                        Checkout
+                    </button>
                 </div>
             </div>
         </div>

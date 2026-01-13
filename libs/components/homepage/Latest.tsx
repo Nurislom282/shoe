@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCTS } from '../../../apollo/user/query';
+import { Product } from '../../types/product/product';
+import { REACT_APP_API_URL } from '../../config';
+import { Box, Stack, Typography } from '@mui/material';
+import { Direction } from '../../enums/common.enum';
 
 interface ShoeCardProps {
-    id: number;
+    id: string;
     image: string;
     hoverImage: string;
     title: string;
@@ -34,7 +40,7 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ id, image, hoverImage, title, categ
                     className={`shoe-img hover-image ${isHovered ? 'fade-in' : ''}`}
                 />
                 <div className="hover-overlay">
-                    <Link href={`/property/detail?id=${id}`}>
+                    <Link href={`/product/detail?id=${id}`}>
                         <button className="view-product-btn">View Product</button>
                     </Link>
                 </div>
@@ -51,48 +57,42 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ id, image, hoverImage, title, categ
 };
 
 const ShoeCollection: React.FC = () => {
-    const shoes = [
-        {
-            id: 1,
-            title: "Eclipse Stride",
-            category: "Oxford",
-            price: "$ 95.00 USD",
-            onSale: true,
-            image: "/img/banner/shoe.png",
-            hoverImage: "/img/banner/shoe2.png",
-            className: "bg-default"
+    const [products, setProducts] = useState<Product[]>([]);
+
+    const { loading, error } = useQuery(GET_PRODUCTS, {
+        fetchPolicy: 'network-only',
+        variables: {
+            input: {
+                page: 1,
+                limit: 3,
+                sort: 'createdAt',
+                direction: Direction.DESC,
+                search: {},
+            },
         },
-        {
-            id: 2,
-            title: "LunarPulse",
-            category: "Oxford",
-            price: "$ 80.00 USD",
-            onSale: false,
-            image: "/img/banner/shoe2.png",
-            hoverImage: "/img/banner/shoe3.png",
-            className: "bg-split"
+        onCompleted: (data) => {
+            if (data?.getProducts?.list) {
+                setProducts(data.getProducts.list);
+            }
         },
-        {
-            id: 3,
-            title: "Mystic Glide",
-            category: "Oxford",
-            price: "$ 95.00 USD",
-            onSale: true,
-            image: "/img/banner/shoe3.png",
-            hoverImage: "/img/banner/shoe.png",
-            className: "bg-grey"
-        },
-        {
-            id: 4,
-            title: "NovaGrip Blaze",
-            category: "Oxford",
-            price: "$ 95.00 USD",
-            onSale: true,
-            image: "/img/banner/shoe.png",
-            hoverImage: "/img/banner/shoe3.png",
-            className: "bg-blue"
-        }
-    ];
+    });
+
+    if (loading) return (
+        <div className="latest-section">
+            <div className="container">
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+                    <Typography>Loading...</Typography>
+                </Box>
+            </div>
+        </div>
+    );
+
+    if (error) {
+        console.log('Latest products error:', error);
+        // Let it continue to render empty state
+    }
+
+    const bgClasses = ['bg-default', 'bg-split', 'bg-grey', 'bg-blue'];
 
     return (
         <div className="latest-section">
@@ -107,9 +107,27 @@ const ShoeCollection: React.FC = () => {
             </div>
             <div className="container">
                 <div className="shoe-grid">
-                    {shoes.map(shoe => (
-                        <ShoeCard key={shoe.id} {...shoe} />
-                    ))}
+                    {products.length === 0 ? (
+                        <Box className="empty-list" sx={{ textAlign: 'center', py: 8 }}>
+                            <Typography variant="h6" color="text.secondary">
+                                No products found. Please check back later!
+                            </Typography>
+                        </Box>
+                    ) : (
+                        products.map((product, index) => (
+                            <ShoeCard
+                                key={product._id}
+                                id={product._id}
+                                image={product.productImages?.[0] ? `${REACT_APP_API_URL}/${product.productImages[0]}` : '/img/logo/logo-vector.png'}
+                                hoverImage={product.productImages?.[1] ? `${REACT_APP_API_URL}/${product.productImages[1]}` : (product.productImages?.[0] ? `${REACT_APP_API_URL}/${product.productImages[0]}` : '/img/logo/logo-vector.png')}
+                                title={product.productTitle}
+                                category="Sneakers"
+                                price={`$${product.productPrice.toLocaleString()}`}
+                                onSale={false}
+                                className={bgClasses[index % bgClasses.length]}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

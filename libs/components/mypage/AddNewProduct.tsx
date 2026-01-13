@@ -4,24 +4,24 @@ import { useRouter } from 'next/router';
 import { Button, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { PropertyLocation, PropertyType } from '../../enums/property.enum';
-import { REACT_APP_API_URL, propertySquare } from '../../config';
-import { PropertyInput } from '../../types/property/property.input';
+import { ProductLocation, ProductType } from '../../enums/product.enum';
+import { REACT_APP_API_URL } from '../../config';
+import { ProductInput } from '../../types/product/product.input';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
-import { CREATE_PROPERTY, UPDATE_PROPERTY } from '../../../apollo/user/mutation';
-import { GET_PROPERTY } from '../../../apollo/user/query';
+import { CREATE_PRODUCT, UPDATE_PRODUCT } from '../../../apollo/user/mutation';
+import { GET_PRODUCT } from '../../../apollo/user/query';
 
-const AddProperty = ({ initialValues, ...props }: any) => {
+const AddProduct = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const inputRef = useRef<any>(null);
-	const [insertPropertyData, setInsertPropertyData] = useState<PropertyInput>(initialValues);
-	const [propertyType, setPropertyType] = useState<PropertyType[]>(Object.values(PropertyType));
-	const [propertyLocation, setPropertyLocation] = useState<PropertyLocation[]>(Object.values(PropertyLocation));
+	const [insertProductData, setInsertProductData] = useState<ProductInput>(initialValues);
+	const [productType, setProductType] = useState<ProductType[]>(Object.values(ProductType));
+	const [productLocation, setProductLocation] = useState<ProductLocation[]>(Object.values(ProductLocation));
 	const token = getJwtToken();
 	// const user = useReactiveVar(userVar);
 	const user = {
@@ -32,39 +32,39 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 	};
 
 	/** APOLLO REQUESTS **/
-	const [createProperty] = useMutation(CREATE_PROPERTY);
-	const [updateProperty] = useMutation(UPDATE_PROPERTY);
+	const [createProduct] = useMutation(CREATE_PRODUCT);
+	const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
 	const {
-		loading: getPropertyLoading,
-		data: getPropertyData,
-		error: getPropertyError,
-		refetch: getPropertyRefetch,
-	} = useQuery(GET_PROPERTY, {
+		loading: getProductLoading,
+		data: getProductData,
+		error: getProductError,
+		refetch: getProductRefetch,
+	} = useQuery(GET_PRODUCT, {
 		fetchPolicy: 'network-only',
 		variables: {
-			input: router.query.propertyId,
+			input: router.query.productId,
 		},
 	});
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		setInsertPropertyData({
-			...insertPropertyData,
-			propertyTitle: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyTitle : '',
-			propertyPrice: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyPrice : 0,
-			propertyType: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyType : '',
-			propertyLocation: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyLocation : '',
-			propertyAddress: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyAddress : '',
-			propertyBarter: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyBarter : false,
-			propertyRent: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyRent : false,
-			propertyRooms: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyRooms : 0,
-			propertyBeds: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyBeds : 0,
-			propertySquare: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertySquare : 0,
-			propertyDesc: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyDesc : '',
-			propertyImages: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyImages : [],
+		setInsertProductData({
+			...insertProductData,
+			productTitle: getProductData?.getProduct ? getProductData?.getProduct?.productTitle : '',
+			productPrice: getProductData?.getProduct ? getProductData?.getProduct?.productPrice : 0,
+			productType: getProductData?.getProduct ? getProductData?.getProduct?.productType : '',
+			productLocation: getProductData?.getProduct ? getProductData?.getProduct?.productLocation : '',
+			productAddress: getProductData?.getProduct ? getProductData?.getProduct?.productAddress : '',
+			productBarter: getProductData?.getProduct ? getProductData?.getProduct?.productBarter : false,
+			productRent: getProductData?.getProduct ? getProductData?.getProduct?.productRent : false,
+			productRooms: getProductData?.getProduct ? getProductData?.getProduct?.productRooms : 0,
+			productBeds: getProductData?.getProduct ? getProductData?.getProduct?.productBeds : 0,
+			productSquare: getProductData?.getProduct ? getProductData?.getProduct?.productSquare : 0,
+			productDesc: getProductData?.getProduct ? getProductData?.getProduct?.productDesc : '',
+			productImages: getProductData?.getProduct ? getProductData?.getProduct?.productImages : [],
 		});
-	}, [getPropertyLoading, getPropertyData]);
+	}, [getProductLoading, getProductData]);
 
 	/** HANDLERS **/
 	async function uploadImages() {
@@ -83,7 +83,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 				  }`,
 					variables: {
 						files: [null, null, null, null, null],
-						target: 'property',
+						target: 'product',
 					},
 				}),
 			);
@@ -112,7 +112,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 			const responseImages = response.data.data.imagesUploader;
 
 			console.log('+responseImages: ', responseImages);
-			setInsertPropertyData({ ...insertPropertyData, propertyImages: responseImages });
+			setInsertProductData({ ...insertProductData, productImages: responseImages });
 		} catch (err: any) {
 			console.log('err: ', err.message);
 			await sweetMixinErrorAlert(err.message);
@@ -123,80 +123,80 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 	const deleteImage = useCallback(
 		async (image: string) => {
 			console.log('deleteImage:', image);
-			setInsertPropertyData({
-				...insertPropertyData,
-				propertyImages: insertPropertyData.propertyImages.filter((img: string) => img !== image),
+			setInsertProductData({
+				...insertProductData,
+				productImages: insertProductData.productImages.filter((img: string) => img !== image),
 			});
 		},
-		[insertPropertyData],
+		[insertProductData],
 	);
 
 	const doDisabledCheck = () => {
 		if (
-			insertPropertyData.propertyTitle === '' ||
-			insertPropertyData.propertyPrice === 0 || // @ts-ignore
-			insertPropertyData.propertyType === '' || // @ts-ignore
-			insertPropertyData.propertyLocation === '' || // @ts-ignore
-			insertPropertyData.propertyAddress === '' || // @ts-ignore
-			insertPropertyData.propertyBarter === '' || // @ts-ignore
-			insertPropertyData.propertyRent === '' ||
-			insertPropertyData.propertyRooms === 0 ||
-			insertPropertyData.propertyBeds === 0 ||
-			insertPropertyData.propertySquare === 0 ||
-			insertPropertyData.propertyDesc === '' ||
-			insertPropertyData.propertyImages.length === 0
+			insertProductData.productTitle === '' ||
+			insertProductData.productPrice === 0 || // @ts-ignore
+			insertProductData.productType === '' || // @ts-ignore
+			insertProductData.productLocation === '' || // @ts-ignore
+			insertProductData.productAddress === '' || // @ts-ignore
+			insertProductData.productBarter === '' || // @ts-ignore
+			insertProductData.productRent === '' ||
+			insertProductData.productRooms === 0 ||
+			insertProductData.productBeds === 0 ||
+			insertProductData.productSquare === 0 ||
+			insertProductData.productDesc === '' ||
+			insertProductData.productImages.length === 0
 		) {
 			return true;
 		}
 	};
 
-	const insertPropertyHandler = useCallback(async () => {
+	const insertProductHandler = useCallback(async () => {
 		try {
-			const result = await createProperty({
+			const result = await createProduct({
 				variables: {
-					input: insertPropertyData,
+					input: insertProductData,
 				},
 			});
 
-			await sweetMixinSuccessAlert('This property has been created successfully. ');
+			await sweetMixinSuccessAlert('This product has been created successfully. ');
 			await router.push({
 				pathname: '/mypage',
 				query: {
-					category: 'myProperties',
+					category: 'myProducts',
 				},
 			});
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
-	}, [insertPropertyData]);
+	}, [insertProductData]);
 
-	const updatePropertyHandler = useCallback(async () => {
+	const updateProductHandler = useCallback(async () => {
 		try {
 			//@ts-ignore
-			insertPropertyData._id = getPropertyData?.getProperty?._id;
-			const result = await updateProperty({
+			insertProductData._id = getProductData?.getProduct?._id;
+			const result = await updateProduct({
 				variables: {
-					input: insertPropertyData,
+					input: insertProductData,
 				},
 			});
 
-			await sweetMixinSuccessAlert('This property has been updated successfully. ');
+			await sweetMixinSuccessAlert('This product has been updated successfully. ');
 			await router.push({
 				pathname: '/mypage',
 				query: {
-					category: 'myProperties',
+					category: 'myProducts',
 				},
 			});
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
-	}, [insertPropertyData]);
+	}, [insertProductData]);
 
 	if (user?.memberType !== 'AGENT') {
 		router.back();
 	}
 
-	console.log('+insertPropertyData', insertPropertyData);
+	console.log('+insertProductData', insertProductData);
 
 	if (device === 'mobile') {
 		return <div>ADD NEW PRODUCT MOBILE PAGE</div>;
@@ -217,9 +217,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									type="text"
 									className="description-input"
 									placeholder={'Title'}
-									value={insertPropertyData.propertyTitle}
+									value={insertProductData.productTitle}
 									onChange={({ target: { value } }) =>
-										setInsertPropertyData({ ...insertPropertyData, propertyTitle: value })
+										setInsertProductData({ ...insertProductData, productTitle: value })
 									}
 								/>
 							</Stack>
@@ -231,9 +231,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Price'}
-										value={insertPropertyData.propertyPrice}
+										value={insertProductData.productPrice}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyPrice: parseInt(value) })
+											setInsertProductData({ ...insertProductData, productPrice: parseInt(value) })
 										}
 									/>
 								</Stack>
@@ -241,18 +241,18 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Select Type</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyType || 'select'}
-										value={insertPropertyData.propertyType || 'select'}
+										defaultValue={insertProductData.productType || 'select'}
+										value={insertProductData.productType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyType: value })
+											setInsertProductData({ ...insertProductData, productType: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyType.map((type: any) => (
+											{productType.map((type: any) => (
 												<option value={`${type}`} key={type}>
 													{type}
 												</option>
@@ -269,18 +269,18 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Select Location</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertProductData.productLocation || 'select'}
+										value={insertProductData.productLocation || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertProductData({ ...insertProductData, productLocation: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
+											{productLocation.map((location: any) => (
 												<option value={`${location}`} key={location}>
 													{location}
 												</option>
@@ -296,9 +296,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										value={insertProductData.productAddress}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertProductData({ ...insertProductData, productAddress: value })
 										}
 									/>
 								</Stack>
@@ -309,10 +309,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Barter</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyBarter ? 'yes' : 'no'}
-										defaultValue={insertPropertyData.propertyBarter ? 'yes' : 'no'}
+										value={insertProductData.productBarter ? 'yes' : 'no'}
+										defaultValue={insertProductData.productBarter ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyBarter: value === 'yes' })
+											setInsertProductData({ ...insertProductData, productBarter: value === 'yes' })
 										}
 									>
 										<option disabled={true} selected={true}>
@@ -328,10 +328,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Rent</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyRent ? 'yes' : 'no'}
-										defaultValue={insertPropertyData.propertyRent ? 'yes' : 'no'}
+										value={insertProductData.productRent ? 'yes' : 'no'}
+										defaultValue={insertProductData.productRent ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyRent: value === 'yes' })
+											setInsertProductData({ ...insertProductData, productRent: value === 'yes' })
 										}
 									>
 										<option disabled={true} selected={true}>
@@ -350,10 +350,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Rooms</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyRooms || 'select'}
-										defaultValue={insertPropertyData.propertyRooms || 'select'}
+										value={insertProductData.productRooms || 'select'}
+										defaultValue={insertProductData.productRooms || 'select'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyRooms: parseInt(value) })
+											setInsertProductData({ ...insertProductData, productRooms: parseInt(value) })
 										}
 									>
 										<option disabled={true} selected={true} value={'select'}>
@@ -370,10 +370,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Bed</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyBeds || 'select'}
-										defaultValue={insertPropertyData.propertyBeds || 'select'}
+										value={insertProductData.productBeds || 'select'}
+										defaultValue={insertProductData.productBeds || 'select'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyBeds: parseInt(value) })
+											setInsertProductData({ ...insertProductData, productBeds: parseInt(value) })
 										}
 									>
 										<option disabled={true} selected={true} value={'select'}>
@@ -390,20 +390,18 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Square</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertySquare || 'select'}
-										defaultValue={insertPropertyData.propertySquare || 'select'}
+										value={insertProductData.productSquare || 'select'}
+										defaultValue={insertProductData.productSquare || 'select'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertySquare: parseInt(value) })
+											setInsertProductData({ ...insertProductData, productSquare: parseInt(value) })
 										}
 									>
 										<option disabled={true} selected={true} value={'select'}>
 											Select
 										</option>
-										{propertySquare.map((square: number) => {
-											if (square !== 0) {
-												return <option value={`${square}`}>{square}</option>;
-											}
-										})}
+										{[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((square: number) => (
+											<option value={`${square}`}>{square}</option>
+										))}
 									</select>
 									<div className={'divider'}></div>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -417,9 +415,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									name=""
 									id=""
 									className="description-text"
-									value={insertPropertyData.propertyDesc}
+									value={insertProductData.productDesc}
 									onChange={({ target: { value } }) =>
-										setInsertPropertyData({ ...insertPropertyData, propertyDesc: value })
+										setInsertProductData({ ...insertProductData, productDesc: value })
 									}
 								></textarea>
 							</Stack>
@@ -456,7 +454,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="gallery-box">
-									{insertPropertyData?.propertyImages.map((image: string, index: number) => {
+									{insertProductData?.productImages.map((image: string, index: number) => {
 										const imagePath: string = `${process.env.REACT_APP_API_URL}/${image}`;
 										return (
 											<Stack className="image-box" key={index}>
@@ -471,12 +469,12 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 							</Stack>
 						</Stack>
 						<Stack className="buttons-row">
-							{router.query.propertyId ? (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={updatePropertyHandler}>
+							{router.query.productId ? (
+								<Button className="next-button" disabled={doDisabledCheck()} onClick={updateProductHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							) : (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={insertPropertyHandler}>
+								<Button className="next-button" disabled={doDisabledCheck()} onClick={insertProductHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							)}
@@ -488,21 +486,21 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 	}
 };
 
-AddProperty.defaultProps = {
+AddProduct.defaultProps = {
 	initialValues: {
-		propertyTitle: '',
-		propertyPrice: 0,
-		propertyType: '',
-		propertyLocation: '',
-		propertyAddress: '',
-		propertyBarter: false,
-		propertyRent: false,
-		propertyRooms: 0,
-		propertyBeds: 0,
-		propertySquare: 0,
-		propertyDesc: '',
-		propertyImages: [],
+		productTitle: '',
+		productPrice: 0,
+		productType: '',
+		productLocation: '',
+		productAddress: '',
+		productBarter: false,
+		productRent: false,
+		productRooms: 0,
+		productBeds: 0,
+		productSquare: 0,
+		productDesc: '',
+		productImages: [],
 	},
 };
 
-export default AddProperty;
+export default AddProduct;

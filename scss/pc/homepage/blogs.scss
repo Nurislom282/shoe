@@ -32,6 +32,22 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 30px;
+
+        .empty-list {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+
+            p {
+                font-family: 'Poppins', sans-serif;
+                font-size: 1.2rem;
+                color: #888;
+                margin-top: 10px;
+            }
+        }
     }
 
     .blog-card {

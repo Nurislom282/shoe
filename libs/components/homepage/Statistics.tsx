@@ -3,6 +3,7 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
 import CachedOutlinedIcon from '@mui/icons-material/CachedOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Money } from '@mui/icons-material';
 
 const Statistics = () => {
     return (
@@ -25,17 +26,17 @@ const Statistics = () => {
                         </div>
                         <div className="stat-content">
                             <h3>ONLINE SUPPORT 24/7</h3>
-                            <p>Support online 24 hours a day</p>
+                            <p>Online support 24 hours a day</p>
                         </div>
                     </div>
 
                     <div className="stat-item">
                         <div className="stat-icon">
-                            <CachedOutlinedIcon />
+                            <Money />
                         </div>
                         <div className="stat-content">
                             <h3>MONEY RETURN</h3>
-                            <p>Support online 24 hours a day</p>
+                            <p>Money return guarantee</p>
                         </div>
                     </div>
 
@@ -45,7 +46,7 @@ const Statistics = () => {
                         </div>
                         <div className="stat-content">
                             <h3>SECURE PAYMENT</h3>
-                            <p>Support online 24 hours a day</p>
+                            <p>Secure payment</p>
                         </div>
                     </div>
                 </div>

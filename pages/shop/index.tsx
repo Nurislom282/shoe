@@ -6,18 +6,19 @@ import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 
 import { useRouter } from 'next/router';
-import { PropertiesInquiry } from '../../libs/types/property/property.input';
-import { Property } from '../../libs/types/property/property';
+import { ProductsInquiry } from '../../libs/types/product/product.input';
+import { Product } from '../../libs/types/product/product';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import { Direction, Message } from '../../libs/enums/common.enum';
-import { GET_PROPERTIES } from '../../apollo/user/query';
-import { T } from '../../libs/types/common';
+import { GET_PRODUCTS } from '../../apollo/user/query';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
+import { LIKE_TARGET_PRODUCT } from '../../apollo/user/mutation';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { ProductType } from '../../libs/enums/product.enum';
+import { REACT_APP_API_URL } from '../../libs/config';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -28,132 +29,110 @@ export const getStaticProps = async ({ locale }: any) => ({
 const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 	const [cartOpen, setCartOpen] = useState(false);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [page, setPage] = useState(1);
+	const [filter, setFilter] = useState<ProductsInquiry>({
+		page: 1,
+		limit: 6,
+		sort: "createdAt",
+		direction: Direction.DESC,
+		search: {
+			squaresRange: { start: 0, end: 500 },
+			pricesRange: { start: 0, end: 2000000 },
+		},
+	});
+	const [products, setProducts] = useState<Product[]>([]);
+	const [total, setTotal] = useState<number>(0);
 	const device = useDeviceDetect();
 	const router = useRouter();
-
-	const products = [
-		{
-			id: 1,
-			name: 'Eclipse Stride',
-			category: 'Oxford',
-			price: 95.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00b7275dbb9d61e703400_6407.jpg',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00b78071e059bd3c75642_7555.webp'
-			],
-			sale: true
+	const {
+		loading,
+		data,
+		error,
+		refetch: refetchProducts,
+	} = useQuery(GET_PRODUCTS, {
+		fetchPolicy: 'network-only',
+		variables: { input: filter },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: any) => {
+			setProducts(data?.getProducts?.list || []);
+			setTotal(data?.getProducts?.metaCounter[0]?.total || 0);
 		},
-		{
-			id: 2,
-			name: 'LunarPulse',
-			category: 'Oxford',
-			price: 80.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00a75e19c88e19a53ed79_10847.webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00a7f0c66f75a12299835_10980.webp'
-			],
-			sale: true
-		},
-		{
-			id: 3,
-			name: 'Luxe Vista',
-			category: 'Loafers',
-			price: 62.50,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65ef5075a8040d3a222349d4_101515.webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65ef58a597574d9bb64d67bb_mikhail-tyrsyna-R8IfCCtAweE-unsplash.webp'
-			],
-			sale: true
-		},
-		{
-			id: 4,
-			name: 'Mystic Glide',
-			category: 'Oxford',
-			price: 95.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65eeff58834a0e1c401e23c8_37552.webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65ef5075a8040d3a222349d4_101515.webp'
-			],
-			sale: true
-		},
-		{
-			id: 5,
-			name: 'Nebula Nectar',
-			category: 'Oxford',
-			price: 80.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65ef50a9e0db5d8eafa37f7e_%E2%80%94Pngtree%E2%80%94men%27s%20shoes%20sports%20shoes_6784833.png',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f496d214cdaa244dc53141_Shoe%20Black.webp'
-			],
-			sale: true
-		},
-		{
-			id: 6,
-			name: 'NovaGrip Blaze',
-			category: 'Oxford',
-			price: 95.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65ef50b0a5118a45e8b8163e_pngwing.com%20(3).webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00b93377b625d5d019456_3993.webp'
-			],
-			sale: true
-		},
-		{
-			id: 7,
-			name: 'Rogue Rhythm',
-			category: 'Oxford',
-			price: 210.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65e80455799429dd369e5809_23442.webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65e804591bd6c4851877d823_691.webp'
-			],
-			sale: true
-		},
-		{
-			id: 8,
-			name: 'Serene Sole',
-			category: 'Loafers',
-			price: 95.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65eeff68809007162783fd79_1093.webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65aebff57a4070d781987d83_wengang-zhai-_fOL6ebfECQ-unsplash.jpg'
-			],
-			sale: true
-		},
-		{
-			id: 9,
-			name: 'SprintWave',
-			category: 'Loafers',
-			price: 95.00,
-			images: [
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00a26ebd39df85e9e00a4_619.webp',
-				'https://cdn.prod.website-files.com/65a6294a580c5ed45b48f81a/65f00a2d74e889325c53532d_2078.webp'
-			],
-			sale: true
-		}
-	];
-
-	const { text } = router.query;
-	const filteredProducts = products.filter((product) => {
-		if (!text) return true;
-		const searchText = String(text).toLowerCase();
-		return (
-			product.name.toLowerCase().includes(searchText) ||
-			product.category.toLowerCase().includes(searchText)
-		);
 	});
+
+	useEffect(() => {
+		if (router.query.page || router.query.category || router.query.text) {
+			const { page, category, text } = router.query;
+			const newFilter = { ...filter, page: Number(page) || 1 };
+
+			if (category) {
+				const categoryStr = String(category);
+				let typeList: ProductType[] | undefined;
+				let searchText: string | undefined;
+
+				switch (categoryStr) {
+					case 'Sneakers':
+						typeList = [ProductType.SNEAKER];
+						break;
+					case 'Boots':
+						typeList = [ProductType.BOOT];
+						break;
+					case 'Sandals':
+						typeList = [ProductType.SANDAL];
+						break;
+					case 'Shoes':
+						typeList = [ProductType.SHOE];
+						break;
+					default:
+						searchText = categoryStr;
+						break;
+				}
+
+				newFilter.search = {
+					...newFilter.search,
+					typeList,
+					text: searchText,
+				};
+			} else {
+				// If category is removed from URL, clear typeList and text from filter.search
+				newFilter.search = {
+					...newFilter.search,
+					typeList: undefined,
+					text: undefined,
+				};
+			}
+
+			if (text) {
+				newFilter.search.text = String(text);
+			}
+
+			setFilter(newFilter);
+		}
+	}, [router.query]);
+
+	/** HANDLERS **/
+	const handlePaginationChange = (event: ChangeEvent<unknown>, value: number) => {
+		router.push(
+			{
+				pathname: '/shop',
+				query: { ...router.query, page: value },
+			},
+			undefined,
+			{ scroll: false }
+		);
+	};
+
+
 
 
 	const categories = [
 		'Sneakers',
-		'Loafers',
 		'Boots',
+		'Sandals',
+		'Shoes',
 		'Oxford',
 		'Formal',
 		'Turfs',
 		'High Neck',
-		'Sports Shoe'
+		'Sports Shoe',
 	];
 
 	const brands = [
@@ -168,6 +147,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		'https://cdn.prod.website-files.com/65a62949580c5ed45b48f683/6855c1f678f1e279043edbfc_customers_1.svg',
 		'https://cdn.prod.website-files.com/65a62949580c5ed45b48f683/6855c1f678f1e279043edbf9_customers_3.svg'
 	];
+
 	if (device === 'mobile') {
 		return <h1>PROPERTIES MOBILE</h1>;
 	} else {
@@ -197,7 +177,13 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 								<ul className="category-list">
 									{categories.map((category, index) => (
 										<li key={index}>
-											<Link href={`/category/${category.toLowerCase().replace(' ', '-')}`}>
+											<Link
+												href={{
+													pathname: '/shop',
+													query: { page: 1, category: category },
+												}}
+												scroll={true}
+											>
 												{category}
 												<span className="arrow">»</span>
 											</Link>
@@ -209,49 +195,50 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 							{/* Products Grid */}
 							<div className="products-section">
 								<div className="products-grid">
-									{filteredProducts.slice((page - 1) * 6, page * 6).map((product, index) => (
-										<div key={product.id} className="product-card" style={{ animationDelay: `${index * 0.1}s` }}>
-											<div className="product-image-wrapper">
-												<img src={product.images[0]} alt={product.name} className="product-image main" />
-												<img src={product.images[1]} alt={product.name} className="product-image hover" />
-												<div className="product-overlay">
-													<button className="view-product-btn" onClick={() => router.push(`/shop/detail?id=${product.id}`)}>
-														View Product
-													</button>
+									{products.length > 0 ? (
+										products.map((product, index) => (
+											<div key={product._id} className="product-card" style={{ animationDelay: `${index * 0.1}s` }}>
+												<div className="product-image-wrapper">
+													<img
+														src={`${REACT_APP_API_URL}/${product.productImages[0]}`}
+														alt={product.productTitle}
+														className="product-image main"
+													/>
+													<img
+														src={`${REACT_APP_API_URL}/${product.productImages[1] || product.productImages[0]}`}
+														alt={product.productTitle}
+														className="product-image hover"
+													/>
+													<div className="product-overlay">
+														<button
+															className="view-product-btn"
+															onClick={() => router.push(`/shop/detail?id=${product._id}`)}
+														>
+															View Product
+														</button>
+													</div>
+													{/* {product.sale && <span className="sale-badge">Sale</span>} */}
 												</div>
-												{product.sale && <span className="sale-badge">Sale</span>}
+												<div className="product-info">
+													<h3 className="product-name">{product.productTitle}</h3>
+													<div className="product-category">{product.productType}</div>
+													<p className="product-price">$ {product.productPrice.toLocaleString()} USD</p>
+												</div>
 											</div>
-											<div className="product-info">
-												<h3 className="product-name">{product.name}</h3>
-												<Link href={`/category/${product.category.toLowerCase()}`} className="product-category">
-													{product.category}
-												</Link>
-												<p className="product-price">$ {product.price.toFixed(2)} USD</p>
-											</div>
-										</div>
-									))}
+										))
+									) : (
+										<div className="no-products">No products found</div>
+									)}
 								</div>
 
 								<div className="pagination">
-									<div className="pagination-box">
-										<button
-											className="pagination-btn"
-											onClick={() => setPage((p) => Math.max(1, p - 1))}
-											disabled={page === 1}
-										>
-											<KeyboardArrowLeftRoundedIcon />
-										</button>
-										<span className="pagination-info">
-											{page} of {Math.max(1, Math.ceil(filteredProducts.length / 6))}
-										</span>
-										<button
-											className="pagination-btn"
-											onClick={() => setPage((p) => Math.min(Math.ceil(filteredProducts.length / 6), p + 1))}
-											disabled={page === Math.ceil(filteredProducts.length / 6)}
-										>
-											<KeyboardArrowRightRoundedIcon />
-										</button>
-									</div>
+									<Pagination
+										count={Math.ceil(total / filter.limit)}
+										page={filter.page}
+										shape="circular"
+										color="primary"
+										onChange={handlePaginationChange}
+									/>
 								</div>
 							</div>
 						</div>

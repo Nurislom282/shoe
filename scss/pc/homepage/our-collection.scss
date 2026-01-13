@@ -1,7 +1,8 @@
 .our-collection-section {
     padding: 120px 120px 60px 120px;
     padding-top: 100px !important;
-    margin-top: 0 !important;
+    margin-top: 50px !important;
+    position: relative;
     background-color: #ffffff;
     font-family: 'Poppins', sans-serif;
 
@@ -29,7 +30,7 @@
         p {
             font-size: 1rem;
             color: #666;
-            margin: 0 auto;
+            margin: 0;
             max-width: 600px;
             line-height: 1.8;
         }

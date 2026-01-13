@@ -36,8 +36,7 @@ const About = () => {
                     <div className="about-text">
                         <h2>About ShoeZ</h2>
                         <p>
-                            Discover the Shoez story. We're passionate about creating footwear that not only
-                            complements your style but also prioritizes comfort and quality.
+                            ShoeZ is a premium online store specializing in comfortable and stylish footwear. Our mission is to provide our customers with the best possible shopping experience, offering a wide range of high-quality shoes at competitive prices.
                         </p>
                         <Link href="/property">
                             <button className="about-button">View Our Products</button>

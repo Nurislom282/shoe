@@ -1,16 +1,17 @@
-export enum PropertyType {
-	APARTMENT = 'APARTMENT',
-	VILLA = 'VILLA',
-	HOUSE = 'HOUSE',
+export enum ProductType {
+	SHOE = 'SHOE',
+	SNEAKER = 'SNEAKER',
+	BOOT = 'BOOT',
+	SANDAL = 'SANDAL',
 }
 
-export enum PropertyStatus {
+export enum ProductStatus {
 	ACTIVE = 'ACTIVE',
 	SOLD = 'SOLD',
 	DELETE = 'DELETE',
 }
 
-export enum PropertyLocation {
+export enum ProductLocation {
 	SEOUL = 'SEOUL',
 	BUSAN = 'BUSAN',
 	INCHEON = 'INCHEON',

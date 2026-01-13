@@ -4,10 +4,10 @@ import { NextPage } from 'next';
 import { Stack } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import MyProperties from '../../libs/components/mypage/MyProperties';
+import MyProducts from '../../libs/components/mypage/MyProducts';
 import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
-import AddProperty from '../../libs/components/mypage/AddNewProperty';
+import AddProduct from '../../libs/components/mypage/AddNewProduct';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyArticles from '../../libs/components/mypage/MyArticles';
 import { useMutation, useReactiveVar } from '@apollo/client';
@@ -29,13 +29,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 
 const MyPage: NextPage = () => {
 	const device = useDeviceDetect();
-	// const user = useReactiveVar(userVar);
-	const user = {
-		_id: 'mock_id',
-		memberNick: 'Mock User',
-		memberImage: '',
-		memberType: 'AGENT', // Mocking Agent
-	};
+	const user = useReactiveVar(userVar);
 	const router = useRouter();
 	const category: any = router.query?.category ?? 'myProfile';
 
@@ -125,8 +119,8 @@ const MyPage: NextPage = () => {
 							</Stack>
 							<Stack className="main-config" mb={'76px'}>
 								<Stack className={'list-config'}>
-									{category === 'addProperty' && <AddProperty />}
-									{category === 'myProperties' && <MyProperties />}
+									{category === 'addProduct' && <AddProduct />}
+									{category === 'myProducts' && <MyProducts />}
 									{category === 'myFavorites' && <MyFavorites />}
 									{category === 'recentlyVisited' && <RecentlyVisited />}
 									{category === 'myArticles' && <MyArticles />}

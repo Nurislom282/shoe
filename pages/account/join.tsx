@@ -18,7 +18,7 @@ const Join: NextPage = () => {
 	const router = useRouter();
 	const device = useDeviceDetect();
 	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER' });
-	const [loginView, setLoginView] = useState<boolean>(true);
+	const [loginView, setLoginView] = useState<boolean>(false);
 
 	/** HANDLERS **/
 	const viewChangeHandler = (state: boolean) => {
@@ -73,30 +73,29 @@ const Join: NextPage = () => {
 						<Stack className={'left'}>
 							{/* Background Image Area */}
 						</Stack>
-						<Stack className={'right animate__animated animate__fadeInRight'}>
+						<Stack className={'right animate__animated animate__fadeInDown'}>
 							<div className={'info'}>
 								<span className={'title'}>{loginView ? 'Log in' : 'Sign up'}</span>
 							</div>
 							<div className={'input-wrap'}>
 								{!loginView && (
 									<div className={'input-box'}>
-										<span>Name</span>
 										<input
 											type="text"
-											placeholder={'Enter Nickname'}
+											placeholder={' '}
 											onChange={(e) => handleInput('nick', e.target.value)}
 											required={true}
 											onKeyDown={(event) => {
 												if (event.key == 'Enter') doSignUp();
 											}}
 										/>
+										<label>Name</label>
 									</div>
 								)}
 								<div className={'input-box'}>
-									<span>{loginView ? 'Username' : 'Phone'}</span>
 									<input
 										type="text"
-										placeholder={loginView ? 'Enter Username' : 'Enter Phone'}
+										placeholder={' '}
 										onChange={(e) => handleInput(loginView ? 'nick' : 'phone', e.target.value)}
 										required={true}
 										onKeyDown={(event) => {
@@ -104,12 +103,12 @@ const Join: NextPage = () => {
 											if (event.key == 'Enter' && !loginView) doSignUp();
 										}}
 									/>
+									<label>{loginView ? 'Username' : 'Phone'}</label>
 								</div>
 								<div className={'input-box'}>
-									<span>Password</span>
 									<input
 										type="password"
-										placeholder={'Enter Password'}
+										placeholder={' '}
 										onChange={(e) => handleInput('password', e.target.value)}
 										required={true}
 										onKeyDown={(event) => {
@@ -117,6 +116,7 @@ const Join: NextPage = () => {
 											if (event.key == 'Enter' && !loginView) doSignUp();
 										}}
 									/>
+									<label>Password</label>
 								</div>
 							</div>
 							<div className={'register'}>

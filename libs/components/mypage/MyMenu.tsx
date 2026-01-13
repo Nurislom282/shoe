@@ -16,17 +16,7 @@ const MyMenu = () => {
 	const router = useRouter();
 	const pathname = router.query.category ?? 'myProfile';
 	const category: any = router.query?.category ?? 'myProfile';
-	// const user = useReactiveVar(userVar);
-	const userVarData = useReactiveVar(userVar);
-	const user = userVarData?._id
-		? userVarData
-		: {
-			_id: 'mock_id',
-			memberNick: 'Mock User',
-			memberImage: '',
-			memberType: 'AGENT', // Mocking Agent
-			memberPhone: '010-1234-5678',
-		};
+	const user = useReactiveVar(userVar);
 
 	/** HANDLERS **/
 	const logoutHandler = async () => {
@@ -72,11 +62,11 @@ const MyMenu = () => {
 						<List className={'sub-section'}>
 							{user.memberType === 'AGENT' && (
 								<>
-									<ListItem className={pathname === 'addProperty' ? 'focus' : ''}>
+									<ListItem className={pathname === 'addProduct' ? 'focus' : ''}>
 										<Link
 											href={{
 												pathname: '/mypage',
-												query: { category: 'addProperty' },
+												query: { category: 'addProduct' },
 											}}
 											scroll={false}
 										>
@@ -88,11 +78,11 @@ const MyMenu = () => {
 											</div>
 										</Link>
 									</ListItem>
-									<ListItem className={pathname === 'myProperties' ? 'focus' : ''}>
+									<ListItem className={pathname === 'myProducts' ? 'focus' : ''}>
 										<Link
 											href={{
 												pathname: '/mypage',
-												query: { category: 'myProperties' },
+												query: { category: 'myProducts' },
 											}}
 											scroll={false}
 										>

@@ -23,92 +23,10 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const mockBoardArticles: BoardArticle[] = [
-	{
-		_id: 'mock1',
-		articleCategory: BoardArticleCategory.FREE,
-		articleStatus: BoardArticleStatus.ACTIVE,
-		articleTitle: 'Top 5 Running Shoes for 2024',
-		articleContent: 'Discover the best running shoes required for marathons and daily jogs.',
-		articleImage: '/img/banner/shoe.png',
-		articleViews: 120,
-		articleLikes: 45,
-		articleComments: 12,
-		memberId: 'admin',
-		createdAt: new Date(),
-		updatedAt: new Date(),
-	},
-	{
-		_id: 'mock2',
-		articleCategory: BoardArticleCategory.RECOMMEND,
-		articleStatus: BoardArticleStatus.ACTIVE,
-		articleTitle: 'How to Clean Your Sneakers',
-		articleContent: 'A comprehensive guide to keeping your kicks looking fresh and new.',
-		articleImage: '/img/banner/shoe2.png',
-		articleViews: 85,
-		articleLikes: 30,
-		articleComments: 5,
-		memberId: 'admin',
-		createdAt: new Date('2023-11-15'),
-		updatedAt: new Date('2023-11-15'),
-	},
-	{
-		_id: 'mock3',
-		articleCategory: BoardArticleCategory.NEWS,
-		articleStatus: BoardArticleStatus.ACTIVE,
-		articleTitle: 'New Collection Release Date',
-		articleContent: 'Get ready for the upcoming summer collection drop. Exclusive previews inside.',
-		articleImage: '/img/banner/shoe3.png',
-		articleViews: 200,
-		articleLikes: 150,
-		articleComments: 40,
-		memberId: 'admin',
-		createdAt: new Date('2023-10-01'),
-		updatedAt: new Date('2023-10-01'),
-	},
-	{
-		_id: 'mock4',
-		articleCategory: BoardArticleCategory.HUMOR,
-		articleStatus: BoardArticleStatus.ACTIVE,
-		articleTitle: 'Why Do We Love Shoes?',
-		articleContent: 'An entertaining look at sneaker culture and obsession.',
-		articleImage: '/img/banner/header1.svg',
-		articleViews: 50,
-		articleLikes: 10,
-		articleComments: 2,
-		memberId: 'admin',
-		createdAt: new Date(),
-		updatedAt: new Date(),
-	},
-	{
-		_id: 'mock5',
-		articleCategory: BoardArticleCategory.FREE,
-		articleStatus: BoardArticleStatus.ACTIVE,
-		articleTitle: 'Runner’s High: Fact or Fiction?',
-		articleContent: 'Exploring the science behind the feeling of euphoria after a long run.',
-		articleImage: '/img/banner/header2.svg',
-		articleViews: 300,
-		articleLikes: 200,
-		articleComments: 50,
-		memberId: 'admin',
-		createdAt: new Date('2023-09-20'),
-		updatedAt: new Date('2023-09-20'),
-	},
-	{
-		_id: 'mock6',
-		articleCategory: BoardArticleCategory.RECOMMEND,
-		articleStatus: BoardArticleStatus.ACTIVE,
-		articleTitle: 'Best Hiking Boots for Beginners',
-		articleContent: 'Start your adventure with the right gear. Here are our top picks.',
-		articleImage: '/img/banner/header3.svg',
-		articleViews: 150,
-		articleLikes: 60,
-		articleComments: 15,
-		memberId: 'admin',
-		createdAt: new Date('2023-08-05'),
-		updatedAt: new Date('2023-08-05'),
-	},
-];
+const mockBoardArticles: BoardArticle[] = [];
+
+
+
 
 // Helper component for scroll animations
 const FadeInWhenVisible = ({ children, delay = 0, animation = 'animate__fadeInUp' }: { children: React.ReactNode, delay?: number, animation?: string }) => {
@@ -151,9 +69,8 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 	const { query } = router;
 	const articleCategory = query?.articleCategory as string;
 	const [searchCommunity, setSearchCommunity] = useState<BoardArticlesInquiry>(initialInput);
-	const [boardArticles, setBoardArticles] = useState<BoardArticle[]>(mockBoardArticles);
-	const [totalCount, setTotalCount] = useState<number>(mockBoardArticles.length);
-	if (articleCategory) initialInput.search.articleCategory = articleCategory;
+	const [boardArticles, setBoardArticles] = useState<BoardArticle[]>([]);
+	const [totalCount, setTotalCount] = useState<number>(0);
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetBoardArticle] = useMutation(LIKE_TARGET_BOARD_ARTICLE);
@@ -168,11 +85,21 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 		variables: { input: searchCommunity },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setBoardArticles([...mockBoardArticles, ...data?.getBoardArticles?.list]);
-			setTotalCount(data?.getBoardArticles?.metaCounter[0].total + mockBoardArticles.length);
+			setBoardArticles(data?.getBoardArticles?.list);
+			setTotalCount(data?.getBoardArticles?.metaCounter[0].total);
 		},
 	});
 	/** LIFECYCLES **/
+	useEffect(() => {
+		if (router.query.articleCategory) {
+			const category = router.query.articleCategory as BoardArticleCategory;
+			setSearchCommunity((prev) => ({
+				...prev,
+				search: { ...prev.search, articleCategory: category },
+			}));
+		}
+	}, [router.query]);
+
 	useEffect(() => {
 		if (!query?.articleCategory)
 			router.push(
@@ -180,7 +107,7 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 					pathname: router.pathname,
 					query: { articleCategory: 'FREE' },
 				},
-				router.pathname,
+				undefined,
 				{ shallow: true },
 			);
 	}, [query, router]);
@@ -195,7 +122,7 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 				pathname: '/community',
 				query: { articleCategory: value },
 			},
-			router.pathname,
+			undefined,
 			{ shallow: true },
 		);
 	};

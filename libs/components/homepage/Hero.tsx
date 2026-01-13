@@ -13,7 +13,7 @@ const Hero = () => {
             <div className="container">
                 <div className="hero-content">
                     <div className="hero-left">
-                        <h1>Embrace Comfort with ShoeZ - Online Ecommerce Shop!</h1>
+                        <h1>Comfort Shoes with ShoeZ - Online Shop For You!</h1>
                         <p>
                             Step into a world of style and comfort with ShoeZ, where every pair of shoes tells a story
                             of craftsmanship and innovation. Explore our curated collection, where trends seamlessly

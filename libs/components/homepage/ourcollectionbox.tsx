@@ -6,7 +6,7 @@ const OurCollectionBox = () => {
         <section className="our-collection-section">
             <div className="container">
                 <div className="collection-header">
-                    <h2>Our Latest Collctions</h2>
+                    <h2>Our Latest Collections</h2>
                     <p>*Embark on a journey of style and innovation with our latest collections at NX Shoez.</p>
                 </div>
             </div>
