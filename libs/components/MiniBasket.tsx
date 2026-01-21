@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { cartItemsVar, cartVar, userVar } from '../../apollo/store';
@@ -13,6 +14,7 @@ interface MiniBasketProps {
 }
 
 const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
+    const { t } = useTranslation('common');
     const cartItems = useReactiveVar(cartItemsVar);
     const cartTotal = useReactiveVar(cartVar);
     const user = useReactiveVar(userVar);
@@ -42,19 +44,27 @@ const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
     return (
         <div className={`mini-basket-menu ${open ? 'open' : ''}`} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
             <div className="basket-header">
-                My Cart ({cartTotal})
+                {t('My Cart')} ({cartTotal})
             </div>
 
             <div className="basket-list">
                 {cartItems.length === 0 ? (
                     <div className="empty-basket">
-                        Your cart is empty
+                        {t('Your cart is empty')}
                     </div>
                 ) : (
                     cartItems.map((item) => (
                         <div key={item.id} className="basket-item">
                             <div className="img-box">
-                                <Image src={item.image} alt={item.name} width={60} height={60} />
+                                <Image
+                                    src={item.image.startsWith('http')
+                                        ? item.image
+                                        : `${process.env.REACT_APP_API_URL}/${item.image}`
+                                    }
+                                    alt={item.name}
+                                    width={60}
+                                    height={60}
+                                />
                             </div>
                             <div className="info-box">
                                 <div className="title">{item.name}</div>
@@ -72,17 +82,17 @@ const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
 
             <div className="basket-footer">
                 <div className="total-box">
-                    <span>Subtotal:</span>
+                    <span>{t('Subtotal')}:</span>
                     <span>${calculateTotal().toFixed(2)}</span>
                 </div>
                 <div className="action-btns">
                     <Link href="/shop/basket">
                         <button className="view-cart" onClick={() => setOpen(false)}>
-                            View Cart
+                            {t('View Cart')}
                         </button>
                     </Link>
                     <button className="checkout" disabled={cartItems.length === 0} onClick={checkoutHandler}>
-                        Checkout
+                        {t('Checkout')}
                     </button>
                 </div>
             </div>

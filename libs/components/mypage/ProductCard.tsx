@@ -9,6 +9,7 @@ import { formatterStr } from '../../utils';
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
 import { ProductStatus } from '../../enums/product.enum';
+import { REACT_APP_API_URL } from '../../config';
 
 interface ProductCardProps {
 	product: Product;
@@ -59,13 +60,21 @@ export const ProductCard = (props: ProductCardProps) => {
 		return (
 			<Stack className="property-card-box">
 				<Stack className="image-box" onClick={() => pushProductDetail(product?._id)}>
-					<img src={`${process.env.REACT_APP_API_URL}/${product.productImages[0]}`} alt="" />
+					<img
+						src={product.images?.[0]?.url
+							? product.images[0].url.startsWith('http')
+								? product.images[0].url
+								: `${REACT_APP_API_URL}/${product.images[0].url}`
+							: '/img/profile/defaultUser.svg'
+						}
+						alt=""
+					/>
 				</Stack>
 				<Stack className="information-box" onClick={() => pushProductDetail(product?._id)}>
-					<Typography className="name">{product.productTitle}</Typography>
-					<Typography className="address">{product.productAddress}</Typography>
+					<Typography className="name">{product.name}</Typography>
+					{/* <Typography className="address">{product.productAddress}</Typography> */}
 					<Typography className="price">
-						<strong>${formatterStr(product?.productPrice)}</strong>
+						<strong>${formatterStr(product?.price)}</strong>
 					</Typography>
 				</Stack>
 				<Stack className="date-box">
@@ -76,11 +85,11 @@ export const ProductCard = (props: ProductCardProps) => {
 				<Stack className="status-box">
 					<Stack className="coloured-box" sx={{ background: '#E5F0FD' }} onClick={handleClick}>
 						<Typography className="status" sx={{ color: '#3554d1' }}>
-							{product.productStatus}
+							{product.status}
 						</Typography>
 					</Stack>
 				</Stack>
-				{!memberPage && product.productStatus !== 'SOLD' && (
+				{!memberPage && product.status !== 'SOLD' && (
 					<Menu
 						anchorEl={anchorEl}
 						open={open}
@@ -101,7 +110,7 @@ export const ProductCard = (props: ProductCardProps) => {
 							},
 						}}
 					>
-						{product.productStatus === 'ACTIVE' && (
+						{product.status === 'ACTIVE' && (
 							<>
 								<MenuItem
 									disableRipple
@@ -118,9 +127,9 @@ export const ProductCard = (props: ProductCardProps) => {
 				)}
 
 				<Stack className="views-box">
-					<Typography className="views">{product.productViews.toLocaleString()}</Typography>
+					<Typography className="views">{product.productViews?.toLocaleString()}</Typography>
 				</Stack>
-				{!memberPage && product.productStatus === ProductStatus.ACTIVE && (
+				{!memberPage && product.status === ProductStatus.ACTIVE && (
 					<Stack className="action-box">
 						<IconButton className="icon-button" onClick={() => pushEditProduct(product._id)}>
 							<ModeIcon className="buttons" />

@@ -35,7 +35,18 @@ const MyMenu = () => {
 				<Stack className={'profile'}>
 					<Box component={'div'} className={'profile-img'}>
 						<img
-							src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+							src={
+								user?.memberImage
+									? user.memberImage.startsWith('http')
+										? user.memberImage
+										: `${REACT_APP_API_URL}/${user.memberImage.startsWith('uploads') || user.memberImage.startsWith('/uploads')
+											? user.memberImage.startsWith('/')
+												? user.memberImage.slice(1)
+												: user.memberImage
+											: `uploads/member/${user.memberImage.startsWith('/') ? user.memberImage.slice(1) : user.memberImage}`
+										}`
+									: '/img/profile/defaultUser.svg'
+							}
 							alt={'member-photo'}
 						/>
 					</Box>
@@ -43,7 +54,9 @@ const MyMenu = () => {
 						<Typography className={'user-name'}>{user?.memberNick}</Typography>
 						<Box component={'div'} className={'user-phone'}>
 							<img src={'/img/icons/call.svg'} alt={'icon'} />
-							<Typography className={'p-number'}>{user?.memberPhone}</Typography>
+							<Typography className={'p-number'}>
+								{user?.memberPhone ? user.memberPhone : 'no phone number'}
+							</Typography>
 						</Box>
 						{user?.memberType === 'ADMIN' ? (
 							<a href="/_admin/users" target={'_blank'}>

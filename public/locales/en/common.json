@@ -18,5 +18,209 @@
   "my page": "my page",
   "Community Detail": "Community Detail",
   "Login/Signup": "Login/Signup",
-  "Member Page": "Member Page"
+  "Member Page": "Member Page",
+  "total free customer care": "total free customer care",
+  "nee live": "nee live",
+  "Support?": "Support?",
+  "follow us on social media": "follow us on social media",
+  "Popular Search": "Popular Search",
+  "Property for Rent": "Property for Rent",
+  "Property Low to hide": "Property Low to hide",
+  "Quick Links": "Quick Links",
+  "Terms of Use": "Terms of Use",
+  "Privacy Policy": "Privacy Policy",
+  "Pricing Plans": "Pricing Plans",
+  "Our Services": "Our Services",
+  "Contact Support": "Contact Support",
+  "FAQs": "FAQs",
+  "Discover": "Discover",
+  "Seoul": "Seoul",
+  "Gyeongido": "Gyeongido",
+  "Busan": "Busan",
+  "Jejudo": "Jejudo",
+  "All rights reserved": "All rights reserved",
+  "Copyright": "Copyright",
+  "Designed by": "Designed by",
+  "Powered by": "Powered by",
+  "Contact": "Contact",
+  "About": "About",
+  "Shop": "Shop",
+  "Blog": "Blog",
+  "Licenses": "Licenses",
+  "Our Blogs": "Our Blogs",
+  "Welcome to the NX Shoez Blog...": "\"Welcome to the NX Shoez Blog, where fashion meets insight, and every step is a story waiting to be told.\"",
+  "No blogs found.": "No blogs found.",
+  "View Details": "View Details",
+  "My Cart": "My Cart",
+  "Your cart is empty": "Your cart is empty",
+  "Subtotal": "Subtotal",
+  "View Cart": "View Cart",
+  "Checkout": "Checkout",
+  "chat": {
+    "tabs": {
+      "community": "Community Chat",
+      "support": "Support Bot"
+    },
+    "disconnected": "(Disconnected)",
+    "reconnecting": "Reconnecting...",
+    "community_welcome": "👟 Welcome to Shoe NZ Community Chat! Share your sneaker finds, ask questions, and connect with other sneaker enthusiasts!",
+    "support_welcome": "👋 Hi! I'm your support assistant. How can I help you today?",
+    "quick_actions": "Quick Actions:",
+    "input_placeholder": {
+      "community": "Type message...",
+      "reconnecting": "Reconnecting...",
+      "support": "Ask me anything about orders, shipping, returns..."
+    },
+    "actions": {
+      "Order Status": "Order Status",
+      "Shipping Info": "Shipping Info",
+      "Returns & Exchanges": "Returns & Exchanges",
+      "Product Sizing": "Product Sizing",
+      "Payment Issues": "Payment Issues",
+      "Contact Support": "Contact Support"
+    },
+    "bot_responses": {
+      "order_status": "To check your order status, please visit 'My Page' → 'My Orders' or provide your order number. I can help you track it!",
+      "shipping_info": "We offer standard shipping (5-7 business days) and express shipping (2-3 business days). Shipping costs vary by location. Would you like to know more about shipping to your area?",
+      "returns_exchanges": "We accept returns within 30 days of purchase. Items must be unworn with original tags. For exchanges, visit 'My Page' → 'Returns & Exchanges'. Need help with a specific return?",
+      "product_sizing": "Each product page includes a size guide. Generally, our sneakers run true to size. If you're between sizes, we recommend going up half a size. Check the product detail page for specific measurements!",
+      "payment_issues": "We accept all major credit cards, PayPal, and Apple Pay. If you're experiencing payment issues, try a different payment method or contact our support team for assistance.",
+      "product_inquiry": "We have a wide selection of premium sneakers! Browse our collection by brand, style, or category. Is there a specific product or brand you're looking for?",
+      "greeting": "Hello! 👋 Welcome to Shoe NZ support. I'm here to help with orders, shipping, returns, sizing, and more. How can I assist you today?",
+      "thanks": "You're welcome! 😊 Is there anything else I can help you with today?",
+      "default": "I understand you need help. Could you provide more details? I can assist with orders, shipping, returns, sizing, payments, or product information. You can also use the quick action buttons above for faster help!",
+      "admin_success": "Thank you for your message! 📧 Our support team has received your inquiry and will contact you soon. We typically respond within 24 hours. You'll receive a response via email or through this chat. Is there anything else I can help you with in the meantime?",
+      "admin_failure": "I apologize, but there was an issue sending your message. Please try again or contact us directly. Our support team is here to help!"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Comfort Shoes with ShoeZ - Online Shop For You!",
+      "desc": "Step into a world of style and comfort with ShoeZ, where every pair of shoes tells a story of craftsmanship and innovation. Explore our curated collection, where trends seamlessly merge with unparalleled ease.",
+      "button": "Learn About Us"
+    },
+    "stats": {
+      "free_delivery": "Free Delivery",
+      "free_delivery_desc": "Free shipping on all order",
+      "online_support": "ONLINE SUPPORT 24/7",
+      "online_support_desc": "Online support 24 hours a day",
+      "money_return": "MONEY RETURN",
+      "money_return_desc": "Money return guarantee",
+      "secure_payment": "SECURE PAYMENT",
+      "secure_payment_desc": "Secure payment"
+    },
+    "latest": {
+      "title": "Latest Shoes",
+      "subtitle": "Explore our latest shoe collection - blending fashion and functionality for every step you take.",
+      "view_product": "View Product",
+      "sale": "Sale",
+      "no_product": "no product yet",
+      "loading": "Loading...",
+      "categories": {
+        "latest": "LATEST",
+        "sneakers": "SNEAKERS",
+        "boots": "BOOTS",
+        "formal": "FORMAL",
+        "oxford": "OXFORD",
+        "sports_shoe": "SPORTS SHOE",
+        "high_neck": "HIGH NECK",
+        "loafers": "LOAFERS"
+      }
+    },
+    "offer": {
+      "title": "Shoe by season",
+      "subtitle": "Browse the latest collection of shoes for every season and find the perfect pair that suits your personality.",
+      "spring": "Spring Collection",
+      "spring_sub": "Spring",
+      "summer": "Summer Collection",
+      "summer_sub": "Summer",
+      "autumn": "Autumn Collection",
+      "autumn_sub": "Autumn",
+      "winter": "Winter Collection",
+      "winter_sub": "Winter"
+    },
+    "collection_box": {
+      "title": "Our Latest Collections",
+      "subtitle": "*Embark on a journey of style and innovation with our latest collections at NX Shoez.",
+      "shop_now": "Shop Now",
+      "luxe_pace": "LUXE PACE",
+      "evolve": "EVOLVE FOOTWEAR",
+      "stellar": "STELLAR SOLE"
+    },
+    "banner": {
+      "subtitle": "Subscribe Our Newsletter",
+      "title": "Get the latest offers early."
+    },
+    "category_collection": {
+      "title": "Shoe By Categories",
+      "subtitle": "View Our Most Selling Products By Categories."
+    },
+    "adds": {
+      "mobile": "Mobile Adds"
+    }
+  },
+  "about_common": {
+    "title": "About ShoeZ",
+    "desc": "ShoeZ is a premium online store specializing in comfortable and stylish footwear. Our mission is to provide our customers with the best possible shopping experience, offering a wide range of high-quality shoes at competitive prices.",
+    "button": "View Our Products"
+  },
+  "about_page": {
+    "title": "ABOUT",
+    "home": "Home",
+    "crumb": "/ About",
+    "tag_about": "About Us",
+    "mission_title": "Our Mission",
+    "mission_desc": "At ShoeZ, we're more than just an online shoe store – we're your trusted partner in all things footwear. With a passion for innovation and a commitment to excellence.",
+    "tag_numbers": "Our Numbers",
+    "numbers_title": "OUR NUMBERS",
+    "numbers_desc": "if people can't get our priorities our numbers will talk about us 😎",
+    "satisfaction": "Customer satisfaction",
+    "satisfaction_desc": "only 0.1 clinets will leave us without our products.",
+    "users": "Monthly active users",
+    "users_desc": "we work fast and professional that's why our users chose us.",
+    "capital": "Capital raised",
+    "capital_desc": "we raise capital to grow our company.",
+    "growth": "Company Growth",
+    "growth_desc": "we don't stay at one place we will find every second to grow.",
+    "partners_title": "Our Partners",
+    "tag_team": "Team",
+    "team_title": "Our Team",
+    "team_desc": "Introducing our dynamic and resilient team—innovators, collaborators, and leaders.",
+    "tag_faq": "FAQ",
+    "faq_title": "Frequently Asked Questions",
+    "mobile": "ABOUT PAGE MOBILE",
+    "faqs": {
+      "q1": "What sizes do you carry?",
+      "a1": "We carry a wide range of sizes for men, women, and children. Check our size guide for specifics.",
+      "q2": "Do you offer international shipping?",
+      "a2": "Yes, we ship to over 50 countries worldwide.",
+      "q3": "What is your return policy?",
+      "a3": "We offer a 30-day return policy for unworn items in original packaging.",
+      "q4": "How can I track my order?",
+      "a4": "Once your order ships, you will receive a tracking link via email.",
+      "q5": "Are your shoes sustainable?",
+      "a5": "We are committed to sustainability and offer a range of eco-friendly options."
+    }
+  },
+  "contact": {
+    "mobile_title": "CS PAGE MOBILE",
+    "title": "Contact",
+    "crumb_home": "Home",
+    "crumb_contact": "Contact",
+    "address_title": "Address",
+    "address_desc": "123 Shoe Street, Footwear City, FC 12345",
+    "email_title": "Email Us",
+    "email_desc": "support@shoez.com",
+    "phone_title": "Phone",
+    "phone_desc": "+1 (555) 123-4567",
+    "form": {
+      "title": "Send Us A Message",
+      "name": "Your Name",
+      "email": "Your Email",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Submit Message"
+    }
+  }
 }

@@ -20,7 +20,9 @@ const AgentCard = (props: AgentCardProps) => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const imagePath: string = agent?.memberImage
-		? `${REACT_APP_API_URL}/${agent?.memberImage}`
+		? agent.memberImage.startsWith('http') || agent.memberImage.startsWith('/')
+			? agent.memberImage
+			: `${REACT_APP_API_URL}/${agent.memberImage}`
 		: '/img/profile/defaultUser.svg';
 
 	console.log(agent);

@@ -14,7 +14,8 @@ export const userVar = makeVar<CustomJwtPayload>({
 	memberImage: '',
 	memberAddress: '',
 	memberDesc: '',
-	memberProperties: 0,
+	memberGmail: '',
+	memberProducts: 0,
 	memberRank: 0,
 	memberArticles: 0,
 	memberPoints: 0,
@@ -22,6 +23,8 @@ export const userVar = makeVar<CustomJwtPayload>({
 	memberViews: 0,
 	memberWarnings: 0,
 	memberBlocks: 0,
+	memberFollowers: 0,
+	memberFollowings: 0,
 });
 
 // @ts-ignore

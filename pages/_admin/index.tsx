@@ -14,7 +14,7 @@ const AdminHome: NextPage = (props: any) => {
 	useEffect(() => {
 		// Line Chart
 		const lineCtx = lineChartRef.current?.getContext('2d');
-		let lineChart: Chart | null = null;
+		let lineChart: any = null;
 		if (lineCtx) {
 			lineChart = new Chart(lineCtx, {
 				type: 'line',
@@ -45,7 +45,7 @@ const AdminHome: NextPage = (props: any) => {
 
 		// Doughnut Chart
 		const doughnutCtx = doughnutChartRef.current?.getContext('2d');
-		let doughnutChart: Chart | null = null;
+		let doughnutChart: any = null;
 		if (doughnutCtx) {
 			doughnutChart = new Chart(doughnutCtx, {
 				type: 'doughnut',
@@ -86,10 +86,10 @@ const AdminHome: NextPage = (props: any) => {
 	];
 
 	return (
-		<Box component={'div'} className={'content'}>
-			<Box component={'div'} className={'title flex_space'} sx={{ mb: 4 }}>
+		<div className={'content'}>
+			<div className={'title flex_space'} style={{ marginBottom: '32px' }}>
 				<Typography variant={'h2'}>Admin Overview</Typography>
-			</Box>
+			</div>
 
 			{/* Stat Cards */}
 			<Grid container spacing={3} sx={{ mb: 4 }}>
@@ -107,26 +107,26 @@ const AdminHome: NextPage = (props: any) => {
 								bgcolor: '#fff',
 							}}
 						>
-							<Box>
+							<div>
 								<Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
 									{stat.title}
 								</Typography>
 								<Typography variant="h4" sx={{ fontWeight: 700, color: '#1e293b' }}>
 									{stat.value}
 								</Typography>
-							</Box>
-							<Box
-								sx={{
-									p: 1.5,
+							</div>
+							<div
+								style={{
+									padding: '12px',
 									borderRadius: '12px',
-									bgcolor: stat.bg,
+									backgroundColor: stat.bg,
 									display: 'flex',
 									alignItems: 'center',
 									justifyContent: 'center',
 								}}
 							>
 								{stat.icon}
-							</Box>
+							</div>
 						</Paper>
 					</Grid>
 				))}
@@ -147,9 +147,9 @@ const AdminHome: NextPage = (props: any) => {
 						<Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
 							User Registration Trends
 						</Typography>
-						<Box sx={{ height: '300px', width: '100%', position: 'relative' }}>
+						<div style={{ height: '300px', width: '100%', position: 'relative' }}>
 							<canvas ref={lineChartRef} />
-						</Box>
+						</div>
 					</Paper>
 				</Grid>
 				<Grid item xs={12} lg={4}>
@@ -165,13 +165,13 @@ const AdminHome: NextPage = (props: any) => {
 						<Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
 							Product Distribution
 						</Typography>
-						<Box sx={{ height: '300px', width: '100%', position: 'relative', display: 'flex', justifyContent: 'center' }}>
+						<div style={{ height: '300px', width: '100%', position: 'relative', display: 'flex', justifyContent: 'center' }}>
 							<canvas ref={doughnutChartRef} />
-						</Box>
+						</div>
 					</Paper>
 				</Grid>
 			</Grid>
-		</Box>
+		</div>
 	);
 };
 

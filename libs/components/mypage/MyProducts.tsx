@@ -19,13 +19,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const [searchFilter, setSearchFilter] = useState<AgentProductsInquiry>(initialInput);
 	const [agentProducts, setAgentProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
-	// const user = useReactiveVar(userVar);
-	const user = {
-		_id: 'mock_id',
-		memberNick: 'Mock User',
-		memberImage: '',
-		memberType: 'AGENT',
-	};
+	const user = useReactiveVar(userVar);
 	const router = useRouter();
 
 	/** APOLLO REQUESTS **/

@@ -5,7 +5,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { ProductLocation, ProductType } from '../../enums/product.enum';
-import { REACT_APP_API_URL } from '../../config';
+import { REACT_APP_API_URL, REACT_APP_API_GRAPHQL_URL } from '../../config';
 import { ProductInput } from '../../types/product/product.input';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
@@ -23,13 +23,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 	const [productType, setProductType] = useState<ProductType[]>(Object.values(ProductType));
 	const [productLocation, setProductLocation] = useState<ProductLocation[]>(Object.values(ProductLocation));
 	const token = getJwtToken();
-	// const user = useReactiveVar(userVar);
-	const user = {
-		_id: 'mock_id',
-		memberNick: 'Mock User',
-		memberImage: '',
-		memberType: 'AGENT',
-	};
+	const user = useReactiveVar(userVar);
 
 	/** APOLLO REQUESTS **/
 	const [createProduct] = useMutation(CREATE_PRODUCT);
@@ -51,18 +45,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 	useEffect(() => {
 		setInsertProductData({
 			...insertProductData,
-			productTitle: getProductData?.getProduct ? getProductData?.getProduct?.productTitle : '',
-			productPrice: getProductData?.getProduct ? getProductData?.getProduct?.productPrice : 0,
-			productType: getProductData?.getProduct ? getProductData?.getProduct?.productType : '',
-			productLocation: getProductData?.getProduct ? getProductData?.getProduct?.productLocation : '',
-			productAddress: getProductData?.getProduct ? getProductData?.getProduct?.productAddress : '',
-			productBarter: getProductData?.getProduct ? getProductData?.getProduct?.productBarter : false,
-			productRent: getProductData?.getProduct ? getProductData?.getProduct?.productRent : false,
-			productRooms: getProductData?.getProduct ? getProductData?.getProduct?.productRooms : 0,
-			productBeds: getProductData?.getProduct ? getProductData?.getProduct?.productBeds : 0,
-			productSquare: getProductData?.getProduct ? getProductData?.getProduct?.productSquare : 0,
-			productDesc: getProductData?.getProduct ? getProductData?.getProduct?.productDesc : '',
-			productImages: getProductData?.getProduct ? getProductData?.getProduct?.productImages : [],
+			name: getProductData?.getProduct ? getProductData?.getProduct?.name : '',
+			price: getProductData?.getProduct ? getProductData?.getProduct?.price : 0,
+			category: getProductData?.getProduct ? getProductData?.getProduct?.category : '',
+			description: getProductData?.getProduct ? getProductData?.getProduct?.description : '',
+			images: getProductData?.getProduct ? getProductData?.getProduct?.images?.map((img: any) => img.url) : [],
 		});
 	}, [getProductLoading, getProductData]);
 
@@ -101,7 +88,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 				if (/^\d+$/.test(key)) formData.append(`${key}`, selectedFiles[key]);
 			}
 
-			const response = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
+			const response = await axios.post(`${REACT_APP_API_GRAPHQL_URL}`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					'apollo-require-preflight': true,
@@ -112,7 +99,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 			const responseImages = response.data.data.imagesUploader;
 
 			console.log('+responseImages: ', responseImages);
-			setInsertProductData({ ...insertProductData, productImages: responseImages });
+			setInsertProductData({ ...insertProductData, images: responseImages });
 		} catch (err: any) {
 			console.log('err: ', err.message);
 			await sweetMixinErrorAlert(err.message);
@@ -125,7 +112,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 			console.log('deleteImage:', image);
 			setInsertProductData({
 				...insertProductData,
-				productImages: insertProductData.productImages.filter((img: string) => img !== image),
+				images: insertProductData.images.filter((img: string) => img !== image),
 			});
 		},
 		[insertProductData],
@@ -133,18 +120,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 
 	const doDisabledCheck = () => {
 		if (
-			insertProductData.productTitle === '' ||
-			insertProductData.productPrice === 0 || // @ts-ignore
-			insertProductData.productType === '' || // @ts-ignore
-			insertProductData.productLocation === '' || // @ts-ignore
-			insertProductData.productAddress === '' || // @ts-ignore
-			insertProductData.productBarter === '' || // @ts-ignore
-			insertProductData.productRent === '' ||
-			insertProductData.productRooms === 0 ||
-			insertProductData.productBeds === 0 ||
-			insertProductData.productSquare === 0 ||
-			insertProductData.productDesc === '' ||
-			insertProductData.productImages.length === 0
+			insertProductData.name === '' ||
+			insertProductData.price === 0 || // @ts-ignore
+			insertProductData.category === '' ||
+			insertProductData.description === '' ||
+			insertProductData.images.length === 0
 		) {
 			return true;
 		}
@@ -172,7 +152,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 
 	const updateProductHandler = useCallback(async () => {
 		try {
-			//@ts-ignore
+			// @ts-ignore
 			insertProductData._id = getProductData?.getProduct?._id;
 			const result = await updateProduct({
 				variables: {
@@ -217,9 +197,9 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 									type="text"
 									className="description-input"
 									placeholder={'Title'}
-									value={insertProductData.productTitle}
+									value={insertProductData.name}
 									onChange={({ target: { value } }) =>
-										setInsertProductData({ ...insertProductData, productTitle: value })
+										setInsertProductData({ ...insertProductData, name: value })
 									}
 								/>
 							</Stack>
@@ -231,21 +211,21 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Price'}
-										value={insertProductData.productPrice}
+										value={insertProductData.price}
 										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productPrice: parseInt(value) })
+											setInsertProductData({ ...insertProductData, price: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
-									<Typography className="title">Select Type</Typography>
+									<Typography className="title">Select Category</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertProductData.productType || 'select'}
-										value={insertProductData.productType || 'select'}
+										defaultValue={insertProductData.category || 'select'}
+										value={insertProductData.category || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertProductData({ ...insertProductData, productType: value })
+											setInsertProductData({ ...insertProductData, category: value })
 										}
 									>
 										<>
@@ -264,149 +244,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 								</Stack>
 							</Stack>
 
-							<Stack className="config-row">
-								<Stack className="price-year-after-price">
-									<Typography className="title">Select Location</Typography>
-									<select
-										className={'select-description'}
-										defaultValue={insertProductData.productLocation || 'select'}
-										value={insertProductData.productLocation || 'select'}
-										onChange={({ target: { value } }) =>
-											// @ts-ignore
-											setInsertProductData({ ...insertProductData, productLocation: value })
-										}
-									>
-										<>
-											<option selected={true} disabled={true} value={'select'}>
-												Select
-											</option>
-											{productLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
-										</>
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-								<Stack className="price-year-after-price">
-									<Typography className="title">Address</Typography>
-									<input
-										type="text"
-										className="description-input"
-										placeholder={'Address'}
-										value={insertProductData.productAddress}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productAddress: value })
-										}
-									/>
-								</Stack>
-							</Stack>
-
-							<Stack className="config-row">
-								<Stack className="price-year-after-price">
-									<Typography className="title">Barter</Typography>
-									<select
-										className={'select-description'}
-										value={insertProductData.productBarter ? 'yes' : 'no'}
-										defaultValue={insertProductData.productBarter ? 'yes' : 'no'}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productBarter: value === 'yes' })
-										}
-									>
-										<option disabled={true} selected={true}>
-											Select
-										</option>
-										<option value={'yes'}>Yes</option>
-										<option value={'no'}>No</option>
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-								<Stack className="price-year-after-price">
-									<Typography className="title">Rent</Typography>
-									<select
-										className={'select-description'}
-										value={insertProductData.productRent ? 'yes' : 'no'}
-										defaultValue={insertProductData.productRent ? 'yes' : 'no'}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productRent: value === 'yes' })
-										}
-									>
-										<option disabled={true} selected={true}>
-											Select
-										</option>
-										<option value={'yes'}>Yes</option>
-										<option value={'no'}>No</option>
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-							</Stack>
-
-							<Stack className="config-row">
-								<Stack className="price-year-after-price">
-									<Typography className="title">Rooms</Typography>
-									<select
-										className={'select-description'}
-										value={insertProductData.productRooms || 'select'}
-										defaultValue={insertProductData.productRooms || 'select'}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productRooms: parseInt(value) })
-										}
-									>
-										<option disabled={true} selected={true} value={'select'}>
-											Select
-										</option>
-										{[1, 2, 3, 4, 5].map((room: number) => (
-											<option value={`${room}`}>{room}</option>
-										))}
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-								<Stack className="price-year-after-price">
-									<Typography className="title">Bed</Typography>
-									<select
-										className={'select-description'}
-										value={insertProductData.productBeds || 'select'}
-										defaultValue={insertProductData.productBeds || 'select'}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productBeds: parseInt(value) })
-										}
-									>
-										<option disabled={true} selected={true} value={'select'}>
-											Select
-										</option>
-										{[1, 2, 3, 4, 5].map((bed: number) => (
-											<option value={`${bed}`}>{bed}</option>
-										))}
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-								<Stack className="price-year-after-price">
-									<Typography className="title">Square</Typography>
-									<select
-										className={'select-description'}
-										value={insertProductData.productSquare || 'select'}
-										defaultValue={insertProductData.productSquare || 'select'}
-										onChange={({ target: { value } }) =>
-											setInsertProductData({ ...insertProductData, productSquare: parseInt(value) })
-										}
-									>
-										<option disabled={true} selected={true} value={'select'}>
-											Select
-										</option>
-										{[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((square: number) => (
-											<option value={`${square}`}>{square}</option>
-										))}
-									</select>
-									<div className={'divider'}></div>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-							</Stack>
+							{/* Real estate fields removed */}
 
 							<Typography className="property-title">Product Description</Typography>
 							<Stack className="config-column">
@@ -415,9 +253,9 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 									name=""
 									id=""
 									className="description-text"
-									value={insertProductData.productDesc}
+									value={insertProductData.description}
 									onChange={({ target: { value } }) =>
-										setInsertProductData({ ...insertProductData, productDesc: value })
+										setInsertProductData({ ...insertProductData, description: value })
 									}
 								></textarea>
 							</Stack>
@@ -454,8 +292,8 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="gallery-box">
-									{insertProductData?.productImages.map((image: string, index: number) => {
-										const imagePath: string = `${process.env.REACT_APP_API_URL}/${image}`;
+									{insertProductData?.images.map((image: string, index: number) => {
+										const imagePath: string = `${REACT_APP_API_URL}/${image}`;
 										return (
 											<Stack className="image-box" key={index}>
 												<img src={imagePath} alt="" />
@@ -488,18 +326,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 
 AddProduct.defaultProps = {
 	initialValues: {
-		productTitle: '',
-		productPrice: 0,
-		productType: '',
-		productLocation: '',
-		productAddress: '',
-		productBarter: false,
-		productRent: false,
-		productRooms: 0,
-		productBeds: 0,
-		productSquare: 0,
-		productDesc: '',
-		productImages: [],
+		name: '',
+		price: 0,
+		category: '',
+		description: '',
+		images: [],
 	},
 };
 

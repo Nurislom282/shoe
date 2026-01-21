@@ -33,11 +33,11 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
 
     if (members.length === 0) {
         return (
-            <Box p={4} textAlign="center">
+            <div style={{ padding: '32px', textAlign: 'center' }}>
                 <Typography variant="body1" color="textSecondary">
                     No members found.
                 </Typography>
-            </Box>
+            </div>
         );
     }
 
@@ -45,7 +45,9 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
         <Grid container spacing={3}>
             {members.map((member: Member, index: number) => {
                 const member_image = member.memberImage
-                    ? `${REACT_APP_API_URL}/${member.memberImage}`
+                    ? member.memberImage.startsWith('http') || member.memberImage.startsWith('/')
+                        ? member.memberImage
+                        : `${REACT_APP_API_URL}/${member.memberImage}`
                     : '/img/profile/defaultUser.svg';
 
                 return (
@@ -66,7 +68,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                             }}
                         >
                             <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
-                                <Stack alignItems="center" spacing={2}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                                     <Link href={`/member?memberId=${member._id}`}>
                                         <Avatar
                                             alt={member.memberNick}
@@ -74,7 +76,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                             sx={{ width: 80, height: 80, border: '3px solid #f0f2f5' }}
                                         />
                                     </Link>
-                                    <Box>
+                                    <div>
                                         <Link href={`/member?memberId=${member._id}`}>
                                             <Typography
                                                 variant="h6"
@@ -87,11 +89,11 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                         <Typography variant="body2" color="textSecondary">
                                             {member.memberType}
                                         </Typography>
-                                    </Box>
+                                    </div>
                                     <Typography variant="body2" color="textSecondary" sx={{ px: 2, minHeight: '40px' }}>
                                         {member.memberDesc || 'No description available for this user.'}
                                     </Typography>
-                                </Stack>
+                                </div>
                             </CardContent>
                             <CardActions
                                 sx={{
@@ -101,7 +103,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                     py: 1.5,
                                 }}
                             >
-                                <Stack direction="row" spacing={1} alignItems="center">
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', alignItems: 'center' }}>
                                     <Button
                                         size="small"
                                         startIcon={<PhoneIcon fontSize="small" />}
@@ -115,8 +117,8 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                     >
                                         Call
                                     </Button>
-                                </Stack>
-                                <Box>
+                                </div>
+                                <div style={{ display: 'block' }}>
                                     <IconButton
                                         size="small"
                                         onClick={(e: any) => menuIconClickHandler(e, member._id)}
@@ -126,7 +128,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                     >
                                         <MoreVertIcon fontSize="small" />
                                     </IconButton>
-                                </Box>
+                                </div>
                             </CardActions>
 
                             <Menu
@@ -163,7 +165,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             >
-                                <Box sx={{ p: 1 }}>
+                                <div style={{ padding: '8px' }}>
                                     <MenuItem
                                         onClick={() => {
                                             menuIconCloseHandler();
@@ -195,7 +197,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                     >
                                         <Typography variant={'body2'} color={'error'}>Delete User</Typography>
                                     </MenuItem>
-                                </Box>
+                                </div>
                             </Menu>
                         </Card>
                     </Grid>

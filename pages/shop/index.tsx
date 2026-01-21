@@ -1,7 +1,7 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { NextPage } from 'next';
-import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography } from '@mui/material';
+import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography, Slider, Checkbox, FormControlLabel } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 
@@ -35,14 +35,24 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		sort: "createdAt",
 		direction: Direction.DESC,
 		search: {
-			squaresRange: { start: 0, end: 500 },
-			pricesRange: { start: 0, end: 2000000 },
+			pricesRange: { start: 0, end: 2000 },
 		},
 	});
 	const [products, setProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const device = useDeviceDetect();
 	const router = useRouter();
+
+	// New State for Filters
+	const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+	const [seasons, setSeasons] = useState({
+		Spring: false,
+		Summer: false,
+		Autumn: false,
+		Winter: false,
+	});
+	const [onSale, setOnSale] = useState(false);
+
 	const {
 		loading,
 		data,
@@ -59,52 +69,89 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 	});
 
 	useEffect(() => {
-		if (router.query.page || router.query.category || router.query.text) {
-			const { page, category, text } = router.query;
-			const newFilter = { ...filter, page: Number(page) || 1 };
+		if (router.query.page || router.query.category || router.query.text || router.query.minPrice || router.query.seasons || router.query.sale) {
+			const { page, category, text, minPrice, maxPrice, seasons: seasonsQuery, sale } = router.query;
+			console.log('DEBUG: Shop useEffect query:', router.query);
+			setFilter((prevFilter: ProductsInquiry) => {
+				const newFilter = { ...prevFilter, page: Number(page) || 1 };
+				const search = { ...newFilter.search };
 
-			if (category) {
-				const categoryStr = String(category);
-				let typeList: ProductType[] | undefined;
-				let searchText: string | undefined;
+				if (category) {
+					const categoryStr = String(category);
+					let typeList: ProductType[] | undefined;
+					let searchText: string | undefined;
 
-				switch (categoryStr) {
-					case 'Sneakers':
-						typeList = [ProductType.SNEAKER];
-						break;
-					case 'Boots':
-						typeList = [ProductType.BOOT];
-						break;
-					case 'Sandals':
-						typeList = [ProductType.SANDAL];
-						break;
-					case 'Shoes':
-						typeList = [ProductType.SHOE];
-						break;
-					default:
-						searchText = categoryStr;
-						break;
+					switch (categoryStr) {
+						case 'Sneakers':
+							typeList = [ProductType.SNEAKER];
+							break;
+						case 'Boots':
+							typeList = [ProductType.BOOT];
+							break;
+						case 'Sandals':
+							typeList = [ProductType.SANDAL];
+							break;
+						case 'Shoes':
+							typeList = [ProductType.SHOE];
+							break;
+						default:
+							searchText = categoryStr;
+							break;
+					}
+
+					search.typeList = typeList;
+					search.text = searchText;
+				} else {
+					delete search.typeList;
+					delete search.text;
 				}
 
-				newFilter.search = {
-					...newFilter.search,
-					typeList,
-					text: searchText,
-				};
-			} else {
-				// If category is removed from URL, clear typeList and text from filter.search
-				newFilter.search = {
-					...newFilter.search,
-					typeList: undefined,
-					text: undefined,
-				};
-			}
+				if (text) {
+					search.text = String(text);
+				}
 
-			if (text) {
-				newFilter.search.text = String(text);
-			}
+				// Price Range
+				if (minPrice && maxPrice) {
+					search.pricesRange = { start: Math.floor(Number(minPrice)), end: Math.ceil(Number(maxPrice)) };
+					setPriceRange([Number(minPrice), Number(maxPrice)]);
+				} else {
+					search.pricesRange = { start: 0, end: 2000 };
+					setPriceRange([0, 2000]);
+				}
 
-			setFilter(newFilter);
+				// Options (Sale)
+				const options: string[] = [];
+				if (sale === 'true') {
+					options.push('sale');
+					setOnSale(true);
+				} else {
+					setOnSale(false);
+				}
+				if (options.length > 0) search.options = options;
+				else delete search.options;
+
+				// Seasons
+				const seasonsList: string[] = [];
+				if (seasonsQuery) {
+					const sList = String(seasonsQuery).split(',').filter(s => s); // Filter empty strings
+					seasonsList.push(...sList);
+					const newSeasons = { Spring: false, Summer: false, Autumn: false, Winter: false };
+					sList.forEach(s => { if (newSeasons.hasOwnProperty(s)) (newSeasons as any)[s] = true; });
+					setSeasons(newSeasons);
+				} else {
+					setSeasons({ Spring: false, Summer: false, Autumn: false, Winter: false });
+				}
+
+				if (seasonsList.length > 0) {
+					search.seasons = seasonsList;
+				} else {
+					delete search.seasons;
+				}
+
+				newFilter.search = search;
+				console.log('DEBUG: New Filter:', newFilter);
+				return newFilter;
+			});
 		}
 	}, [router.query]);
 
@@ -120,7 +167,44 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		);
 	};
 
+	const updateQueryParams = (currentSeasons: any, currentPrice: number[], currentSale: boolean) => {
+		const query: any = { ...router.query };
+		const activeSeasons = Object.keys(currentSeasons).filter(k => currentSeasons[k]);
 
+		if (activeSeasons.length > 0) query.seasons = activeSeasons.join(',');
+		else delete query.seasons;
+
+		if (currentSale) query.sale = 'true';
+		else delete query.sale;
+
+		query.minPrice = currentPrice[0];
+		query.maxPrice = currentPrice[1];
+		query.page = 1; // Reset to page 1 on filter change
+
+		router.push({
+			pathname: '/shop',
+			query: query,
+		}, undefined, { scroll: false });
+	};
+
+	const handleSeasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const newSeasons = { ...seasons, [event.target.name]: event.target.checked };
+		setSeasons(newSeasons);
+		updateQueryParams(newSeasons, priceRange, onSale);
+	};
+
+	const handleSaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setOnSale(event.target.checked);
+		updateQueryParams(seasons, priceRange, event.target.checked);
+	};
+
+	const handlePriceChange = (event: Event, newValue: number | number[]) => {
+		setPriceRange(newValue as number[]);
+	};
+
+	const handlePriceChangeCommitted = (event: React.SyntheticEvent | Event, newValue: number | number[]) => {
+		updateQueryParams(seasons, newValue as number[], onSale);
+	}
 
 
 	const categories = [
@@ -134,6 +218,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		'High Neck',
 		'Sports Shoe',
 	];
+	const seasonNames = ['Spring', 'Summer', 'Autumn', 'Winter'];
 
 	const brands = [
 		'https://cdn.prod.website-files.com/65a62949580c5ed45b48f683/6855c1f678f1e279043edbfe_customers_7.svg',
@@ -154,7 +239,12 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		return (
 			<div className="shop-page">
 				{/* Hero Section */}
-				<section className="shop-hero">
+				<section className="shop-hero" style={{
+					backgroundImage: `url('/img/banner/shoes.jpg')`,
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
+					backgroundRepeat: 'no-repeat'
+				}}>
 					<div className="hero-content">
 						<h1 className="page-title">SHOP</h1>
 						<div className="breadcrumb">
@@ -173,23 +263,98 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 						<div className="shop-layout">
 							{/* Sidebar */}
 							<aside className="sidebar">
-								<h2>Categories</h2>
-								<ul className="category-list">
-									{categories.map((category, index) => (
-										<li key={index}>
-											<Link
-												href={{
-													pathname: '/shop',
-													query: { page: 1, category: category },
+								<div className="sidebar-filter">
+									<div className="filter-box">
+										<div className="filter-header">Categories</div>
+										<ul className="category-list">
+											{categories.map((category, index) => (
+												<li key={index}>
+													<Link
+														href={{
+															pathname: '/shop',
+															query: { page: 1, category: category },
+														}}
+														scroll={true}
+													>
+														{category}
+														<span className="arrow">»</span>
+													</Link>
+												</li>
+											))}
+										</ul>
+									</div>
+
+									<div className="filter-box seasons-box">
+										<h4 className="filter-title">Seasons</h4>
+										<div className="checkbox-group">
+											{seasonNames.map((season) => (
+												<FormControlLabel
+													key={season}
+													control={
+														<Checkbox
+															checked={(seasons as any)[season]}
+															onChange={handleSeasonChange}
+															name={season}
+															size="small"
+															sx={{
+																color: '#ff4757',
+																'&.Mui-checked': {
+																	color: '#ff4757',
+																},
+															}}
+														/>
+													}
+													label={<span className="checkbox-label">{season}</span>}
+												/>
+											))}
+										</div>
+									</div>
+
+									<div className="filter-box price-box">
+										<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+											<h4 className="filter-title" style={{ marginBottom: 0 }}>Price Range</h4>
+											<FormControlLabel
+												control={
+													<Checkbox
+														checked={onSale}
+														onChange={handleSaleChange}
+														size="small"
+														sx={{
+															color: '#ff4757',
+															'&.Mui-checked': {
+																color: '#ff4757',
+															},
+														}}
+													/>
+												}
+												label={<span className="checkbox-label" style={{ fontWeight: 600 }}>On Sale</span>}
+												labelPlacement="start"
+											/>
+										</div>
+
+										<div style={{ width: '100%', paddingLeft: '8px', paddingRight: '8px' }}>
+											<Slider
+												value={priceRange}
+												onChange={handlePriceChange}
+												onChangeCommitted={handlePriceChangeCommitted}
+												valueLabelDisplay="auto"
+												min={0}
+												max={2000}
+												sx={{
+													color: '#ff4757',
+													'& .MuiSlider-thumb': {
+														boxShadow: '0 0 0 8px rgba(255, 71, 87, 0.16)',
+													},
 												}}
-												scroll={true}
-											>
-												{category}
-												<span className="arrow">»</span>
-											</Link>
-										</li>
-									))}
-								</ul>
+											/>
+											<div className="price-inputs">
+												<span>${priceRange[0]}</span>
+												<span>-</span>
+												<span>${priceRange[1]}</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</aside>
 
 							{/* Products Grid */}
@@ -200,29 +365,42 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 											<div key={product._id} className="product-card" style={{ animationDelay: `${index * 0.1}s` }}>
 												<div className="product-image-wrapper">
 													<img
-														src={`${REACT_APP_API_URL}/${product.productImages[0]}`}
-														alt={product.productTitle}
+														src={(() => {
+															const url = product.images?.[0]?.url;
+															if (!url) return '/img/logo/logoText.svg';
+															if (url.startsWith('http')) return url;
+															if (url.startsWith('localhost')) return `http://${url}`;
+															return `${REACT_APP_API_URL}/${url}`;
+														})()}
+														alt={product.name}
 														className="product-image main"
 													/>
 													<img
-														src={`${REACT_APP_API_URL}/${product.productImages[1] || product.productImages[0]}`}
-														alt={product.productTitle}
+														src={(() => {
+															const url = product.images?.[1]?.url || product.images?.[0]?.url;
+															if (!url) return '/img/logo/logoText.svg';
+															if (url.startsWith('http')) return url;
+															if (url.startsWith('localhost')) return `http://${url}`;
+															return `${REACT_APP_API_URL}/${url}`;
+														})()}
+														alt={product.name}
 														className="product-image hover"
 													/>
 													<div className="product-overlay">
 														<button
 															className="view-product-btn"
-															onClick={() => router.push(`/shop/detail?id=${product._id}`)}
+															onClick={() => router.push(`/product/detail?id=${product._id}`)}
 														>
 															View Product
 														</button>
 													</div>
-													{/* {product.sale && <span className="sale-badge">Sale</span>} */}
+													{product.status === 'ACTIVE' && false && <span className="sale-badge">Sale</span>}
+													{/* Using onSale tag if available, else mocking logic or hiding */}
 												</div>
 												<div className="product-info">
-													<h3 className="product-name">{product.productTitle}</h3>
-													<div className="product-category">{product.productType}</div>
-													<p className="product-price">$ {product.productPrice.toLocaleString()} USD</p>
+													<h3 className="product-name">{product.name}</h3>
+													<div className="product-category">{product.category}</div>
+													<p className="product-price">$ {product.price.toLocaleString()} USD</p>
 												</div>
 											</div>
 										))
@@ -268,13 +446,9 @@ PropertyList.defaultProps = {
 		sort: 'createdAt',
 		direction: 'DESC',
 		search: {
-			squaresRange: {
-				start: 0,
-				end: 500,
-			},
 			pricesRange: {
 				start: 0,
-				end: 2000000,
+				end: 2000,
 			},
 		},
 	},

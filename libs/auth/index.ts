@@ -64,18 +64,17 @@ const requestJwtToken = async ({
 	}
 };
 
-export const signUp = async (nick: string, password: string, phone: string, type: string): Promise<void> => {
+export const signUp = async (nick: string, password: string, phone: string, type: string, email: string): Promise<void> => {
 	try {
-		const { jwtToken } = await requestSignUpJwtToken({ nick, password, phone, type });
+		const { jwtToken } = await requestSignUpJwtToken({ nick, password, phone, type, email });
 
 		if (jwtToken) {
 			updateStorage({ jwtToken });
 			updateUserInfo(jwtToken);
 		}
 	} catch (err) {
-		console.warn('login err', err);
-		// logOut();
-		// throw new Error('Login Err');
+		console.warn('signup err', err);
+		throw err;
 	}
 };
 
@@ -84,11 +83,13 @@ const requestSignUpJwtToken = async ({
 	password,
 	phone,
 	type,
+	email,
 }: {
 	nick: string;
 	password: string;
 	phone: string;
 	type: string;
+	email: string;
 }): Promise<{ jwtToken: string }> => {
 	const apolloClient = await initializeApollo();
 
@@ -96,26 +97,24 @@ const requestSignUpJwtToken = async ({
 		const result = await apolloClient.mutate({
 			mutation: SIGN_UP,
 			variables: {
-				input: { memberNick: nick, memberPassword: password, memberPhone: phone, memberType: type },
+				input: { memberNick: nick, memberPassword: password, memberPhone: phone, memberType: type, memberGmail: email },
 			},
 			fetchPolicy: 'network-only',
 		});
 
-		console.log('---------- login ----------');
+		console.log('---------- signup ----------');
 		const { accessToken } = result?.data?.signup;
 
 		return { jwtToken: accessToken };
 	} catch (err: any) {
 		console.log('request token err', err.graphQLErrors);
-		switch (err.graphQLErrors[0].message) {
-			case 'Definer: login and password do not match':
-				await sweetMixinErrorAlert('Please check your password again');
-				break;
-			case 'Definer: user has been blocked!':
-				await sweetMixinErrorAlert('User has been blocked!');
-				break;
+		if (err.graphQLErrors && err.graphQLErrors.length > 0) {
+			const msg = err.graphQLErrors[0].message;
+			await sweetMixinErrorAlert(msg);
+			throw new Error(msg);
+		} else {
+			throw err;
 		}
-		throw new Error('token error');
 	}
 };
 
@@ -136,13 +135,11 @@ export const updateUserInfo = (jwtToken: any) => {
 		memberPhone: claims.memberPhone ?? '',
 		memberNick: claims.memberNick ?? '',
 		memberFullName: claims.memberFullName ?? '',
-		memberImage:
-			claims.memberImage === null || claims.memberImage === undefined
-				? '/img/profile/defaultUser.svg'
-				: `${claims.memberImage}`,
+		memberImage: claims.memberImage,
 		memberAddress: claims.memberAddress ?? '',
 		memberDesc: claims.memberDesc ?? '',
-		memberProperties: claims.memberProperties,
+		memberGmail: claims.memberGmail ?? '',
+		memberProducts: claims.memberProducts ?? 0,
 		memberRank: claims.memberRank,
 		memberArticles: claims.memberArticles,
 		memberPoints: claims.memberPoints,
@@ -150,6 +147,8 @@ export const updateUserInfo = (jwtToken: any) => {
 		memberViews: claims.memberViews,
 		memberWarnings: claims.memberWarnings,
 		memberBlocks: claims.memberBlocks,
+		memberFollowers: claims.memberFollowers,
+		memberFollowings: claims.memberFollowings,
 	});
 };
 
@@ -176,7 +175,7 @@ const deleteUserInfo = () => {
 		memberImage: '',
 		memberAddress: '',
 		memberDesc: '',
-		memberProperties: 0,
+		memberProducts: 0,
 		memberRank: 0,
 		memberArticles: 0,
 		memberPoints: 0,
@@ -184,5 +183,7 @@ const deleteUserInfo = () => {
 		memberViews: 0,
 		memberWarnings: 0,
 		memberBlocks: 0,
+		memberFollowers: 0,
+		memberFollowings: 0,
 	});
 };

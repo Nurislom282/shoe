@@ -41,6 +41,7 @@ import '../scss/pc/account/forgot-password.scss';
 import '../scss/pc/chat.scss';
 import 'animate.css';
 import GlobalLoader from '../libs/components/GlobalLoader';
+import AuthLoader from '../libs/components/AuthLoader';
 
 import { useRouter } from 'next/router';
 // ... existing imports ...
@@ -101,6 +102,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 					/>
 				</Head>
 				{isMounted && <GlobalLoader open={isLoading} />}
+				<AuthLoader />
 				<Component {...pageProps} />
 			</ThemeProvider>
 		</ApolloProvider>

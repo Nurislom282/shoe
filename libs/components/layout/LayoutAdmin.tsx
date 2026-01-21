@@ -25,16 +25,9 @@ const withAdminLayout = (Component: ComponentType) => {
 	return (props: object) => {
 		const router = useRouter();
 
+
 		const userVarData = useReactiveVar(userVar);
-		// BYPASS: Mock Admin User if not authorized
-		const user = userVarData?.memberType === MemberType.ADMIN ? userVarData : {
-			...userVarData,
-			_id: userVarData?._id || 'dev_admin_id',
-			memberType: MemberType.ADMIN,
-			memberNick: userVarData?.memberNick || 'Dev Admin',
-			memberPhone: userVarData?.memberPhone || '010-0000-0000',
-			memberImage: userVarData?.memberImage || '',
-		};
+		const user = userVarData;
 		const [settingsState, setSettingsStateState] = useState(false);
 		const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 		const [openMenu, setOpenMenu] = useState(false);
@@ -90,7 +83,11 @@ const withAdminLayout = (Component: ComponentType) => {
 								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 									<Avatar
 										src={
-											user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'
+											user?.memberImage
+												? user.memberImage.startsWith('http')
+													? user.memberImage
+													: `${REACT_APP_API_URL}/${user.memberImage}`
+												: '/img/profile/defaultUser.svg'
 										}
 									/>
 								</IconButton>
@@ -112,30 +109,29 @@ const withAdminLayout = (Component: ComponentType) => {
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
-								<Box
-									component={'div'}
+								<div
 									onClick={handleCloseUserMenu}
-									sx={{
+									style={{
 										width: '200px',
 									}}
 								>
-									<Stack sx={{ px: '20px', my: '12px' }}>
+									<div style={{ paddingLeft: '20px', paddingRight: '20px', marginTop: '12px', marginBottom: '12px', display: 'flex', flexDirection: 'column' }}>
 										<Typography variant={'h6'} component={'h6'} sx={{ mb: '4px' }}>
 											{user?.memberNick}
 										</Typography>
 										<Typography variant={'subtitle1'} component={'p'} color={'#757575'}>
 											{user?.memberPhone}
 										</Typography>
-									</Stack>
+									</div>
 									<Divider />
-									<Box component={'div'} sx={{ p: 1, py: '6px' }} onClick={logoutHandler}>
+									<div style={{ padding: '8px', paddingTop: '6px', paddingBottom: '6px' }} onClick={logoutHandler}>
 										<MenuItem sx={{ px: '16px', py: '6px' }}>
 											<Typography variant={'subtitle1'} component={'span'}>
 												Logout
 											</Typography>
 										</MenuItem>
-									</Box>
-								</Box>
+									</div>
+								</div>
 							</Menu>
 						</Toolbar>
 					</AppBar>
@@ -174,17 +170,23 @@ const withAdminLayout = (Component: ComponentType) => {
 							}}
 						>
 							<Avatar
-								src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+								src={
+									user?.memberImage
+										? user.memberImage.startsWith('http')
+											? user.memberImage
+											: `${REACT_APP_API_URL}/${user.memberImage}`
+										: '/img/profile/defaultUser.svg'
+								}
 								sx={{ width: 36, height: 36 }}
 							/>
-							<Box ml={1.5} overflow="hidden">
+							<div style={{ marginLeft: '12px', overflow: 'hidden' }}>
 								<Typography variant={'subtitle2'} noWrap sx={{ fontWeight: 600, color: '#fff' }}>
 									{user?.memberNick}
 								</Typography>
 								<Typography variant={'caption'} noWrap sx={{ color: '#94a3b8' }}>
 									{user?.memberType}
 								</Typography>
-							</Box>
+							</div>
 						</Stack>
 
 
@@ -192,28 +194,29 @@ const withAdminLayout = (Component: ComponentType) => {
 
 						<MenuList />
 
-						<Box sx={{ mt: 'auto', p: 2 }}>
+						<div style={{ marginTop: 'auto', padding: '16px' }}>
 							<Divider sx={{ my: 2, borderColor: 'rgba(255, 255, 255, 0.1)' }} />
-							<Box
+							<div
 								onClick={logoutHandler}
-								sx={{
+								style={{
 									display: 'flex',
 									alignItems: 'center',
-									justifyContent: 'center',
+									gap: '12px',
+									padding: '12px',
+									borderRadius: '8px',
 									cursor: 'pointer',
-									p: 2,
-									borderRadius: '12px',
-									bgcolor: 'rgba(255, 255, 255, 0.05)',
-									'&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' },
-									color: '#ff6b6b',
+									transition: 'background-color 0.3s',
+									backgroundColor: 'transparent'
 								}}
+								onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)')}
+								onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
 							>
-								<SignOut size={24} weight="bold" />
-								<Typography variant={'subtitle1'} sx={{ ml: 1, fontWeight: 600 }}>
-									Log Out
+								<SignOut style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: 20 }} />
+								<Typography sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.9rem', fontWeight: 500 }}>
+									Logout
 								</Typography>
-							</Box>
-						</Box>
+							</div>
+						</div>
 					</Drawer>
 
 					<Box component={'div'} id="bunker" sx={{ flexGrow: 1 }}>

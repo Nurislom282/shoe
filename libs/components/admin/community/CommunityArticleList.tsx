@@ -152,7 +152,7 @@ const CommunityArticleList = (props: CommunityArticleListProps) => {
 								<TableRow hover key={article._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 									<TableCell align="left">{article._id}</TableCell>
 									<TableCell align="left">
-										<Box component={'div'}>
+										<div>
 											{article.articleTitle}
 											{article.articleStatus === BoardArticleStatus.ACTIVE && (
 												<Link
@@ -166,7 +166,7 @@ const CommunityArticleList = (props: CommunityArticleListProps) => {
 													</IconButton>
 												</Link>
 											)}
-										</Box>
+										</div>
 									</TableCell>
 									<TableCell align="left">{article.articleCategory}</TableCell>
 									<TableCell align="left" className={'name'}>
@@ -175,7 +175,9 @@ const CommunityArticleList = (props: CommunityArticleListProps) => {
 												alt="Remy Sharp"
 												src={
 													article?.memberData?.memberImage
-														? `${REACT_APP_API_URL}/${article?.memberData?.memberImage}`
+														? article.memberData.memberImage.startsWith('http') || article.memberData.memberImage.startsWith('/')
+															? article.memberData.memberImage
+															: `${REACT_APP_API_URL}/${article.memberData.memberImage}`
 														: `/img/profile/defaultUser.svg`
 												}
 												sx={{ ml: '2px', mr: '10px' }}

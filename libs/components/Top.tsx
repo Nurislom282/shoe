@@ -106,16 +106,27 @@ const Top = () => {
 		setSearchOpen(!searchOpen);
 	};
 
-	const handleSearch = () => {
+	const handleSearch = async () => {
 		if (searchQuery.trim()) {
-			router.push({
+			console.log('DEBUG: submitting search:', searchQuery);
+			await router.push({
 				pathname: '/shop',
 				query: { text: searchQuery },
 			});
 			setSearchOpen(false);
-			setSearchQuery('');
+			// setSearchQuery('');
 		}
 	};
+
+	const searchInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (searchOpen) {
+			setTimeout(() => {
+				searchInputRef.current?.focus();
+			}, 100);
+		}
+	}, [searchOpen]);
 
 	if (typeof window !== 'undefined') {
 		window.addEventListener('scroll', changeNavbarColor);
@@ -256,7 +267,7 @@ const Top = () => {
 								</MenuItem>
 							</Menu>
 							<div onClick={toggleSearch} style={{ cursor: 'pointer' }}>
-								<SearchIcon className={'icon'} />
+								<SearchIcon className={'icon'} sx={{ color: '#ff4757', width: '30px', height: '30px' }} />
 							</div>
 							<div
 								className="basket-hover-wrapper"
@@ -280,7 +291,14 @@ const Top = () => {
 										<img
 											src={
 												user?.memberImage
-													? `${REACT_APP_API_URL}/${user?.memberImage}`
+													? user.memberImage.startsWith('http')
+														? user.memberImage
+														: `${REACT_APP_API_URL}/${user.memberImage.startsWith('uploads') || user.memberImage.startsWith('/uploads')
+															? user.memberImage.startsWith('/')
+																? user.memberImage.slice(1)
+																: user.memberImage
+															: `uploads/member/${user.memberImage.startsWith('/') ? user.memberImage.slice(1) : user.memberImage}`
+														}`
 													: '/img/profile/defaultUser.svg'
 											}
 											alt=""
@@ -330,8 +348,9 @@ const Top = () => {
 				{/* Search Overlay */}
 				<div className={`search-overlay ${searchOpen ? 'open' : ''}`}>
 					<div className="search-content">
-						<SearchIcon className="search-icon" onClick={handleSearch} />
+						<SearchIcon className="search-icon" onClick={handleSearch} sx={{ color: '#ff4757' }} />
 						<input
+							ref={searchInputRef}
 							type="text"
 							placeholder="Search..."
 							value={searchQuery}

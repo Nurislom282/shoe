@@ -26,42 +26,6 @@ const AdminNotice: NextPage = (props: any) => {
 		setValue(newValue);
 	};
 
-	const mockNotices = [
-		{
-			_id: '1',
-			noticeCategory: 'System',
-			noticeTitle: 'Scheduled Maintenance',
-			noticeContent: 'We will be down for maintenance.',
-			noticeStatus: 'ACTIVE',
-			createdAt: new Date().toISOString(),
-			mb_id: 'admin1',
-			mb_nick: 'SysAdmin',
-			views: 120
-		},
-		{
-			_id: '2',
-			noticeCategory: 'Event',
-			noticeTitle: 'New Year Event!',
-			noticeContent: 'Join us for the event.',
-			noticeStatus: 'ACTIVE',
-			createdAt: new Date().toISOString(),
-			mb_id: 'admin2',
-			mb_nick: 'Marketing',
-			views: 350
-		},
-		{
-			_id: '3',
-			noticeCategory: 'Update',
-			noticeTitle: 'Policy Updates',
-			noticeContent: 'Please read our new terms.',
-			noticeStatus: 'ACTIVE',
-			createdAt: new Date().toISOString(),
-			mb_id: 'admin1',
-			mb_nick: 'Legal',
-			views: 50
-		}
-	];
-
 	return (
 		// @ts-ignore
 		<Box component={'div'} className={'content'}>
@@ -175,7 +139,7 @@ const AdminNotice: NextPage = (props: any) => {
 							<Divider />
 						</Box>
 						<NoticeCardGrid
-							notices={mockNotices} // Use mock data for verification
+							notices={[]} // Use mock data for verification
 							anchorEl={anchorEl}
 							menuIconClickHandler={() => { }}
 							menuIconCloseHandler={() => { }}

@@ -1,11 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { Stack, Button } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { sweetMixinErrorAlert, sweetTopSuccessAlert } from '../../libs/sweetAlert';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useMutation } from '@apollo/client';
+import { REQUEST_PASSWORD_RESET, RESET_PASSWORD, VERIFY_RESET_CODE } from '../../apollo/user/mutation';
 
 export const getStaticProps = async ({ locale }: any) => ({
     props: {
@@ -22,42 +24,52 @@ const ForgotPassword: NextPage = () => {
 
     // DATA
     const [email, setEmail] = useState('');
-    const [serverCode, setServerCode] = useState(''); // Simulated backend code
     const [userCode, setUserCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
 
+    // MUTATIONS
+    const [requestReset] = useMutation(REQUEST_PASSWORD_RESET);
+    const [verifyCode] = useMutation(VERIFY_RESET_CODE);
+    const [resetPassword] = useMutation(RESET_PASSWORD);
+
     /**
-     * Step 0: identification
-     * Generates a random code and shows it in an alert (simulating email/sms)
+     * Step 0: Request Code
      */
     const handleRequestCode = async () => {
-        if (!email) return sweetMixinErrorAlert('Please enter your text');
+        if (!email) return sweetMixinErrorAlert('Please enter your email');
 
-        // Simulation: Generate 6 digit code
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        setServerCode(code);
-
-        // Show code to user (since we can't actually send email)
-        alert(`Your password reset code is: ${code}`);
-
-        setStep(1);
+        try {
+            await requestReset({ variables: { email } });
+            await sweetTopSuccessAlert('Reset code sent to your email!', 2000);
+            setStep(1);
+        } catch (err: any) {
+            console.log('Error requestReset:', err);
+            sweetMixinErrorAlert(err.message || 'Failed to send code');
+        }
     };
 
     /**
      * Step 1: Verification
-     * User enters the code they "received"
      */
     const handleVerifyCode = async () => {
-        if (userCode !== serverCode) {
-            return sweetMixinErrorAlert('Invalid code! Please try again.');
+        if (!userCode) return sweetMixinErrorAlert('Please enter the code');
+
+        try {
+            const result = await verifyCode({ variables: { email, code: userCode } });
+            if (result.data.verifyResetCode) {
+                setStep(2);
+            } else {
+                sweetMixinErrorAlert('Invalid code');
+            }
+        } catch (err: any) {
+            console.log('Error verifyCode:', err);
+            sweetMixinErrorAlert(err.message || 'Verification failed');
         }
-        setStep(2);
     };
 
     /**
      * Step 2: Reset Password
-     * User enters new password
      */
     const handleResetPassword = async () => {
         if (newPassword !== repeatPassword) {
@@ -67,10 +79,17 @@ const ForgotPassword: NextPage = () => {
             return sweetMixinErrorAlert('Password must be at least 5 characters!');
         }
 
-        await sweetTopSuccessAlert('Password reset successfully!', 2000);
-        router.push('/account/login');
+        try {
+            const result = await resetPassword({ variables: { email, code: userCode, newPassword } });
+            if (result.data.resetPassword) {
+                await sweetTopSuccessAlert('Password reset successfully!', 2000);
+                router.push('/account/login');
+            }
+        } catch (err: any) {
+            console.log('Error resetPassword:', err);
+            sweetMixinErrorAlert(err.message || 'Reset failed');
+        }
     };
-
 
     if (device === 'mobile') {
         return <div>MOBILE FORGOT PASSWORD</div>;
@@ -80,7 +99,7 @@ const ForgotPassword: NextPage = () => {
                 <Stack className={'container'}>
                     <Stack className={'main'} flexDirection={'row'}>
                         <Stack className={'left'}>
-                            {/* Background Image Area */}
+                            <img src="/img/banner/baner-login.jpg" alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </Stack>
                         <Stack className={'right animate__animated animate__fadeInDown'}>
 
@@ -89,7 +108,7 @@ const ForgotPassword: NextPage = () => {
                                 <>
                                     <div className={'info'}>
                                         <span className={'title'}>Forgot Password?</span>
-                                        <p>Enter your identifier (Email or Phone) to receive a reset code.</p>
+                                        <p>Enter your email to receive a reset code.</p>
                                     </div>
                                     <div className={'input-wrap'}>
                                         <div className={'input-box'}>
@@ -100,7 +119,7 @@ const ForgotPassword: NextPage = () => {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 onKeyDown={(e) => e.key === 'Enter' && handleRequestCode()}
                                             />
-                                            <label>Email or Phone</label>
+                                            <label>Email</label>
                                         </div>
                                     </div>
                                     <div className={'actions'}>
@@ -115,7 +134,7 @@ const ForgotPassword: NextPage = () => {
                                 <>
                                     <div className={'info'}>
                                         <span className={'title'}>Verify Code</span>
-                                        <p>We sent a 6-digit code to <b>{email}</b>. Please enter it below.</p>
+                                        <p>We sent a code to <b>{email}</b>. Please enter it below.</p>
                                     </div>
                                     <div className={'input-wrap'}>
                                         <div className={'input-box'}>
@@ -126,12 +145,12 @@ const ForgotPassword: NextPage = () => {
                                                 onChange={(e) => setUserCode(e.target.value)}
                                                 onKeyDown={(e) => e.key === 'Enter' && handleVerifyCode()}
                                             />
-                                            <label>enter 6-digit code</label>
+                                            <label>Enter code</label>
                                         </div>
                                     </div>
                                     <div className={'actions'}>
-                                        <button onClick={handleVerifyCode} disabled={userCode.length < 6}>Verify Code</button>
-                                        <span className='back-to-login' onClick={() => setStep(0)}>Change Email/Phone</span>
+                                        <button onClick={handleVerifyCode} disabled={userCode.length < 4}>Verify Code</button>
+                                        <span className='back-to-login' onClick={() => setStep(0)}>Change Email</span>
                                     </div>
                                 </>
                             )}

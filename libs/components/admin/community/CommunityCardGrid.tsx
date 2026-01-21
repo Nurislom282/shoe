@@ -39,11 +39,11 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
 
     if (articles.length === 0) {
         return (
-            <Box p={4} textAlign="center">
+            <div style={{ padding: '32px', textAlign: 'center' }}>
                 <Typography variant="body1" color="textSecondary">
                     No articles found.
                 </Typography>
-            </Box>
+            </div>
         );
     }
 
@@ -51,7 +51,9 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
         <Grid container spacing={3}>
             {articles.map((article: BoardArticle, index: number) => {
                 const memberImage = article?.memberData?.memberImage
-                    ? `${REACT_APP_API_URL}/${article?.memberData?.memberImage}`
+                    ? article.memberData.memberImage.startsWith('http') || article.memberData.memberImage.startsWith('/')
+                        ? article.memberData.memberImage
+                        : `${REACT_APP_API_URL}/${article.memberData.memberImage}`
                     : `/img/profile/defaultUser.svg`;
 
                 return (
@@ -72,20 +74,19 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                             }}
                         >
                             <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                                <Stack direction="row" justifyContent="space-between" alignItems="flex-start" mb={2}>
-                                    <Box
-                                        sx={{
-                                            bgcolor: '#e0f2f1',
+                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                                    <div
+                                        style={{
+                                            backgroundColor: '#e0f2f1',
                                             color: '#00695c',
-                                            px: 1,
-                                            py: 0.5,
+                                            padding: '4px 8px',
                                             borderRadius: '8px',
                                             fontSize: '0.75rem',
                                             fontWeight: 'bold',
                                         }}
                                     >
                                         {article.articleCategory}
-                                    </Box>
+                                    </div>
                                     {article.articleStatus === BoardArticleStatus.ACTIVE && (
                                         <Tooltip title={'Open article tab'}>
                                             <Link
@@ -98,7 +99,7 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                             </Link>
                                         </Tooltip>
                                     )}
-                                </Stack>
+                                </div>
 
                                 <Typography
                                     variant="h6"
@@ -118,29 +119,29 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                     {article.articleTitle}
                                 </Typography>
 
-                                <Stack direction="row" spacing={2} alignItems="center" mb={2}>
-                                    <Stack direction="row" spacing={0.5} alignItems="center">
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'center' }}>
                                         <VisibilityIcon sx={{ fontSize: 16, color: '#64748b' }} />
                                         <Typography variant="caption" color="textSecondary">
                                             {article.articleViews}
                                         </Typography>
-                                    </Stack>
-                                    <Stack direction="row" spacing={0.5} alignItems="center">
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'center' }}>
                                         <FavoriteIcon sx={{ fontSize: 16, color: '#64748b' }} />
                                         <Typography variant="caption" color="textSecondary">
                                             {article.articleLikes}
                                         </Typography>
-                                    </Stack>
+                                    </div>
                                     <Typography variant="caption" color="textSecondary">
                                         <Moment format={'DD.MM.YY'}>{article?.createdAt}</Moment>
                                     </Typography>
-                                </Stack>
+                                </div>
 
-                                <Stack direction="row" alignItems="center" spacing={1.5}>
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px' }}>
                                     <Link href={`/member?memberId=${article?.memberData?._id}`}>
                                         <Avatar src={memberImage} sx={{ width: 32, height: 32, cursor: 'pointer' }} />
                                     </Link>
-                                    <Box>
+                                    <div>
                                         <Link href={`/member?memberId=${article?.memberData?._id}`}>
                                             <Typography variant="subtitle2" sx={{ color: '#1a1f36', fontWeight: 600, cursor: 'pointer' }}>
                                                 {article?.memberData?.memberNick || 'Unknown'}
@@ -149,8 +150,8 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                         <Typography variant="caption" color="textSecondary">
                                             Writer
                                         </Typography>
-                                    </Box>
-                                </Stack>
+                                    </div>
+                                </div>
                             </CardContent>
 
                             <CardActions
@@ -161,20 +162,19 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                     py: 1.5,
                                 }}
                             >
-                                <Box
-                                    sx={{
-                                        bgcolor: article.articleStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
+                                <div
+                                    style={{
+                                        backgroundColor: article.articleStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
                                         color: 'white',
-                                        px: 1,
-                                        py: 0.2,
+                                        padding: '2px 8px',
                                         borderRadius: '10px',
                                         fontSize: '0.7rem',
                                         fontWeight: 'bold',
                                     }}
                                 >
                                     {article.articleStatus}
-                                </Box>
-                                <Box>
+                                </div>
+                                <div>
                                     <IconButton
                                         size="small"
                                         onClick={(e: any) => menuIconClickHandler(e, article._id)}
@@ -184,7 +184,7 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                     >
                                         <MoreVertIcon fontSize="small" />
                                     </IconButton>
-                                </Box>
+                                </div>
                             </CardActions>
 
                             <Menu
@@ -215,7 +215,7 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             >
-                                <Box sx={{ p: 1 }}>
+                                <div style={{ padding: '8px' }}>
                                     <MenuItem
                                         onClick={() => {
                                             menuIconCloseHandler();
@@ -243,7 +243,7 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                                 <Typography variant={'body2'}>{status}</Typography>
                                             </MenuItem>
                                         ))}
-                                </Box>
+                                </div>
                             </Menu>
                         </Card>
                     </Grid>

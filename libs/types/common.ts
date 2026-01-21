@@ -3,3 +3,6 @@ export interface T {
 }
 
 
+export interface TotalCounter {
+	total: number;
+}

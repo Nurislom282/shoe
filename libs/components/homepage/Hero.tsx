@@ -4,8 +4,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { useTranslation } from 'next-i18next';
 
 const Hero = () => {
+    const { t } = useTranslation('common');
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
@@ -13,14 +15,12 @@ const Hero = () => {
             <div className="container">
                 <div className="hero-content">
                     <div className="hero-left">
-                        <h1>Comfort Shoes with ShoeZ - Online Shop For You!</h1>
+                        <h1>{t('home.hero.title')}</h1>
                         <p>
-                            Step into a world of style and comfort with ShoeZ, where every pair of shoes tells a story
-                            of craftsmanship and innovation. Explore our curated collection, where trends seamlessly
-                            merge with unparalleled ease.
+                            {t('home.hero.desc')}
                         </p>
                         <Link href="/about">
-                            <button className="cta-button">Learn About Us</button>
+                            <button className="cta-button">{t('home.hero.button')}</button>
                         </Link>
                     </div>
 

@@ -1,139 +1,171 @@
-# NestJS Backend API
+# Backend Data Specification - ShoeZ Project
 
-This README documents the backend API requirements and setup for the NestJS application, focusing on the "Product" module (formerly "Property").
+This document outlines the data structures, GraphQL schema, and logic required on the backend to support the entire application, including Shop, Community, Authentication, and Profile features.
 
-## Table of Contents
+---
 
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
-- [Environment Variables](#environment-variables)
-- [Product API (Refactored)](#product-api-refactored)
-    - [Data Model](#data-model)
-    - [GraphQL Queries](#graphql-queries)
-- [Running the App](#running-the-app)
+## 1. Member Module (Authentication & Users)
 
-## Overview
+### Goals
+Handle user registration, login, profile management, and retrieving agent lists.
 
-This is the backend API for the Nestar Next application, built with NestJS. It provides a GraphQL API to serve the frontend application.
+### Schema
+#### Mutations
+- **signup(input: MemberInput!): Member!**
+    - Creates a new member.
+    - Hashes password.
+    - Generates JWT token (`accessToken`).
+- **login(input: LoginInput!): Member!**
+    - Verifies credentials.
+    - Returns member data with `accessToken`.
+- **updateMember(input: MemberUpdate!): Member!**
+    - Private access.
+    - Updates profile info.
+- **likeTargetMember(memberId: String!): Member!**
+    - Toggles like status for a member.
 
-## Prerequisites
+#### Queries
+- **getAgents(input: AgentsInquiry!): Agents!**
+    - Returns a paginated list of members with `memberType = AGENT`.
+- **getMember(memberId: String!): Member!**
+    - Returns public profile data for a specific member.
 
-- Node.js (v18 or later recommended)
-- npm or yarn
-- MongoDB (running locally or cloud instance)
-
-## Installation & Setup
-
-```bash
-# Clone the repository (if not already done)
-# git clone <repository-url>
-
-# Install dependencies
-npm install
-```
-
-## Environment Variables
-
-Create a `.env` file in the root directory. **Do not commit this file.**
-
-```env
-# Example .env configuration
-PORT=3000
-MONGO_URI=mongodb://localhost:27017/nestar
-JWT_SECRET=your_jwt_secret_key
-```
-
-## Product API (Refactored)
-
-> [!IMPORTANT]
-> The **Property** module is being refactored to **Product** to align with the shoe shop domain. All "property" related schemas, DTOs, and resolvers must be updated to "product".
-
-### Data Model
-
-The `Product` schema should replace the `Property` schema.
-
-**Key Changes:**
-- `Property` -> `Product`
-- `propertyTitle` -> `productTitle`
-- `propertyPrice` -> `productPrice`
-- ...and so on for all `propertyPrefix` fields.
-
-**Interface (TypeScript):**
-
-```typescript
-export interface Product {
-    _id: string;
-    productType: ProductType;
-    productStatus: ProductStatus;
-    productLocation: ProductLocation;
-    productAddress: string;
-    productTitle: string;
-    productPrice: number;
-    productSquare: number; // Consider deprecating if irrelevant for shoes
-    productBeds: number;   // Consider deprecating if irrelevant for shoes
-    productRooms: number;  // Consider deprecating if irrelevant for shoes
-    productViews: number;
-    productLikes: number;
-    productComments: number;
-    productRank: number;
-    productImages: string[];
-    productDesc?: string;
-    memberId: string;
-    soldAt?: Date;
-    deletedAt?: Date;
-    createdAt: Date;
-    updatedAt: Date;
-}
-```
-
-### GraphQL Queries
-
-The following queries must be exposed by the backend to support the frontend:
-
-#### `getProducts`
-
-Retrieves a list of products based on filter criteria.
-
+### Input Types
 ```graphql
-query GetProducts($input: ProductsInquiry!) {
-    getProducts(input: $input) {
-        list {
-            _id
-            productTitle
-            productPrice
-            productImages
-            productStatus
-            # ... other fields
-        }
-        metaCounter {
-            total
-        }
-    }
+input MemberInput {
+    memberNick: String!
+    memberPassword: String!
+    memberPhone: String!
+    memberType: String # "USER" or "AGENT"
+}
+
+input AgentsInquiry {
+    page: Int!
+    limit: Int!
+    search: AISearch
 }
 ```
 
-#### `getProduct`
+---
 
-Retrieves a single product by ID.
+## 2. Product Module (Shop)
 
-```graphql
-query GetProduct($input: String!) {
-    getProduct(productId: $input) {
-        _id
-        productTitle
-        # ... other fields
-    }
-}
-```
+### Goals
+Manage product listings, searching, filtering, and liking.
 
-## Running the App
+### Schema
+#### Mutations
+- **createProduct(input: ProductInput!): Product!**
+    - Private access (Agents only).
+- **updateProduct(input: ProductUpdate!): Product!**
+    - Owner access only.
+- **likeTargetProduct(productId: String!): Product!**
+    - Toggles like status.
 
-```bash
-# Development
-npm run start:dev
+#### Queries
+- **getProduct(productId: String!): Product!**
+    - Returns single product detail.
+    - Populates `memberData`.
+- **getProducts(input: ProductsInquiry!): Products!**
+    - Main shop query.
+    - Supports complex filtering (see Logic below).
+- **getAgentProducts(input: AgentProductsInquiry!): Products!**
+    - Returns products for a specific agent/member.
+- **getFavorites(input: OrdinaryInquiry!): Products!**
+    - Returns products liked by the current user.
+- **getVisited(input: OrdinaryInquiry!): Products!**
+    - Returns formatted list of recently visited products.
 
-# Production
-npm run build
-npm run start:prod
-```
+### Filter Logic (getProducts)
+The `search` input in `ProductsInquiry` determines the filters:
+1.  **Text Search**: Regex match on Title/Description.
+2.  **Category (`typeList`)**: Match `productType` against list (e.g., `['SNEAKER', 'BOOT']`).
+3.  **Price Range (`pricesRange`)**: `start` <= `productPrice` <= `end`.
+4.  **Seasons (`seasons`)**: Match product season (e.g., `['SUMMER']`).
+5.  **Sale (`options`)**: If `options` contains "sale", filter active promotions.
+
+---
+
+## 3. Board Article Module (Community)
+
+### Goals
+Manage community posts/articles.
+
+### Schema
+#### Mutations
+- **createBoardArticle(input: BoardArticleInput!): BoardArticle!**
+    - Private access.
+- **updateBoardArticle(input: BoardArticleUpdate!): BoardArticle!**
+    - Owner access only.
+- **likeTargetBoardArticle(articleId: String!): BoardArticle!**
+    - Toggles like status.
+
+#### Queries
+- **getBoardArticle(articleId: String!): BoardArticle!**
+    - Returns single article detail.
+- **getBoardArticles(input: BoardArticlesInquiry!): BoardArticles!**
+    - Returns paginated list.
+    - Filters by `articleCategory` (FREE, NEWS, RECOMMEND, HUMOR).
+
+---
+
+## 4. Comment Module
+
+### Goals
+Handle comments on products and articles.
+
+### Schema
+#### Mutations
+- **createComment(input: CommentInput!): Comment!**
+    - Private access.
+- **updateComment(input: CommentUpdate!): Comment!**
+    - Owner access only.
+
+#### Queries
+- **getComments(input: CommentsInquiry!): Comments!**
+    - Returns comments for a specific reference ID (`commentRefId`), which can be a Product ID or Article ID.
+    - Filter by `commentGroup` (PRODUCT or ARTICLE).
+
+---
+
+## 5. Follow Module
+
+### Goals
+Allow users to follow other users/agents.
+
+### Schema
+#### Mutations
+- **subscribe(input: String!): Subscriber!**
+    - Input is `followingId`.
+    - Creates a relationship record.
+- **unsubscribe(input: String!): Subscriber!**
+    - Removes the relationship.
+
+#### Queries
+- **getMemberFollowers(input: FollowInquiry!): Followers!**
+    - Returns list of people following a user.
+- **getMemberFollowings(input: FollowInquiry!): Followings!**
+    - Returns list of people a user is following.
+
+---
+
+## 6. Support Module
+
+### Goals
+Handle customer support inquiries.
+
+### Schema
+#### Mutations
+- **createSupportInquiry(input: SupportInquiryInput!): SupportInquiry!**
+    - Types: "General", "Payment", "Product".
+
+---
+
+## General Notes for All Modules
+1.  **Pagination**: All lists (`list` field) must be accompanied by a `metaCounter` array containing the `total` count for pagination calculation on the frontend.
+2.  **Auth Guard**: Mutations and some specific queries (like `getFavorites`) require a valid JWT in the header (`Authorization: Bearer <token>`).
+3.  **Timestamps**: All entities should have `createdAt` and `updatedAt`.
+4.  **Relationships**:
+    - Product/Article -> Member (Author)
+    - Comment -> Member (Commenter)
+    - Entities typically return populated member data (nick, image) for display.

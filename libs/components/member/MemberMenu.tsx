@@ -39,7 +39,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 		},
 	});
 
-	console.log(member);
+	// console.log(member); // Removed console log
 	if (device === 'mobile') {
 		return <div>MEMBER MENU MOBILE</div>;
 	} else {
@@ -48,7 +48,18 @@ const MemberMenu = (props: MemberMenuProps) => {
 				<Stack className={'profile'}>
 					<Box component={'div'} className={'profile-img'}>
 						<img
-							src={member?.memberImage ? `${REACT_APP_API_URL}/${member?.memberImage}` : '/img/profile/defaultUser.svg'}
+							src={
+								member?.memberImage
+									? member.memberImage.startsWith('http')
+										? member.memberImage
+										: `${REACT_APP_API_URL}/${member.memberImage.startsWith('uploads') || member.memberImage.startsWith('/uploads')
+											? member.memberImage.startsWith('/')
+												? member.memberImage.slice(1)
+												: member.memberImage
+											: `uploads/member/${member.memberImage.startsWith('/') ? member.memberImage.slice(1) : member.memberImage}`
+										}`
+									: '/img/profile/defaultUser.svg'
+							}
 							alt={'member-photo'}
 						/>
 					</Box>
@@ -90,26 +101,26 @@ const MemberMenu = (props: MemberMenuProps) => {
 						</Typography>
 						<List className={'sub-section'}>
 							{member?.memberType === 'AGENT' && (
-								<ListItem className={category === 'properties' ? 'focus' : ''}>
+								<ListItem className={category === 'products' ? 'focus' : ''}>
 									<Link
 										href={{
 											pathname: '/member',
-											query: { ...router.query, category: 'properties' },
+											query: { ...router.query, category: 'products' },
 										}}
 										scroll={false}
 										style={{ width: '100%' }}
 									>
 										<div className={'flex-box'}>
-											{category === 'properties' ? (
+											{category === 'products' ? (
 												<img className={'com-icon'} src={'/img/icons/homeWhite.svg'} alt={'com-icon'} />
 											) : (
 												<img className={'com-icon'} src={'/img/icons/home.svg'} alt={'com-icon'} />
 											)}
 											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-												Properties
+												Products
 											</Typography>
 											<Typography className="count-title" variant="subtitle1">
-												{member?.memberProperties}
+												{member?.memberProducts}
 											</Typography>
 										</div>
 									</Link>

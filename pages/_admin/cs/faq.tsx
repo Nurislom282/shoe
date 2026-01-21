@@ -27,39 +27,6 @@ const FaqArticles: NextPage = (props: any) => {
 		setValue(newValue);
 	};
 
-	const mockFaqs = [
-		{
-			_id: '1',
-			faqCategory: 'Payment',
-			faqTitle: 'How do I change my payment method?',
-			faqContent: 'Content here',
-			faqStatus: 'ACTIVE',
-			createdAt: new Date().toISOString(),
-			mb_id: 'user1',
-			mb_nick: 'Admin'
-		},
-		{
-			_id: '2',
-			faqCategory: 'Account',
-			faqTitle: 'Can I delete my account?',
-			faqContent: 'Content here',
-			faqStatus: 'ACTIVE',
-			createdAt: new Date().toISOString(),
-			mb_id: 'user2',
-			mb_nick: 'Support'
-		},
-		{
-			_id: '3',
-			faqCategory: 'General',
-			faqTitle: 'Where are you located?',
-			faqContent: 'Content here',
-			faqStatus: 'ACTIVE',
-			createdAt: new Date().toISOString(),
-			mb_id: 'user3',
-			mb_nick: 'Admin'
-		}
-	];
-
 	return (
 		// @ts-ignore
 		<Box component={'div'} className={'content'}>
@@ -173,7 +140,7 @@ const FaqArticles: NextPage = (props: any) => {
 							<Divider />
 						</Box>
 						<FaqCardGrid
-							articles={mockFaqs} // Use mock data for verification
+							articles={[]} // Use mock data for verification
 							anchorEl={anchorEl}
 							menuIconClickHandler={() => { }}
 							menuIconCloseHandler={() => { }}

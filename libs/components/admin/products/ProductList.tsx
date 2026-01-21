@@ -68,13 +68,13 @@ const headCells: readonly HeadCell[] = [
 		id: 'location',
 		numeric: false,
 		disablePadding: false,
-		label: 'LOCATION',
+		label: 'CATEGORY',
 	},
 	{
 		id: 'type',
 		numeric: false,
 		disablePadding: false,
-		label: 'TYPE',
+		label: 'GENDER',
 	},
 	{
 		id: 'status',
@@ -149,38 +149,42 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 
 						{products.length !== 0 &&
 							products.map((product: Product, index: number) => {
-								const productImage = `${REACT_APP_API_URL}/${product?.productImages[0]}`;
+								const productImage = product?.images?.[0]?.url
+									? product.images[0].url.startsWith('http') || product.images[0].url.startsWith('/')
+										? product.images[0].url
+										: `${REACT_APP_API_URL}/${product.images[0].url}`
+									: '/img/profile/defaultUser.svg';
 
 								return (
 									<TableRow hover key={product?._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 										<TableCell align="left">{product._id}</TableCell>
 										<TableCell align="left" className={'name'}>
-											{product.productStatus === 'ACTIVE' ? (
-												<Stack direction={'row'}>
+											{product.status === 'ACTIVE' ? (
+												<div style={{ display: 'flex', flexDirection: 'row' }}>
 													<Link href={`/product/detail?id=${product?._id}`}>
 														<div>
 															<Avatar alt="Remy Sharp" src={productImage} sx={{ ml: '2px', mr: '10px' }} />
 														</div>
 													</Link>
 													<Link href={`/product/detail?id=${product?._id}`}>
-														<div>{product.productTitle}</div>
+														<div style={{ lineHeight: '40px' }}>{product.name}</div>
 													</Link>
-												</Stack>
+												</div>
 											) : (
-												<Stack direction={'row'}>
+												<div style={{ display: 'flex', flexDirection: 'row' }}>
 													<div>
 														<Avatar alt="Remy Sharp" src={productImage} sx={{ ml: '2px', mr: '10px' }} />
 													</div>
-													<div style={{ marginTop: '10px' }}>{product.productTitle}</div>
-												</Stack>
+													<div style={{ marginTop: '10px' }}>{product.name}</div>
+												</div>
 											)}
 										</TableCell>
-										<TableCell align="center">{product.productPrice}</TableCell>
+										<TableCell align="center">{product.price}</TableCell>
 										<TableCell align="center">{product.memberData?.memberNick}</TableCell>
-										<TableCell align="center">{product.productLocation}</TableCell>
-										<TableCell align="center">{product.productType}</TableCell>
+										<TableCell align="center">{product.category}</TableCell>
+										<TableCell align="center">{product.gender}</TableCell>
 										<TableCell align="center">
-											{product.productStatus === ProductStatus.DELETE && (
+											{product.status === ProductStatus.DELETE && (
 												<Button
 													variant="outlined"
 													sx={{ p: '3px', border: 'none', ':hover': { border: '1px solid #000000' } }}
@@ -190,14 +194,14 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 												</Button>
 											)}
 
-											{product.productStatus === ProductStatus.SOLD && (
-												<Button className={'badge warning'}>{product.productStatus}</Button>
+											{product.status === ProductStatus.SOLD && (
+												<Button className={'badge warning'}>{product.status}</Button>
 											)}
 
-											{product.productStatus === ProductStatus.ACTIVE && (
+											{product.status === ProductStatus.ACTIVE && (
 												<>
 													<Button onClick={(e: any) => menuIconClickHandler(e, index)} className={'badge success'}>
-														{product.productStatus}
+														{product.status}
 													</Button>
 
 													<Menu
@@ -212,10 +216,10 @@ export const ProductPanelList = (props: ProductPanelListType) => {
 														sx={{ p: 1 }}
 													>
 														{Object.values(ProductStatus)
-															.filter((ele) => ele !== product.productStatus)
+															.filter((ele) => ele !== product.status)
 															.map((status: string) => (
 																<MenuItem
-																	onClick={() => updateProductHandler({ _id: product._id, productStatus: status })}
+																	onClick={() => updateProductHandler({ _id: product._id, status: status })}
 																	key={status}
 																>
 																	<Typography variant={'subtitle1'} component={'span'}>

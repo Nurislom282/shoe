@@ -45,7 +45,7 @@ const Login: NextPage = () => {
         console.warn(input);
         try {
             await logIn(input.nick, input.password);
-            await router.push(`${router.query.referrer ?? '/'}`);
+            window.location.replace(`${router.query.referrer ?? '/'}`);
         } catch (err: any) {
             await sweetMixinErrorAlert(err.message);
         }
@@ -54,8 +54,8 @@ const Login: NextPage = () => {
     const doSignUp = useCallback(async () => {
         console.warn(input);
         try {
-            await signUp(input.nick, input.password, input.phone, input.type);
-            await router.push(`${router.query.referrer ?? '/'}`);
+            await signUp(input.nick, input.password, input.phone, input.type, '');
+            window.location.replace(`${router.query.referrer ?? '/'}`);
         } catch (err: any) {
             await sweetMixinErrorAlert(err.message);
         }
@@ -71,7 +71,7 @@ const Login: NextPage = () => {
                 <Stack className={'container'}>
                     <Stack className={'main'} flexDirection={'row'}>
                         <Stack className={'left'}>
-                            {/* Background Image Area */}
+                            <img src="/img/banner/baner-login.jpg" alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </Stack>
                         <Stack className={'right animate__animated animate__fadeInDown'}>
                             <div className={'info'}>

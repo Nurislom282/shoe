@@ -7,9 +7,17 @@ import { Product } from '../../types/product/product';
 import { T } from '../../types/common';
 import { useQuery } from '@apollo/client';
 import { GET_VISITED } from '../../../apollo/user/query';
+import { REACT_APP_API_URL } from '../../config';
+import { formatterStr } from '../../utils';
+import { useRouter } from 'next/router';
+import IconButton from '@mui/material/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const RecentlyVisited: NextPage = () => {
 	const device = useDeviceDetect();
+	const router = useRouter();
 	const [recentlyVisited, setRecentlyVisited] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const [searchVisited, setSearchVisited] = useState<T>({ page: 1, limit: 6 });
@@ -49,8 +57,58 @@ const RecentlyVisited: NextPage = () => {
 				</Stack>
 				<Stack className="favorites-list-box">
 					{recentlyVisited?.length ? (
-						recentlyVisited?.map((product: Product) => {
-							return <ProductCard product={product} memberPage={true} key={product._id} />;
+						recentlyVisited?.map((product: Product, index: number) => {
+							const imagePath = product.images?.[0]?.url
+								? product.images[0].url.startsWith('http')
+									? product.images[0].url
+									: `${REACT_APP_API_URL}/${product.images[0].url}`
+								: '/img/profile/defaultUser.svg';
+
+							return (
+								<Stack
+									className="card-config"
+									key={product._id}
+									onClick={() => router.push(`/product/detail?id=${product._id}`)}
+									sx={{ animationDelay: `${index * 0.1}s` }}
+								>
+									<Stack className="top">
+										<img
+											src={imagePath}
+											alt=""
+											onError={(e) => {
+												e.currentTarget.src = '/img/profile/defaultUser.svg';
+											}}
+										/>
+										<Stack className="top-badge">
+											<Typography>{product.status}</Typography>
+										</Stack>
+										<Stack className="remove-btn" onClick={(e: any) => { e.stopPropagation(); /* Add remove logic here */ }}>
+											<DeleteIcon sx={{ fontSize: 20, color: '#ff4d4f' }} />
+										</Stack>
+									</Stack>
+									<Stack className="bottom">
+										<Stack className="name-address">
+											<Stack className="name">
+												<Typography>{product.name}</Typography>
+											</Stack>
+											<Stack className="price">
+												<Typography>${formatterStr(product.price)}</Typography>
+											</Stack>
+										</Stack>
+										<div className="divider" />
+										<Stack className="options">
+											<Stack className="option">
+												<RemoveRedEyeIcon sx={{ fontSize: 14, color: '#888' }} />
+												<Typography>{product.productViews}</Typography>
+											</Stack>
+											<Stack className="option">
+												<FavoriteIcon sx={{ fontSize: 14, color: '#888' }} />
+												<Typography>{product.productLikes}</Typography>
+											</Stack>
+										</Stack>
+									</Stack>
+								</Stack>
+							);
 						})
 					) : (
 						<div className={'no-data'}>

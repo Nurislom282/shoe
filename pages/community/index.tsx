@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Stack, Tab, Typography, Button, Pagination } from '@mui/material';
@@ -12,8 +13,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { BoardArticlesInquiry } from '../../libs/types/board-article/board-article.input';
 import { BoardArticleCategory, BoardArticleStatus } from '../../libs/enums/board-article.enum';
 import { LIKE_TARGET_BOARD_ARTICLE } from '../../apollo/user/mutation';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { GET_BOARD_ARTICLES } from '../../apollo/user/query';
+import { userVar } from '../../apollo/store';
 import { Messages } from '../../libs/config';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 
@@ -23,7 +25,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const mockBoardArticles: BoardArticle[] = [];
+
 
 
 
@@ -68,6 +70,7 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 	const router = useRouter();
 	const { query } = router;
 	const articleCategory = query?.articleCategory as string;
+	const user = useReactiveVar(userVar);
 	const [searchCommunity, setSearchCommunity] = useState<BoardArticlesInquiry>(initialInput);
 	const [boardArticles, setBoardArticles] = useState<BoardArticle[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
@@ -157,12 +160,12 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 				<div className="blog-wrapper">
 					<div className="banner">
 						<div className="banner-image">
-							<img src="/img/banner/aboutBanner.svg" alt="Blog Banner" />
+							<img src="/img/banner/blog.jpg" alt="Blog Banner" />
 						</div>
 						<div className="container">
 							<div className="banner-text">
 								<h1>BLOG</h1>
-								<p>Home</p> <span>/</span> <p>Blog</p>
+								<Link href="/">Home</Link> <span>/</span> <p>Blog</p>
 							</div>
 						</div>
 					</div>
@@ -178,14 +181,16 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 										<Tab value={'HUMOR'} label={'Humor'} />
 									</TabList>
 									<Button
-										onClick={() =>
-											router.push({
-												pathname: '/mypage',
-												query: {
-													category: 'writeArticle',
-												},
-											})
-										}
+										onClick={() => {
+											if (!user?._id) sweetMixinErrorAlert('You are not authorized!').then();
+											else
+												router.push({
+													pathname: '/mypage',
+													query: {
+														category: 'writeArticle',
+													},
+												});
+										}}
 										className="write-btn"
 									>
 										Write Article

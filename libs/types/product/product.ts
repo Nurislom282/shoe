@@ -1,47 +1,45 @@
-import { ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
-import { Member } from '../member/member';
-
-export interface MeLiked {
-	memberId: string;
-	likeRefId: string;
-	myFavorite: boolean;
-}
-
-export interface TotalCounter {
+export interface ProductStock {
 	total: number;
+	sizes: Array<{ size: number; count: number }>;
+}
+export interface ProductImage {
+	url: string;
 }
 
 export interface Product {
 	_id: string;
-	productType: ProductType;
-	productStatus: ProductStatus;
-	productLocation: ProductLocation;
-	productAddress: string;
-	productTitle: string;
-	productPrice: number;
-	productSquare: number;
-	productBeds: number;
-	productRooms: number;
+	category: string;
+	status: string;
+	name: string;
+	brand: string;
+	price: number;
+	discountPrice?: number;
+	currency: string;
+	gender: string[];
+	season: string;
 	productViews: number;
 	productLikes: number;
-	productComments: number;
 	productRank: number;
-	productImages: string[];
-	productDesc?: string;
-	productBarter: boolean;
-	productRent: boolean;
+	rating?: number;
+	reviewsCount?: number;
+	images: ProductImage[];
+	colors: string[];
+	stock: ProductStock;
+	specifications?: {
+		material?: string;
+		weight?: string;
+		origin?: string;
+	};
+	description: string;
 	memberId: string;
-	soldAt?: Date;
-	deletedAt?: Date;
-	constructedAt?: Date;
-	createdAt: Date;
-	updatedAt: Date;
-	/** from aggregation **/
-	meLiked?: MeLiked[];
-	memberData?: Member;
+	soldAt?: string;
+	createdAt: string;
+	updatedAt: string;
+	meLiked?: any; // Define MeLiked interface if needed, or use any for now
+	memberData?: any;
 }
 
 export interface Products {
 	list: Product[];
-	metaCounter: TotalCounter[];
+	metaCounter: Array<{ total: number }>;
 }

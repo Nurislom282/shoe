@@ -21,14 +21,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { BoardArticle } from '../../libs/types/board-article/board-article';
 import { CREATE_COMMENT, LIKE_TARGET_BOARD_ARTICLE, UPDATE_COMMENT } from '../../apollo/user/mutation';
-import { GET_BOARD_ARTICLE, GET_COMMENTS } from '../../apollo/user/query';
+import { GET_BOARD_ARTICLE, GET_BOARD_ARTICLES, GET_COMMENTS } from '../../apollo/user/query';
 import {
 	sweetConfirmAlert,
 	sweetMixinErrorAlert,
 	sweetMixinSuccessAlert,
 	sweetTopSmallSuccessAlert,
 } from '../../libs/sweetAlert';
-import { Messages } from '../../libs/config';
+import { Messages, REACT_APP_API_URL } from '../../libs/config';
 import { CommentUpdate } from '../../libs/types/comment/comment.update';
 const ToastViewerComponent = dynamic(() => import('../../libs/components/community/TViewer'), { ssr: false });
 
@@ -95,36 +95,28 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	const [updatedComment, setUpdatedComment] = useState<string>('');
 	const [updatedCommentId, setUpdatedCommentId] = useState<string>('');
 	const [likeLoading, setLikeLoading] = useState<boolean>(false);
+	const [relatedArticles, setRelatedArticles] = useState<BoardArticle[]>([]);
 
 	// MOCK DATA INITIALIZATION
 	const [boardArticle, setBoardArticle] = useState<BoardArticle>({
-		_id: 'mock-id',
+		_id: '',
 		articleCategory: 'NEWS',
-		articleTitle: 'Step into Style: Your Guide to Perfect Shoes',
-		articleContent: `Finding the perfect pair of shoes can be a daunting task, but it doesn't have to be. Whether you're looking for comfort, style, or a mix of both, there are a few key things to keep in mind.
-
-## Understanding Your Lifestyle
-
-The first step in finding the perfect shoes is to consider your lifestyle. Do you spend most of your day on your feet? Are you an avid runner? Or do you work in a corporate environment? Your daily activities will dictate the type of support and cushioning you need.
-
-## Balancing Aesthetics with Functionality
-
-It's easy to get caught up in the latest trends, but it's important to remember that functionality is just as important as aesthetics. Detailed attention to the fit and material can prevent long-term foot issues.
-`,
-		articleImage: '/img/community/articleImg.png',
-		articleLikes: 35,
-		articleViews: 120,
+		articleTitle: '',
+		articleContent: '',
+		articleImage: '',
+		articleLikes: 0,
+		articleViews: 0,
 		articleStatus: 'ACTIVE',
 		articleComments: 0,
-		memberId: 'mock-member',
+		memberId: '',
 		memberData: {
-			_id: 'mock-member',
-			memberNick: 'Harold Kozey',
+			_id: '',
+			memberNick: '',
 			memberImage: '',
 		},
 		meLiked: [],
-		createdAt: new Date('2024-01-28'),
-		updatedAt: new Date('2024-01-28'),
+		createdAt: new Date(),
+		updatedAt: new Date(),
 	} as any);
 
 	/** APOLLO REQUESTS **/
@@ -146,9 +138,31 @@ It's easy to get caught up in the latest trends, but it's important to remember 
 			if (data?.getBoardArticle) {
 				setBoardArticle(data?.getBoardArticle);
 				if (data?.getBoardArticle?.memberData?.memberImage) {
-					setMemberImage(`${process.env.REACT_APP_API_URL}/${data?.getBoardArticle?.memberData?.memberImage}`);
+					setMemberImage(`${REACT_APP_API_URL}/${data?.getBoardArticle?.memberData?.memberImage}`);
 				}
 			}
+		},
+	});
+
+	const {
+		loading: getRelatedArticlesLoading,
+		data: getRelatedArticlesData,
+	} = useQuery(GET_BOARD_ARTICLES, {
+		fetchPolicy: 'network-only',
+		variables: {
+			input: {
+				page: 1,
+				limit: 3,
+				sort: 'createdAt',
+				direction: 'DESC',
+				search: {
+					articleCategory: articleCategory || 'NEWS',
+				},
+			},
+		},
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: any) => {
+			setRelatedArticles(data?.getBoardArticles?.list);
 		},
 	});
 
@@ -279,7 +293,7 @@ It's easy to get caught up in the latest trends, but it's important to remember 
 	};
 
 	const getCommentMemberImage = (imageUrl: string | undefined) => {
-		if (imageUrl) return `${process.env.REACT_APP_API_URL}/${imageUrl}`;
+		if (imageUrl) return `${REACT_APP_API_URL}/${imageUrl}`;
 		else return '/img/community/articleImg.png';
 	};
 
@@ -336,7 +350,7 @@ It's easy to get caught up in the latest trends, but it's important to remember 
 											<img
 												src={
 													boardArticle?.articleImage
-														? (boardArticle.articleImage.startsWith('/') ? boardArticle.articleImage : `${process.env.REACT_APP_API_URL}/${boardArticle?.articleImage}`)
+														? (boardArticle.articleImage.startsWith('/') ? boardArticle.articleImage : `${REACT_APP_API_URL}/${boardArticle?.articleImage}`)
 														: '/img/community/articleImg.png'
 												}
 												alt="Article Hero"
@@ -576,27 +590,39 @@ It's easy to get caught up in the latest trends, but it's important to remember 
 								<Stack className="sidebar-section">
 									<Typography className="sidebar-title">Related Posts</Typography>
 									<Stack className="related-posts-list">
-										<div className="related-post-item">
-											<img src="/img/community/articleImg.png" alt="" />
-											<div className="info">
-												<div className="date">Jan 28, 2024</div>
-												<div className="title">Comfort in Style: Best Shoes...</div>
-											</div>
-										</div>
-										<div className="related-post-item">
-											<img src="/img/community/articleImg.png" alt="" />
-											<div className="info">
-												<div className="date">Jan 25, 2024</div>
-												<div className="title">Top 10 Sneakers for Running...</div>
-											</div>
-										</div>
-										<div className="related-post-item">
-											<img src="/img/community/articleImg.png" alt="" />
-											<div className="info">
-												<div className="date">Jan 20, 2024</div>
-												<div className="title">Why You Need Specialized Shoe...</div>
-											</div>
-										</div>
+										{relatedArticles?.map((article: BoardArticle) => {
+											const imagePath = article?.articleImage
+												? article.articleImage.startsWith('/')
+													? article.articleImage
+													: `${REACT_APP_API_URL}/${article.articleImage}`
+												: '/img/community/articleImg.png';
+
+											return (
+												<div
+													className="related-post-item"
+													key={article?._id}
+													onClick={() => {
+														router.push(
+															{
+																pathname: '/community/detail',
+																query: { id: article?._id, articleCategory: article?.articleCategory || 'NEWS' },
+															},
+															undefined,
+															{ shallow: false },
+														);
+													}}
+													style={{ cursor: 'pointer' }}
+												>
+													<img src={imagePath} alt="" />
+													<div className="info">
+														<div className="date">
+															<Moment format={'MMM DD, YYYY'}>{article?.createdAt}</Moment>
+														</div>
+														<div className="title">{article?.articleTitle}</div>
+													</div>
+												</div>
+											);
+										})}
 									</Stack>
 								</Stack>
 							</FadeInWhenVisible>

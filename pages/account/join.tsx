@@ -17,7 +17,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 const Join: NextPage = () => {
 	const router = useRouter();
 	const device = useDeviceDetect();
-	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER' });
+	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER', email: '' });
 	const [loginView, setLoginView] = useState<boolean>(false);
 
 	/** HANDLERS **/
@@ -54,7 +54,7 @@ const Join: NextPage = () => {
 	const doSignUp = useCallback(async () => {
 		console.warn(input);
 		try {
-			await signUp(input.nick, input.password, input.phone, input.type);
+			await signUp(input.nick, input.password, input.phone, input.type, input.email);
 			await router.push(`${router.query.referrer ?? '/'}`);
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err.message);
@@ -71,7 +71,7 @@ const Join: NextPage = () => {
 				<Stack className={'container'}>
 					<Stack className={'main'} flexDirection={'row'}>
 						<Stack className={'left'}>
-							{/* Background Image Area */}
+							<img src="/img/season-shoes/summer.jpg" alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 						</Stack>
 						<Stack className={'right animate__animated animate__fadeInDown'}>
 							<div className={'info'}>
@@ -90,6 +90,20 @@ const Join: NextPage = () => {
 											}}
 										/>
 										<label>Name</label>
+									</div>
+								)}
+								{!loginView && (
+									<div className={'input-box'}>
+										<input
+											type="text"
+											placeholder={' '}
+											onChange={(e) => handleInput('email', e.target.value)}
+											required={true}
+											onKeyDown={(event) => {
+												if (event.key == 'Enter') doSignUp();
+											}}
+										/>
+										<label>Gmail</label>
 									</div>
 								)}
 								<div className={'input-box'}>

@@ -20,13 +20,12 @@ export const GET_ALL_MEMBERS_BY_ADMIN = gql`
 				memberDesc
 				memberWarnings
 				memberBlocks
-				memberProperties
+				memberProducts # Fixed: was memberProperties
 				memberRank
 				memberArticles
 				memberPoints
 				memberLikes
 				memberViews
-				deletedAt
 				createdAt
 				updatedAt
 				accessToken
@@ -39,33 +38,34 @@ export const GET_ALL_MEMBERS_BY_ADMIN = gql`
 `;
 
 /**************************
- *        PROPERTY        *
+ *        PRODUCT         *
  *************************/
 
-export const GET_ALL_PROPERTIES_BY_ADMIN = gql`
-	query GetAllPropertiesByAdmin($input: AllPropertiesInquiry!) {
-		getAllPropertiesByAdmin(input: $input) {
+export const GET_ALL_PRODUCTS_BY_ADMIN = gql`
+	query GetAllProductsByAdmin($input: AllProductsInquiry!) {
+		getAllProductsByAdmin(input: $input) {
 			list {
 				_id
-				propertyType
-				propertyStatus
-				propertyLocation
-				propertyAddress
-				propertyTitle
-				propertyPrice
-				propertySquare
-				propertyBeds
-				propertyRooms
-				propertyViews
-				propertyLikes
-				propertyImages
-				propertyDesc
-				propertyBarter
-				propertyRent
+				category
+				status
+				name
+				price
+				discountPrice
+				currency
+				brand
+				productViews
+				productLikes
+				colors # Standard product color tags
+				stock {
+					total
+					sizes {
+						size
+						count
+					}
+				}
+				description
 				memberId
 				soldAt
-				deletedAt
-				constructedAt
 				createdAt
 				updatedAt
 				memberData {
@@ -81,7 +81,7 @@ export const GET_ALL_PROPERTIES_BY_ADMIN = gql`
 					memberDesc
 					memberWarnings
 					memberBlocks
-					memberProperties
+					memberProducts # Fixed: was memberProperties
 					memberRank
 					memberPoints
 					memberLikes
@@ -131,7 +131,7 @@ export const GET_ALL_BOARD_ARTICLES_BY_ADMIN = gql`
 					memberDesc
 					memberWarnings
 					memberBlocks
-					memberProperties
+					memberProducts # Fixed: was memberProperties
 					memberRank
 					memberPoints
 					memberLikes
@@ -178,7 +178,7 @@ export const GET_COMMENTS = gql`
 					memberDesc
 					memberWarnings
 					memberBlocks
-					memberProperties
+					memberProducts # Fixed: was memberProperties
 					memberRank
 					memberPoints
 					memberLikes

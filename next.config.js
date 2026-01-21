@@ -7,7 +7,7 @@ const nextConfig = {
 		REACT_APP_API_WS: process.env.REACT_APP_API_WS || 'ws://localhost:3007',
 	},
 	images: {
-		domains: ['cdn.prod.website-files.com'],
+		domains: ['cdn.prod.website-files.com', 'localhost'],
 	},
 };
 

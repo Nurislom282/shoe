@@ -10,6 +10,8 @@ import { getJwtToken, updateStorage, updateUserInfo } from '../../auth';
 import { UPDATE_MEMBER } from '../../../apollo/user/mutation';
 import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
 import { Messages, REACT_APP_API_URL } from '../../config';
+import { useImageUpload } from '../../hooks/useImageUpload';
+import { useGetMember } from '../../hooks/useGetMember';
 
 const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
@@ -19,61 +21,35 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 
 	/** APOLLO REQUESTS **/
 	const [updateMember] = useMutation(UPDATE_MEMBER);
+	const { uploadImage: uploadImageMutation } = useImageUpload();
+	const { member: memberData, refetch: refetchMember } = useGetMember(user?._id);
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		setUpdateData({
-			...updateData,
-			memberNick: user.memberNick,
-			memberPhone: user.memberPhone,
-			memberAddress: user.memberAddress,
-			memberImage: user.memberImage,
-		});
-	}, [user]);
+		if (memberData) {
+			setUpdateData({
+				...updateData,
+				memberNick: memberData.memberNick,
+				memberPhone: memberData.memberPhone,
+				memberImage: memberData.memberImage,
+				memberGmail: memberData.memberGmail,
+			});
+		}
+	}, [memberData]);
 
 	/** HANDLERS **/
-	const uploadImage = async (e: any) => {
+	const uploadImageHandler = async (e: any) => {
 		try {
 			const image = e.target.files[0];
-			console.log('+image:', image);
+			if (!image) return;
 
-			const formData = new FormData();
-			formData.append(
-				'operations',
-				JSON.stringify({
-					query: `mutation ImageUploader($file: Upload!, $target: String!) {
-						imageUploader(file: $file, target: $target) 
-				  }`,
-					variables: {
-						file: null,
-						target: 'member',
-					},
-				}),
-			);
-			formData.append(
-				'map',
-				JSON.stringify({
-					'0': ['variables.file'],
-				}),
-			);
-			formData.append('0', image);
+			const uploadedUrl = await uploadImageMutation(image, 'member');
+			setUpdateData({ ...updateData, memberImage: uploadedUrl });
 
-			const response = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					'apollo-require-preflight': true,
-					Authorization: `Bearer ${token}`,
-				},
-			});
-
-			const responseImage = response.data.data.imageUploader;
-			console.log('+responseImage: ', responseImage);
-			updateData.memberImage = responseImage;
-			setUpdateData({ ...updateData });
-
-			return `${REACT_APP_API_URL}/${responseImage}`;
+			return `${REACT_APP_API_URL}/${uploadedUrl}`;
 		} catch (err) {
 			console.log('Error, uploadImage:', err);
+			sweetErrorHandling(err).then();
 		}
 	};
 
@@ -91,6 +67,9 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			const jwtToken = result.data.updateMember?.accessToken;
 			await updateStorage({ jwtToken });
 			updateUserInfo(result.data.updateMember?.accessToken);
+			await updateStorage({ jwtToken });
+			updateUserInfo(result.data.updateMember?.accessToken);
+			await refetchMember();
 			await sweetMixinSuccessAlert('information updated successfully.');
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
@@ -100,8 +79,9 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const doDisabledCheck = () => {
 		if (
 			updateData.memberNick === '' ||
+
+			updateData.memberNick === '' ||
 			updateData.memberPhone === '' ||
-			updateData.memberAddress === '' ||
 			updateData.memberImage === ''
 		) {
 			return true;
@@ -129,7 +109,9 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 								<img
 									src={
 										updateData?.memberImage
-											? `${REACT_APP_API_URL}/${updateData?.memberImage}`
+											? updateData.memberImage.startsWith('http')
+												? updateData.memberImage
+												: `${REACT_APP_API_URL}/${updateData.memberImage}`
 											: `/img/profile/defaultUser.svg`
 									}
 									alt=""
@@ -140,7 +122,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 									type="file"
 									hidden
 									id="hidden-input"
-									onChange={uploadImage}
+									onChange={uploadImageHandler}
 									accept="image/jpg, image/jpeg, image/png"
 								/>
 								<label htmlFor="hidden-input" className="labeler">
@@ -169,16 +151,17 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
 							/>
 						</Stack>
+						<Stack className="input-box">
+							<Typography className="title">Email</Typography>
+							<input
+								type="text"
+								placeholder="Your Email"
+								value={updateData.memberGmail}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberGmail: value })}
+							/>
+						</Stack>
 					</Stack>
-					<Stack className="address-box">
-						<Typography className="title">Address</Typography>
-						<input
-							type="text"
-							placeholder="Your address"
-							value={updateData.memberAddress}
-							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberAddress: value })}
-						/>
-					</Stack>
+
 					<Stack className="about-me-box">
 						<Button className="update-button" onClick={updatePropertyHandler} disabled={doDisabledCheck()}>
 							<Typography>Update Profile</Typography>
@@ -208,7 +191,7 @@ MyProfile.defaultProps = {
 		memberImage: '',
 		memberNick: '',
 		memberPhone: '',
-		memberAddress: '',
+		memberGmail: '',
 	},
 };
 

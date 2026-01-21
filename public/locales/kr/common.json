@@ -18,5 +18,209 @@
   "my page": "마이 페이지",
   "Community Detail": "커뮤니티 디테일",
   "Login/Signup": "로그인/가입",
-  "Member Page": "멤버 페이지"
+  "Member Page": "멤버 페이지",
+  "total free customer care": "무료 고객 지원",
+  "nee live": "실시간 상담",
+  "Support?": "지원?",
+  "follow us on social media": "소셜 미디어 팔로우",
+  "Popular Search": "인기 검색어",
+  "Property for Rent": "임대용 매물",
+  "Property Low to hide": "숨겨진 매물",
+  "Quick Links": "빠른 링크",
+  "Terms of Use": "이용 약관",
+  "Privacy Policy": "개인정보 보호정책",
+  "Pricing Plans": "요금제",
+  "Our Services": "서비스",
+  "Contact Support": "지원팀 문의",
+  "FAQs": "자주 묻는 질문",
+  "Discover": "탐색",
+  "Seoul": "서울",
+  "Gyeongido": "경기도",
+  "Busan": "부산",
+  "Jejudo": "제주도",
+  "All rights reserved": "판권 소유",
+  "Copyright": "저작권",
+  "Designed by": "디자인",
+  "Powered by": "제공",
+  "Contact": "연락처",
+  "About": "소개",
+  "Shop": "쇼핑",
+  "Blog": "블로그",
+  "Licenses": "라이선스",
+  "Our Blogs": "최신 블로그",
+  "Welcome to the NX Shoez Blog...": "\"NX Shoez 블로그에 오신 것을 환영합니다. 패션과 통찰력이 만나 모든 발걸음이 이야기가 되는 곳입니다.\"",
+  "No blogs found.": "블로그를 찾을 수 없습니다.",
+  "View Details": "자세히 보기",
+  "My Cart": "장바구니",
+  "Your cart is empty": "장바구니가 비어 있습니다",
+  "Subtotal": "소계",
+  "View Cart": "장바구니 보기",
+  "Checkout": "결제하기",
+  "chat": {
+    "tabs": {
+      "community": "커뮤니티 채팅",
+      "support": "고객 지원 봇"
+    },
+    "disconnected": "(연결 끊김)",
+    "reconnecting": "재연결 중...",
+    "community_welcome": "👟 Shoe NZ 커뮤니티 채팅에 오신 것을 환영합니다! 스니커즈 정보를 공유하고 질문하며 다른 애호가들과 소통하세요!",
+    "support_welcome": "👋 안녕하세요! 고객 지원 어시스턴트입니다. 무엇을 도와드릴까요?",
+    "quick_actions": "빠른 작업:",
+    "input_placeholder": {
+      "community": "메시지 입력...",
+      "reconnecting": "재연결 중...",
+      "support": "주문, 배송, 반품 등에 대해 물어보세요..."
+    },
+    "actions": {
+      "Order Status": "주문 상태",
+      "Shipping Info": "배송 정보",
+      "Returns & Exchanges": "반품 및 교환",
+      "Product Sizing": "제품 사이즈",
+      "Payment Issues": "결제 문제",
+      "Contact Support": "지원 팀 문의"
+    },
+    "bot_responses": {
+      "order_status": "주문 상태를 확인하려면 '마이 페이지' → '내 주문'을 방문하거나 주문 번호를 알려주세요. 추적을 도와드리겠습니다!",
+      "shipping_info": "표준 배송(영업일 기준 5~7일)과 빠른 배송(영업일 기준 2~3일)을 제공합니다. 배송비는 지역에 따라 다릅니다. 귀하의 지역 배송에 대해 더 알고 싶으신가요?",
+      "returns_exchanges": "구입 후 30일 이내에 반품이 가능합니다. 상품은 원래 태그가 부착된 상태로 착용하지 않아야 합니다. 교환을 원하시면 '마이 페이지' → '반품 및 교환'을 방문하세요. 특정 반품에 대한 도움이 필요하신가요?",
+      "product_sizing": "각 제품 페이지에는 사이즈 가이드가 포함되어 있습니다. 일반적으로 저희 스니커즈는 정사이즈입니다. 사이즈가 애매하다면 반 사이즈 업을 추천합니다. 제품 상세 페이지에서 구체적인 치수를 확인하세요!",
+      "payment_issues": "모든 주요 신용카드, PayPal, Apple Pay를 사용할 수 있습니다. 결제 문제가 발생하면 다른 결제 방법을 시도하거나 지원 팀에 문의하세요.",
+      "product_inquiry": "다양한 프리미엄 스니커즈를 보유하고 있습니다! 브랜드, 스타일 또는 카테고리별로 컬렉션을 찾아보세요. 찾으시는 특정 제품이나 브랜드가 있나요?",
+      "greeting": "안녕하세요! 👋 Shoe NZ 지원에 오신 것을 환영합니다. 주문, 배송, 반품, 사이즈 등에 대해 도와드리겠습니다. 오늘 무엇을 도와드릴까요?",
+      "thanks": "천만에요! 😊 오늘 더 도와드릴 일이 있나요?",
+      "default": "도움이 필요하시군요. 자세한 내용을 알려주시겠어요? 주문, 배송, 반품, 사이즈, 결제 또는 제품 정보에 대해 도와드릴 수 있습니다. 빠른 도움을 위해 위의 빠른 작업 버튼을 사용할 수도 있습니다!",
+      "admin_success": "메시지를 보내주셔서 감사합니다! 📧 지원 팀이 문의를 접수했으며 곧 연락드릴 것입니다. 보통 24시간 이내에 응답합니다. 이메일이나 이 채팅을 통해 응답을 받으실 수 있습니다. 그동안 더 도와드릴 일이 있나요?",
+      "admin_failure": "죄송하지만 메시지를 보내는 데 문제가 발생했습니다. 다시 시도하거나 직접 문의해 주세요. 지원 팀이 도와드리겠습니다!"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "ShoeZ와 함께하는 편안한 신발 - 당신을 위한 온라인 샵!",
+      "desc": "ShoeZ와 함께 스타일과 편안함의 세계로 들어오세요. 모든 신발은 장인 정신과 혁신의 이야기를 담고 있습니다. 트렌드와 편안함이 조화를 이루는 컬렉션을 만나보세요.",
+      "button": "회사 소개"
+    },
+    "stats": {
+      "free_delivery": "무료 배송",
+      "free_delivery_desc": "모든 주문 무료 배송",
+      "online_support": "24/7 온라인 지원",
+      "online_support_desc": "하루 24시간 온라인 지원",
+      "money_return": "환불 보장",
+      "money_return_desc": "환불 보장 서비스",
+      "secure_payment": "안전한 결제",
+      "secure_payment_desc": "안전한 결제 시스템"
+    },
+    "latest": {
+      "title": "최신 신발",
+      "subtitle": "패션과 기능성을 겸비한 최신 신발 컬렉션을 살펴보세요.",
+      "view_product": "제품 보기",
+      "sale": "세일",
+      "no_product": "제품이 없습니다",
+      "loading": "로딩 중...",
+      "categories": {
+        "latest": "최신",
+        "sneakers": "스니커즈",
+        "boots": "부츠",
+        "formal": "정장화",
+        "oxford": "옥스퍼드",
+        "sports_shoe": "스포츠화",
+        "high_neck": "하이탑",
+        "loafers": "로퍼"
+      }
+    },
+    "offer": {
+      "title": "계절별 신발",
+      "subtitle": "모든 계절에 맞는 최신 신발 컬렉션을 찾아보세요.",
+      "spring": "봄 컬렉션",
+      "spring_sub": "봄",
+      "summer": "여름 컬렉션",
+      "summer_sub": "여름",
+      "autumn": "가을 컬렉션",
+      "autumn_sub": "가을",
+      "winter": "겨울 컬렉션",
+      "winter_sub": "겨울"
+    },
+    "collection_box": {
+      "title": "최신 컬렉션",
+      "subtitle": "*NX Shoez의 최신 컬렉션으로 스타일과 혁신의 여정을 시작하세요.",
+      "shop_now": "지금 쇼핑하기",
+      "luxe_pace": "럭스 페이스",
+      "evolve": "이볼브 풋웨어",
+      "stellar": "스텔라 솔"
+    },
+    "banner": {
+      "subtitle": "뉴스레터 구독",
+      "title": "최신 혜택을 가장 먼저 받아보세요."
+    },
+    "category_collection": {
+      "title": "카테고리별 신발",
+      "subtitle": "카테고리별 베스트셀러 제품을 만나보세요."
+    },
+    "adds": {
+      "mobile": "모바일 광고"
+    }
+  },
+  "about_common": {
+    "title": "ShoeZ 소개",
+    "desc": "ShoeZ는 편안하고 세련된 신발을 전문으로 하는 프리미엄 온라인 스토어입니다. 우리의 사명은 고객에게 최고의 쇼핑 경험을 제공하고, 고품질의 신발을 합리적인 가격에 제공하는 것입니다.",
+    "button": "제품 보기"
+  },
+  "about_page": {
+    "title": "회사 소개",
+    "home": "홈",
+    "crumb": "/ 소개",
+    "tag_about": "회사 소개",
+    "mission_title": "우리의 사명",
+    "mission_desc": "ShoeZ는 단순한 온라인 신발 가게 그 이상입니다. 우리는 신발에 관한 모든 것에서 당신의 신뢰받는 파트너입니다. 혁신에 대한 열정과 탁월함에 대한 헌신으로 함께합니다.",
+    "tag_numbers": "우리의 숫자",
+    "numbers_title": "우리의 성과",
+    "numbers_desc": "사람들이 우리의 우선순위를 모를 때, 우리의 숫자가 대신 말해줄 것입니다 😎",
+    "satisfaction": "고객 만족도",
+    "satisfaction_desc": "오직 0.1%의 고객만이 불만족합니다.",
+    "users": "월간 활성 사용자",
+    "users_desc": "우리는 빠르고 전문적으로 일하기 때문에 사용자들이 우리를 선택합니다.",
+    "capital": "투자 유치",
+    "capital_desc": "우리는 회사를 성장시키기 위해 자본을 유치합니다.",
+    "growth": "회사 성장",
+    "growth_desc": "우리는 한 곳에 머물지 않고 매 순간 성장할 방법을 찾습니다.",
+    "partners_title": "파트너",
+    "tag_team": "팀",
+    "team_title": "우리의 팀",
+    "team_desc": "혁신가, 협력자, 리더로 구성된 역동적이고 회복력 있는 팀을 소개합니다.",
+    "tag_faq": "FAQ",
+    "faq_title": "자주 묻는 질문",
+    "mobile": "회사 소개 모바일 페이지",
+    "faqs": {
+      "q1": "어떤 사이즈가 있나요?",
+      "a1": "남성, 여성, 어린이를 위한 다양한 사이즈를 보유하고 있습니다. 자세한 내용은 사이즈 가이드를 확인하세요.",
+      "q2": "해외 배송이 가능한가요?",
+      "a2": "네, 전 세계 50개국 이상으로 배송합니다.",
+      "q3": "반품 정책은 어떻게 되나요?",
+      "a3": "착용하지 않은 원래 포장 상태의 제품에 대해 30일 반품 정책을 제공합니다.",
+      "q4": "주문을 어떻게 조회하나요?",
+      "a4": "주문이 발송되면 이메일로 송장 번호 링크를 보내드립니다.",
+      "q5": "신발은 친환경적인가요?",
+      "a5": "우리는 지속 가능성을 위해 노력하며 다양한 친환경 옵션을 제공합니다."
+    }
+  },
+  "contact": {
+    "mobile_title": "고객센터 모바일 페이지",
+    "title": "연락처",
+    "crumb_home": "홈",
+    "crumb_contact": "연락처",
+    "address_title": "주소",
+    "address_desc": "123 Shoe Street, Footwear City, FC 12345",
+    "email_title": "이메일",
+    "email_desc": "support@shoez.com",
+    "phone_title": "전화번호",
+    "phone_desc": "+1 (555) 123-4567",
+    "form": {
+      "title": "메시지 보내기",
+      "name": "이름",
+      "email": "이메일",
+      "phone": "전화번호",
+      "subject": "제목",
+      "message": "메시지",
+      "submit": "메시지 전송"
+    }
+  }
 }

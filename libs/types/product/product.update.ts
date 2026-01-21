@@ -2,20 +2,18 @@ import { ProductLocation, ProductStatus, ProductType } from '../../enums/product
 
 export interface ProductUpdate {
 	_id: string;
-	productType?: ProductType;
-	productStatus?: ProductStatus;
-	productLocation?: ProductLocation;
-	productAddress?: string;
-	productTitle?: string;
-	productPrice?: number;
-	productSquare?: number;
-	productBeds?: number;
-	productRooms?: number;
-	productImages?: string[];
-	productDesc?: string;
-	productBarter?: boolean;
-	productRent?: boolean;
+	category?: string;
+	status?: string;
+	name?: string;
+	price?: number;
+	discountPrice?: number;
+	currency?: string;
+	brand?: string;
+	gender?: string[];
+	season?: string;
+	images?: string[];
+	colors?: string[];
+	stock?: any;
+	description?: string;
 	soldAt?: Date;
-	deletedAt?: Date;
-	constructedAt?: Date;
 }

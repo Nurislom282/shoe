@@ -41,21 +41,25 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
 
     if (products.length === 0) {
         return (
-            <Box p={4} textAlign="center">
+            <div style={{ padding: '32px', textAlign: 'center' }}>
                 <Typography variant="body1" color="textSecondary">
                     No products found.
                 </Typography>
-            </Box>
+            </div>
         );
     }
 
     return (
         <Grid container spacing={3}>
             {products.map((product: Product, index: number) => {
-                const productImage = `${REACT_APP_API_URL}/${product?.productImages[0]}`;
+                const productImage = product?.images?.[0]?.url
+                    ? product.images[0].url.startsWith('http') || product.images[0].url.startsWith('/')
+                        ? product.images[0].url
+                        : `${REACT_APP_API_URL}/${product.images[0].url}`
+                    : '/img/logo/logoText.svg';
 
                 return (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                    <Grid item xs={12} sm={6} md={3} lg={2} key={product._id}>
                         <Card
                             sx={{
                                 height: '100%',
@@ -71,32 +75,31 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                 },
                             }}
                         >
-                            <Box sx={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
+                            <div style={{ position: 'relative', height: '150px', overflow: 'hidden' }}>
                                 <Link href={`/product/detail?id=${product?._id}`}>
                                     <img
                                         src={productImage}
-                                        alt={product.productTitle}
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        alt={product.name}
+                                        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '10px', backgroundColor: '#f8f9fa' }}
                                     />
                                 </Link>
-                                <Box
-                                    sx={{
+                                <div
+                                    style={{
                                         position: 'absolute',
-                                        top: 10,
-                                        right: 10,
-                                        bgcolor: product.productStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
-                                        color: '#white',
-                                        px: 1,
-                                        py: 0.5,
+                                        top: '10px',
+                                        right: '10px',
+                                        backgroundColor: product.status === 'ACTIVE' ? '#4caf50' : '#f44336',
+                                        color: 'white',
+                                        padding: '4px 8px',
                                         borderRadius: '8px',
                                         fontSize: '0.75rem',
                                         fontWeight: 'bold',
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                                     }}
                                 >
-                                    {product.productStatus}
-                                </Box>
-                            </Box>
+                                    {product.status}
+                                </div>
+                            </div>
                             <CardContent sx={{ flexGrow: 1, pt: 2, pb: 1 }}>
                                 <Link href={`/product/detail?id=${product?._id}`}>
                                     <Typography
@@ -112,11 +115,11 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                             whiteSpace: 'nowrap',
                                         }}
                                     >
-                                        {product.productTitle}
+                                        {product.name}
                                     </Typography>
                                 </Link>
                                 <Typography variant="body1" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                    ${Number(product.productPrice).toLocaleString()}
+                                    ${Number(product.price).toLocaleString()}
                                 </Typography>
                                 {/* <Stack direction="row" alignItems="center" spacing={0.5}>
                                     <LocationOnIcon sx={{ fontSize: 16, color: '#64748b' }} />
@@ -133,19 +136,12 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                     py: 1.5,
                                 }}
                             >
-                                <Stack direction="row" spacing={1} alignItems="center">
-                                    {/* <Avatar
-                                        src={product.memberData?.memberImage ? `${REACT_APP_API_URL}/${product.memberData.memberImage}` : '/img/profile/defaultUser.svg'}
-                                        sx={{ width: 24, height: 24 }}
-                                    />
-                                    <Typography variant="caption" color="textSecondary">
-                                        {product.memberData?.memberNick || 'Unknown Agent'}
-                                    </Typography> */}
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', alignItems: 'center' }}>
                                     <Typography variant="caption" color="textSecondary">
                                         ID: {product._id.slice(0, 8).toUpperCase()}
                                     </Typography>
-                                </Stack>
-                                <Box>
+                                </div>
+                                <div onClick={(e: any) => e.stopPropagation()}>
                                     <IconButton
                                         size="small"
                                         onClick={(e: any) => menuIconClickHandler(e, product._id)}
@@ -155,7 +151,7 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                     >
                                         <MoreVertIcon fontSize="small" />
                                     </IconButton>
-                                </Box>
+                                </div>
                             </CardActions>
 
                             <Menu
@@ -186,7 +182,7 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             >
-                                <Box sx={{ p: 1 }}>
+                                <div style={{ padding: '8px' }}>
                                     <MenuItem
                                         onClick={() => {
                                             menuIconCloseHandler();
@@ -197,17 +193,17 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                         <Typography variant={'body2'}>Edit Product</Typography>
                                     </MenuItem>
 
-                                    {product.productStatus !== ProductStatus.SOLD && (
+                                    {product.status !== ProductStatus.SOLD && (
                                         <MenuItem
-                                            onClick={() => updateProductHandler({ _id: product._id, productStatus: ProductStatus.SOLD })}
+                                            onClick={() => updateProductHandler({ _id: product._id, status: ProductStatus.SOLD })}
                                         >
                                             <Typography variant={'body2'}>Mark as Sold</Typography>
                                         </MenuItem>
                                     )}
 
-                                    {product.productStatus === ProductStatus.SOLD && (
+                                    {product.status === ProductStatus.SOLD && (
                                         <MenuItem
-                                            onClick={() => updateProductHandler({ _id: product._id, productStatus: ProductStatus.ACTIVE })}
+                                            onClick={() => updateProductHandler({ _id: product._id, status: ProductStatus.ACTIVE })}
                                         >
                                             <Typography variant={'body2'}>Mark as Active</Typography>
                                         </MenuItem>
@@ -218,7 +214,7 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                     >
                                         <Typography variant={'body2'} color={'error'}>Delete Product</Typography>
                                     </MenuItem>
-                                </Box>
+                                </div>
                             </Menu>
                         </Card>
                     </Grid>

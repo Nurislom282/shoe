@@ -72,7 +72,10 @@ const Basket: NextPage = () => {
                             <div key={item.id} className="cart-item">
                                 <div className="item-image">
                                     <Image
-                                        src={item.image}
+                                        src={item.image.startsWith('http')
+                                            ? item.image
+                                            : `${process.env.REACT_APP_API_URL}/${item.image}`
+                                        }
                                         alt={item.name}
                                         width={100}
                                         height={100}

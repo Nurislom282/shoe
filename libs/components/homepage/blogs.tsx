@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { GET_BOARD_ARTICLES } from '../../../apollo/user/query';
@@ -9,6 +10,7 @@ import { REACT_APP_API_URL } from '../../config';
 import { Box, Typography } from '@mui/material';
 
 const Blogs = () => {
+    const { t } = useTranslation('common');
     const [blogs, setBlogs] = useState<BoardArticle[]>([]);
 
     const { loading, error } = useQuery(GET_BOARD_ARTICLES, {
@@ -37,15 +39,15 @@ const Blogs = () => {
         <section className="blogs-section">
             <div className="container">
                 <div className="blogs-header">
-                    <h2>Our Blogs</h2>
-                    <p>"Welcome to the NX Shoez Blog, where fashion meets insight, and every step is a story waiting to be told."</p>
+                    <h2>{t('Our Blogs')}</h2>
+                    <p>{t('Welcome to the NX Shoez Blog...')}</p>
                 </div>
             </div>
             <div className="container">
                 <div className="blog-grid">
                     {blogs.length === 0 ? (
                         <Box className="empty-list" sx={{ textAlign: 'center', width: '100%', py: 4 }}>
-                            <Typography>No blogs found.</Typography>
+                            <Typography>{t('No blogs found.')}</Typography>
                         </Box>
                     ) : (
                         blogs.map((blog) => (
@@ -55,15 +57,22 @@ const Blogs = () => {
                                         {blog.articleCategory}
                                     </span>
                                     <img
-                                        src={blog.articleImage && blog.articleImage.startsWith('/') ? blog.articleImage : (blog.articleImage ? `${REACT_APP_API_URL}/${blog.articleImage}` : '/img/event/default-event.jpg')}
+                                        src={(() => {
+                                            const url = blog.articleImage;
+                                            if (!url) return '/img/event/default-event.jpg';
+                                            if (url.startsWith('http')) return url;
+                                            if (url.startsWith('localhost')) return `http://${url}`;
+                                            return `${REACT_APP_API_URL}/${url}`;
+                                        })()}
                                         alt={blog.articleTitle}
+                                        className="product-image main"
                                     />
                                 </div>
                                 <div className="card-content">
                                     <h3>{blog.articleTitle}</h3>
                                     <div className="link-wrapper">
                                         <Link href={`/blog/detail?id=${blog._id}`}>
-                                            <span>View Details</span>
+                                            <span>{t('View Details')}</span>
                                         </Link>
                                     </div>
                                 </div>

@@ -4,8 +4,11 @@ import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
 import CachedOutlinedIcon from '@mui/icons-material/CachedOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Money } from '@mui/icons-material';
+import { useTranslation } from 'next-i18next';
 
 const Statistics = () => {
+    const { t } = useTranslation('common');
+
     return (
         <div className="statistics-section">
             <div className="container">
@@ -15,8 +18,8 @@ const Statistics = () => {
                             <LocalShippingOutlinedIcon />
                         </div>
                         <div className="stat-content">
-                            <h3>Free Delivery</h3>
-                            <p>Free shipping on all order</p>
+                            <h3>{t('home.stats.free_delivery')}</h3>
+                            <p>{t('home.stats.free_delivery_desc')}</p>
                         </div>
                     </div>
 
@@ -25,8 +28,8 @@ const Statistics = () => {
                             <HeadsetMicOutlinedIcon />
                         </div>
                         <div className="stat-content">
-                            <h3>ONLINE SUPPORT 24/7</h3>
-                            <p>Online support 24 hours a day</p>
+                            <h3>{t('home.stats.online_support')}</h3>
+                            <p>{t('home.stats.online_support_desc')}</p>
                         </div>
                     </div>
 
@@ -35,8 +38,8 @@ const Statistics = () => {
                             <Money />
                         </div>
                         <div className="stat-content">
-                            <h3>MONEY RETURN</h3>
-                            <p>Money return guarantee</p>
+                            <h3>{t('home.stats.money_return')}</h3>
+                            <p>{t('home.stats.money_return_desc')}</p>
                         </div>
                     </div>
 
@@ -45,8 +48,8 @@ const Statistics = () => {
                             <LockOutlinedIcon />
                         </div>
                         <div className="stat-content">
-                            <h3>SECURE PAYMENT</h3>
-                            <p>Secure payment</p>
+                            <h3>{t('home.stats.secure_payment')}</h3>
+                            <p>{t('home.stats.secure_payment_desc')}</p>
                         </div>
                     </div>
                 </div>

@@ -11,7 +11,7 @@
 			// Header
 			.main-title-box {
 				display: flex;
-				justify-content: space-between;
+				justify-content: flex-start;
 				align-items: center;
 				margin-bottom: 20px;
 
@@ -49,6 +49,8 @@
 					overflow: hidden;
 					transition: transform 0.2s, box-shadow 0.2s;
 					cursor: pointer;
+					animation: fadeInUp 0.5s ease-out forwards;
+					opacity: 0; // Start invisible for animation
 
 					&:hover {
 						transform: translateY(-5px);
@@ -58,6 +60,10 @@
 					.top {
 						height: 220px;
 						position: relative;
+						background-color: #f9f9f9;
+						display: flex;
+						align-items: center;
+						justify-content: center;
 
 						img {
 							width: 100%;
@@ -85,6 +91,7 @@
 							background: rgba(255, 255, 255, 0.95);
 							padding: 6px 12px;
 							border-radius: 6px;
+							box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
 							p {
 								font-size: 15px;
@@ -92,13 +99,36 @@
 								color: #181a20;
 							}
 						}
+
+						.remove-btn {
+							position: absolute;
+							top: 10px;
+							right: 10px;
+							background: rgba(255, 255, 255, 0.8);
+							border-radius: 50%;
+							padding: 5px;
+							visibility: hidden;
+							opacity: 0;
+							transition: all 0.2s;
+
+							&:hover {
+								background: #fff;
+								transform: scale(1.1);
+							}
+						}
+					}
+
+					&:hover .top .remove-btn {
+						visibility: visible;
+						opacity: 1;
 					}
 
 					.bottom {
 						padding: 16px;
+						text-align: center; // Center align mostly for the clean look
 
 						.name-address {
-							margin-bottom: 15px;
+							margin-bottom: 10px;
 
 							.name p {
 								font-size: 16px;
@@ -109,26 +139,30 @@
 								text-overflow: ellipsis;
 								margin-bottom: 4px;
 							}
-
-							.address p {
-								font-size: 13px;
-								color: #717171;
-							}
 						}
 
 						.options {
 							display: flex;
-							gap: 15px;
+							justify-content: center;
+							gap: 20px;
 							margin-bottom: 15px;
 
 							.option {
 								display: flex;
+								flex-direction: column;
 								align-items: center;
-								gap: 6px;
+								gap: 2px;
 
-								p {
-									font-size: 13px;
-									color: #555;
+								p:first-child {
+									font-size: 12px;
+									color: #999;
+									text-transform: uppercase;
+								}
+
+								p:last-child {
+									font-size: 14px;
+									font-weight: 600;
+									color: #333;
 								}
 							}
 						}
@@ -145,17 +179,22 @@
 							align-items: center;
 
 							.type p {
-								font-size: 13px;
-								font-weight: 500;
-								color: #181a20;
+								font-size: 12px;
+								font-weight: 600;
+								color: #555;
+								background: #eee;
+								padding: 4px 10px;
+								border-radius: 4px;
 							}
 
 							.buttons svg {
-								fill: #eb6753; // Heart color
+								font-size: 24px;
+								color: #eb6753; // Accent color
 								transition: transform 0.2s;
+								cursor: pointer;
 
 								&:hover {
-									transform: scale(1.1);
+									transform: scale(1.2);
 								}
 							}
 						}
@@ -190,5 +229,17 @@
 				}
 			}
 		}
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }

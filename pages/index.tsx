@@ -47,4 +47,13 @@ const Home: NextPage = () => {
 	}
 };
 
+export const getStaticProps = async ({ locale }: { locale: string }) => {
+	const { serverSideTranslations } = await import('next-i18next/serverSideTranslations');
+	return {
+		props: {
+			...(await serverSideTranslations(locale, ['common'])),
+		},
+	};
+};
+
 export default withLayoutMain(Home);

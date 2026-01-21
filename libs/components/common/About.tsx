@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 const About = () => {
+    const { t } = useTranslation('common');
+
     return (
         <div className="about-section">
             <div className="container">
@@ -34,12 +37,14 @@ const About = () => {
                     </div>
 
                     <div className="about-text">
-                        <h2>About ShoeZ</h2>
-                        <p>
-                            ShoeZ is a premium online store specializing in comfortable and stylish footwear. Our mission is to provide our customers with the best possible shopping experience, offering a wide range of high-quality shoes at competitive prices.
-                        </p>
-                        <Link href="/property">
-                            <button className="about-button">View Our Products</button>
+                        <div className="about-description-box">
+                            <h2>{t('about_common.title')}</h2>
+                            <p>
+                                {t('about_common.desc')}
+                            </p>
+                        </div>
+                        <Link href="/shop">
+                            <button className="about-button">{t('about_common.button')}</button>
                         </Link>
                     </div>
                 </div>

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Box, Stack } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 
 const Banner = () => {
+    const { t } = useTranslation('common');
     const [email, setEmail] = useState("");
 
     const handleSubscribe = () => {
@@ -16,8 +18,8 @@ const Banner = () => {
             <div className="container">
                 <Stack className="banner-wrapper">
                     <Stack className="banner-content">
-                        <span className="subtitle">Subscribe Our Newsletter</span>
-                        <h2>Get the latest offers early.</h2>
+                        <span className="subtitle">{t('home.banner.subtitle')}</span>
+                        <h2>{t('home.banner.title')}</h2>
                         <div className="input-box">
                             <input
                                 type="email"

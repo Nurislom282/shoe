@@ -2,20 +2,25 @@ import { ProductLocation, ProductStatus, ProductType } from '../../enums/product
 import { Direction } from '../../enums/common.enum';
 
 export interface ProductInput {
-	productType: ProductType;
-	productLocation: ProductLocation;
-	productAddress: string;
-	productTitle: string;
-	productPrice: number;
-	productSquare: number;
-	productBeds: number;
-	productRooms: number;
-	productImages: string[];
-	productDesc?: string;
-	productBarter?: boolean;
-	productRent?: boolean;
+	category: string;
+	status?: string;
+	name: string;
+	price: number;
+	discountPrice?: number;
+	currency?: string;
+	brand?: string;
+	gender?: string[];
+	season?: string;
+	images: string[]; // Keeping as string[] for upload results, or should it be ProductImage[]? User's AddProduct uses string[].
+	colors?: string[];
+	stock?: any; // Simplify for now or define strictly
+	description?: string;
 	memberId?: string;
-	constructedAt?: Date;
+	productLocation?: string; // Keep if still needed for legacy or remove? Removing as per query.
+	productAddress?: string;
+	productSquare?: number;
+	productBeds?: number;
+	productRooms?: number;
 }
 
 interface PISearch {
@@ -23,11 +28,11 @@ interface PISearch {
 	locationList?: ProductLocation[];
 	typeList?: ProductType[];
 	roomsList?: Number[];
+	seasons?: string[];
 	options?: string[];
 	bedsList?: Number[];
 	pricesRange?: Range;
 	periodsRange?: PeriodsRange;
-	squaresRange?: Range;
 	text?: string;
 }
 

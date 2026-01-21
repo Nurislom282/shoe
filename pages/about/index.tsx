@@ -14,6 +14,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper';
 import { useQuery } from '@apollo/client';
 import { GET_AGENTS } from '../../apollo/user/query';
 import { REACT_APP_API_URL } from '../../libs/config';
+import { useTranslation } from 'next-i18next';
 
 // Helper component for scroll animations
 const FadeInWhenVisible = ({ children, delay = 0, animation = 'animate__fadeInUp' }: { children: React.ReactNode, delay?: number, animation?: string }) => {
@@ -88,6 +89,7 @@ const RollingNumber = ({ number, isVisible, delay = 0 }: { number: number, isVis
 };
 
 const About: NextPage = () => {
+	const { t } = useTranslation('common');
 	const [isVisible, setIsVisible] = useState(false);
 	// counts state removed
 	const sectionRef = useRef(null);
@@ -141,30 +143,28 @@ const About: NextPage = () => {
 
 	// FAQ Data
 	const faqs = [
-		{ question: "What sizes do you carry?", answer: "We carry a wide range of sizes for men, women, and children. Check our size guide for specifics." },
-		{ question: "Do you offer international shipping?", answer: "Yes, we ship to over 50 countries worldwide." },
-		{ question: "What is your return policy?", answer: "We offer a 30-day return policy for unworn items in original packaging." },
-		{ question: "How can I track my order?", answer: "Once your order ships, you will receive a tracking link via email." },
-		{ question: "Are your shoes sustainable?", answer: "We are committed to sustainability and offer a range of eco-friendly options." }
+		{ question: t('about_page.faqs.q1'), answer: t('about_page.faqs.a1') },
+		{ question: t('about_page.faqs.q2'), answer: t('about_page.faqs.a2') },
+		{ question: t('about_page.faqs.q3'), answer: t('about_page.faqs.a3') },
+		{ question: t('about_page.faqs.q4'), answer: t('about_page.faqs.a4') },
+		{ question: t('about_page.faqs.q5'), answer: t('about_page.faqs.a5') }
 	];
 
 	if (device === 'mobile') {
-		return <div>ABOUT PAGE MOBILE</div>;
+		return <div>{t('about_page.mobile')}</div>;
 	} else {
 		return (
 			<Stack className={'about-page'}>
 				{/* banner About Page */}
 				<Stack className={"section banner"}>
 					<div className={'banner-image'}>
-						<img src="/img/banner/about.png" alt="" />
+						<img src="/img/banner/about.jpg" alt="" />
 					</div>
 					<Stack className={"container"}>
 						<div className={"banner-text"}>
-							<h1>ABOUT</h1>
-							<Link href="/">
-								<div style={{ cursor: 'pointer', color: 'white' }}>Home</div>
-							</Link>
-							<p>/ About</p>
+							<h1>{t('about_page.title')}</h1>
+							<Link href="/">{t('about_page.home')}</Link>
+							<p>{t('about_page.crumb')}</p>
 						</div>
 					</Stack>
 				</Stack>
@@ -174,11 +174,10 @@ const About: NextPage = () => {
 					<Stack className={'container'}>
 						<div className={'content-left'}>
 							<FadeInWhenVisible>
-								<span className={'tag'}>About Us</span>
-								<h2 className={'title'}>Our Mission</h2>
+								<span className={'tag'}>{t('about_page.tag_about')}</span>
+								<h2 className={'title'}>{t('about_page.mission_title')}</h2>
 								<p className={'description'}>
-									At ShoeZ, we&apos;re more than just an online shoe store – we&apos;re your trusted partner in all things footwear.
-									With a passion for innovation and a commitment to excellence.
+									{t('about_page.mission_desc')}
 								</p>
 								{/* <div className={'signature'}>
 									<img src="/img/icons/sort.svg" alt="Signature" style={{ width: 50, opacity: 0.5 }} />
@@ -212,27 +211,15 @@ const About: NextPage = () => {
 										position: 'relative',
 										boxShadow: '0 20px 50px rgba(0,0,0,0.15)'
 									}}>
-										<div style={{
-											position: 'absolute',
-											top: '50%',
-											left: '50%',
-											transform: 'translate(-50%, -50%) rotate(-15deg)',
-											width: '80%',
-											height: '60%',
-											background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 70%)'
-										}}></div>
-										{/* Nike shoe representation */}
-										<div style={{
-											position: 'absolute',
-											top: '50%',
-											left: '50%',
-											transform: 'translate(-50%, -50%) rotate(-20deg)',
-											width: '70%',
-											height: '40%',
-											background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffffff 100%)',
-											clipPath: 'polygon(15% 30%, 85% 35%, 90% 55%, 10% 70%)',
-											boxShadow: '0 10px 30px rgba(255,107,53,0.3)'
-										}}></div>
+										<img
+											src="/img/about/aim.png"
+											alt="Shoe Representation"
+											style={{
+												width: '100%',
+												height: '100%',
+												objectFit: 'cover'
+											}}
+										/>
 									</div>
 								</div>
 							</FadeInWhenVisible>
@@ -251,55 +238,17 @@ const About: NextPage = () => {
 										overflow: 'hidden',
 										aspectRatio: '4/5',
 										position: 'relative',
-										boxShadow: '0 20px 50px rgba(0,0,0,0.1)'
+										boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)'
 									}}>
-										{/* Pink/Peach geometric shapes in background */}
-										<div style={{
-											position: 'absolute',
-											top: '20%',
-											right: '15%',
-											width: '150px',
-											height: '150px',
-											background: 'linear-gradient(135deg, #ffd4b8 0%, #ffb89d 100%)',
-											clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-											opacity: '0.6'
-										}}></div>
-
-										{/* Turquoise shoe */}
-										<div style={{
-											position: 'absolute',
-											top: '45%',
-											left: '50%',
-											transform: 'translate(-50%, -50%)',
-											width: '60%',
-											height: '35%',
-											background: 'linear-gradient(135deg, #5fb5a8 0%, #4a9b8e 50%, #3d8275 100%)',
-											borderRadius: '45% 45% 40% 40% / 50% 50% 40% 40%',
-											boxShadow: 'inset 0 -5px 15px rgba(0,0,0,0.2), 0 15px 35px rgba(74,155,142,0.3)'
-										}}></div>
-
-										{/* Peach/fruit accent */}
-										<div style={{
-											position: 'absolute',
-											bottom: '25%',
-											left: '25%',
-											width: '80px',
-											height: '80px',
-											background: 'radial-gradient(circle at 30% 30%, #ffd4a3 0%, #ffb366 50%, #ff9944 100%)',
-											borderRadius: '50%',
-											boxShadow: '0 8px 20px rgba(255,153,68,0.4)'
-										}}></div>
-
-										<div style={{
-											position: 'absolute',
-											top: '20%',
-											right: '20%',
-											width: '60px',
-											height: '60px',
-											background: 'radial-gradient(circle at 40% 40%, #ffe4c4 0%, #ffc8a0 100%)',
-											borderRadius: '50%',
-											boxShadow: '0 6px 15px rgba(255,200,160,0.3)'
-										}}></div>
+										<img
+											src="/img/about/about-1.jpg"
+											alt="Shoe Representation"
+											style={{
+												width: '100%',
+												height: '100%',
+												objectFit: 'cover'
+											}}
+										/>
 									</div>
 								</div>
 							</FadeInWhenVisible>
@@ -321,7 +270,6 @@ const About: NextPage = () => {
 						gap: '40px',
 						alignItems: 'center'
 					}}>
-						{/* Left Side - Shoe Image */}
 						<div style={{
 							position: 'relative',
 							aspectRatio: '1',
@@ -333,97 +281,15 @@ const About: NextPage = () => {
 							opacity: isVisible ? 1 : 0,
 							transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
 						}}>
-							{/* Shoe representation */}
-							<div style={{
-								position: 'absolute',
-								bottom: '10%',
-								left: '50%',
-								transform: 'translateX(-50%) rotate(-15deg)',
-								width: '75%',
-								height: '65%',
-							}}>
-								{/* Shoe sole/bottom - beige color */}
-								<div style={{
-									position: 'absolute',
-									bottom: '0',
-									left: '10%',
-									width: '80%',
-									height: '45%',
-									background: 'linear-gradient(135deg, #f4e4c8 0%, #e8d5b8 50%, #d4c4a8 100%)',
-									borderRadius: '50% 50% 45% 45% / 40% 40% 60% 60%',
-									boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-								}}></div>
-
-								{/* Shoe upper part - white/cream */}
-								<div style={{
-									position: 'absolute',
-									top: '0',
-									left: '15%',
-									width: '70%',
-									height: '60%',
-									background: 'linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%)',
-									borderRadius: '45% 45% 50% 50% / 50% 50% 50% 50%',
-									boxShadow: 'inset 0 -5px 15px rgba(0,0,0,0.1), 0 5px 20px rgba(0,0,0,0.15)',
-								}}>
-									{/* Shoe laces detail */}
-									<div style={{
-										position: 'absolute',
-										top: '30%',
-										left: '20%',
-										width: '60%',
-										height: '40%',
-										borderLeft: '2px solid #ddd',
-										borderRight: '2px solid #ddd',
-									}}>
-										{[0, 1, 2, 3].map((i) => (
-											<div key={i} style={{
-												position: 'absolute',
-												top: `${i * 25}%`,
-												left: '0',
-												width: '100%',
-												height: '2px',
-												background: '#ddd'
-											}}></div>
-										))}
-									</div>
-								</div>
-
-								{/* Shoe side accent - tan/brown */}
-								<div style={{
-									position: 'absolute',
-									bottom: '15%',
-									right: '5%',
-									width: '40%',
-									height: '35%',
-									background: 'linear-gradient(135deg, #c4a589 0%, #b89977 100%)',
-									borderRadius: '40% 60% 50% 50% / 50% 50% 50% 50%',
-									boxShadow: 'inset -3px 3px 10px rgba(0,0,0,0.2)'
-								}}></div>
-
-								{/* Orange accent/insole visible */}
-								<div style={{
-									position: 'absolute',
-									top: '-5%',
-									left: '25%',
-									width: '35%',
-									height: '25%',
-									background: 'linear-gradient(135deg, #ff9955 0%, #ff7733 100%)',
-									borderRadius: '50% 50% 40% 40%',
-									boxShadow: '0 5px 15px rgba(255, 119, 51, 0.4)'
-								}}></div>
-							</div>
-
-							{/* Decorative circles */}
-							<div style={{
-								position: 'absolute',
-								top: '10%',
-								right: '15%',
-								width: '80px',
-								height: '80px',
-								background: 'rgba(255, 255, 255, 0.2)',
-								borderRadius: '50%',
-								backdropFilter: 'blur(10px)'
-							}}></div>
+							<img
+								src="/img/about/number.png"
+								alt="Our Numbers"
+								style={{
+									width: '100%',
+									height: '100%',
+									objectFit: 'cover'
+								}}
+							/>
 						</div>
 
 						{/* Right Side - Numbers */}
@@ -441,7 +307,7 @@ const About: NextPage = () => {
 								transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
 								transition: 'all 0.6s ease 0.2s'
 							}}>
-								Our Numbers
+								{t('about_page.tag_numbers')}
 							</p>
 
 							<h2 style={{
@@ -453,7 +319,7 @@ const About: NextPage = () => {
 								transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
 								transition: 'all 0.6s ease 0.3s'
 							}}>
-								We have impactful numbers
+								{t('about_page.numbers_title')}
 							</h2>
 
 							<p style={{
@@ -465,7 +331,7 @@ const About: NextPage = () => {
 								transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
 								transition: 'all 0.6s ease 0.4s'
 							}}>
-								Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.
+								{t('about_page.numbers_desc')}
 							</p>
 
 							{/* Stats Grid */}
@@ -481,13 +347,13 @@ const About: NextPage = () => {
 									transition: 'all 0.6s ease 0.5s'
 								}}>
 									<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-										<RollingNumber number={14} isVisible={isVisible} /><span style={{ color: '#d97742' }}>%</span>
+										<RollingNumber number={99.9} isVisible={isVisible} /><span style={{ color: '#d97742' }}>%</span>
 									</div>
 									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										Customer satisfaction
+										{t('about_page.satisfaction')}
 									</h3>
 									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										Lorem ipsum dolor sit am et consectet adipiscing.
+										{t('about_page.satisfaction_desc')}
 									</p>
 								</div>
 
@@ -501,10 +367,10 @@ const About: NextPage = () => {
 										<RollingNumber number={8.1} isVisible={isVisible} /><span style={{ color: '#d97742' }}>M</span>
 									</div>
 									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										Monthly active users
+										{t('about_page.users')}
 									</h3>
 									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										Lorem ipsum dolor sit am et consectet adipiscing.
+										{t('about_page.users_desc')}
 									</p>
 								</div>
 
@@ -515,13 +381,13 @@ const About: NextPage = () => {
 									transition: 'all 0.6s ease 0.7s'
 								}}>
 									<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-										<span style={{ color: '#d97742' }}>$</span><RollingNumber number={4.8} isVisible={isVisible} />
+										<span style={{ color: '#d97742' }}>$</span><RollingNumber number={5.99} isVisible={isVisible} />
 									</div>
 									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										Capital raised
+										{t('about_page.capital')}
 									</h3>
 									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										Lorem ipsum dolor sit am et consectet adipiscing.
+										{t('about_page.capital_desc')}
 									</p>
 								</div>
 
@@ -535,10 +401,10 @@ const About: NextPage = () => {
 										<RollingNumber number={100} isVisible={isVisible} />
 									</div>
 									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										Company Growth
+										{t('about_page.growth')}
 									</h3>
 									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										Lorem ipsum dolor sit am et consectet adipiscing.
+										{t('about_page.growth_desc')}
 									</p>
 								</div>
 							</div>
@@ -550,7 +416,7 @@ const About: NextPage = () => {
 				<Stack className={'section partners-section'}>
 					<Stack className={'container'}>
 						<FadeInWhenVisible>
-							<h3 className={'section-title'}>Our Partners</h3>
+							<h3 className={'section-title'}>{t('about_page.partners_title')}</h3>
 						</FadeInWhenVisible>
 						<div className={'logos-grid'}>
 							{[
@@ -576,9 +442,9 @@ const About: NextPage = () => {
 					<Stack className={'container'}>
 						<FadeInWhenVisible>
 							<div className={'header'}>
-								<span className={'tag'}>Team</span>
-								<h2 className={'title'}>Our Team</h2>
-								<p className={'description'}>Introducing our dynamic and resilient team—innovators, collaborators, and leaders.</p>
+								<span className={'tag'}>{t('about_page.tag_team')}</span>
+								<h2 className={'title'}>{t('about_page.team_title')}</h2>
+								<p className={'description'}>{t('about_page.team_desc')}</p>
 							</div>
 						</FadeInWhenVisible>
 					</Stack>
@@ -633,8 +499,8 @@ const About: NextPage = () => {
 					<Stack className={'container'}>
 						<FadeInWhenVisible>
 							<div className={'header'}>
-								<span className={'tag'}>FAQ</span>
-								<h2 className={'title'}>Frequently Asked Questions</h2>
+								<span className={'tag'}>{t('about_page.tag_faq')}</span>
+								<h2 className={'title'}>{t('about_page.faq_title')}</h2>
 							</div>
 						</FadeInWhenVisible>
 						<Stack className={'faq-list'}>
@@ -658,9 +524,18 @@ const About: NextPage = () => {
 
 				{/* ADD Section */}
 				<Adds />
-			</Stack>
+			</Stack >
 		);
 	}
+};
+
+export const getStaticProps = async ({ locale }: { locale: string }) => {
+	const { serverSideTranslations } = await import('next-i18next/serverSideTranslations');
+	return {
+		props: {
+			...(await serverSideTranslations(locale, ['common'])),
+		},
+	};
 };
 
 export default withLayoutBasic(About);

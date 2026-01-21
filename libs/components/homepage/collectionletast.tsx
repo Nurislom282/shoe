@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Stack, Box, Typography, Button } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 
 interface CollectionShoe {
     id: number;
@@ -15,6 +16,7 @@ interface CollectionShoe {
 }
 
 const CollectionLatest = () => {
+    const { t } = useTranslation('common');
     const [activeCategory, setActiveCategory] = useState<string>('LATEST');
 
     const categories = [
@@ -65,8 +67,8 @@ const CollectionLatest = () => {
         <section className="collection-latest-section">
             <div className="container">
                 <div className="section-header">
-                    <h2 className="title">Shoe By Categories</h2>
-                    <p className="subtitle">View Our Most Selling Products By Categories.</p>
+                    <h2 className="title">{t('home.category_collection.title')}</h2>
+                    <p className="subtitle">{t('home.category_collection.subtitle')}</p>
                 </div>
             </div>
             <div className="container">
@@ -80,7 +82,7 @@ const CollectionLatest = () => {
                                     className={activeCategory === category ? 'active' : ''}
                                     onClick={() => setActiveCategory(category)}
                                 >
-                                    {category}
+                                    {t(`home.latest.categories.${category.toLowerCase().replace(' ', '_')}`)}
                                 </li>
                             ))}
                         </ul>
@@ -91,7 +93,7 @@ const CollectionLatest = () => {
                         {shoes.map((shoe) => (
                             <div key={shoe.id} className="collection-shoe-card">
                                 <div className={`card-image ${shoe.className || ''}`}>
-                                    {shoe.onSale && <span className="sale-badge">Sale</span>}
+                                    {shoe.onSale && <span className="sale-badge">{t('home.latest.sale')}</span>}
                                     <Link href={`/property/detail?id=${shoe.id}`}>
                                         <img src={shoe.image} alt={shoe.title} className="shoe-img base-image" />
                                         <img src={shoe.hoverImage} alt={shoe.title} className="shoe-img hover-image" />

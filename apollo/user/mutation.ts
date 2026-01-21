@@ -19,9 +19,8 @@ export const SIGN_UP = gql`
 			memberDesc
 			memberWarnings
 			memberBlocks
-			memberProperties
+			memberProducts
 			memberRank
-			memberArticles
 			memberPoints
 			memberLikes
 			memberViews
@@ -48,12 +47,12 @@ export const LOGIN = gql`
 			memberDesc
 			memberWarnings
 			memberBlocks
-			memberProperties
+			memberProducts
 			memberRank
 			memberPoints
 			memberLikes
 			memberViews
-			deletedAt
+
 			createdAt
 			updatedAt
 			accessToken
@@ -74,7 +73,8 @@ export const UPDATE_MEMBER = gql`
 			memberImage
 			memberAddress
 			memberDesc
-			memberProperties
+			memberGmail
+			memberProducts
 			memberRank
 			memberArticles
 			memberPoints
@@ -82,7 +82,7 @@ export const UPDATE_MEMBER = gql`
 			memberViews
 			memberWarnings
 			memberBlocks
-			deletedAt
+
 			createdAt
 			updatedAt
 			accessToken
@@ -105,16 +105,33 @@ export const LIKE_TARGET_MEMBER = gql`
 			memberDesc
 			memberWarnings
 			memberBlocks
-			memberProperties
+			memberProducts
 			memberRank
 			memberPoints
 			memberLikes
 			memberViews
-			deletedAt
+
 			createdAt
 			updatedAt
-			accessToken
 		}
+	}
+`;
+
+export const REQUEST_PASSWORD_RESET = gql`
+	mutation RequestPasswordReset($email: String!) {
+		requestPasswordReset(email: $email)
+	}
+`;
+
+export const VERIFY_RESET_CODE = gql`
+	mutation VerifyResetCode($email: String!, $code: String!) {
+		verifyResetCode(email: $email, code: $code)
+	}
+`;
+
+export const RESET_PASSWORD = gql`
+	mutation ResetPassword($email: String!, $code: String!, $newPassword: String!) {
+		resetPassword(email: $email, code: $code, newPassword: $newPassword)
 	}
 `;
 
@@ -126,25 +143,28 @@ export const CREATE_PRODUCT = gql`
 	mutation CreateProduct($input: ProductInput!) {
 		createProduct(input: $input) {
 			_id
-			productType
-			productStatus
-			productLocation
-			productAddress
-			productTitle
-			productPrice
-			productSquare
-			productBeds
-			productRooms
+			category
+			status
+			name
+			brand
+			price
+			discountPrice
+			currency
+			stock {
+				total
+				sizes {
+					size
+					count
+				}
+			}
+			images
+			description
+			season
 			productViews
 			productLikes
-			productImages
-			productDesc
-			productBarter
-			productRent
+			productRank
 			memberId
 			soldAt
-			deletedAt
-			constructedAt
 			createdAt
 			updatedAt
 		}
@@ -155,25 +175,31 @@ export const UPDATE_PRODUCT = gql`
 	mutation UpdateProduct($input: ProductUpdate!) {
 		updateProduct(input: $input) {
 			_id
-			productType
-			productStatus
-			productLocation
-			productAddress
-			productTitle
-			productPrice
-			productSquare
-			productBeds
-			productRooms
+			category
+			status
+			name
+			brand
+			price
+			discountPrice
+			currency
+			stock {
+				total
+				sizes {
+					size
+					count
+				}
+			}
+			images {
+				url
+			}
+			colors
+			description
+			season
 			productViews
 			productLikes
-			productImages
-			productDesc
-			productBarter
-			productRent
+			productRank
 			memberId
 			soldAt
-			deletedAt
-			constructedAt
 			createdAt
 			updatedAt
 		}
@@ -184,25 +210,31 @@ export const LIKE_TARGET_PRODUCT = gql`
 	mutation LikeTargetProduct($input: String!) {
 		likeTargetProduct(productId: $input) {
 			_id
-			productType
-			productStatus
-			productLocation
-			productAddress
-			productTitle
-			productPrice
-			productSquare
-			productBeds
-			productRooms
+			category
+			status
+			name
+			brand
+			price
+			discountPrice
+			currency
+			stock {
+				total
+				sizes {
+					size
+					count
+				}
+			}
+			images {
+				url
+			}
+			colors
+			description
+			season
 			productViews
 			productLikes
-			productImages
-			productDesc
-			productBarter
-			productRent
+			productRank
 			memberId
 			soldAt
-			deletedAt
-			constructedAt
 			createdAt
 			updatedAt
 		}
@@ -344,5 +376,21 @@ export const CREATE_SUPPORT_INQUIRY = gql`
 			createdAt
 			updatedAt
 		}
+	}
+`;
+
+/**************************
+ *         IMAGE          *
+ *************************/
+
+export const UPLOAD_IMAGE = gql`
+	mutation ImageUploader($file: Upload!, $target: String!) {
+		imageUploader(file: $file, target: $target)
+	}
+`;
+
+export const UPLOAD_IMAGES = gql`
+	mutation ImagesUploader($files: [Upload!]!, $target: String!) {
+		imagesUploader(files: $files, target: $target)
 	}
 `;

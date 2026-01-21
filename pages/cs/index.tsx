@@ -11,6 +11,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import PersonIcon from '@mui/icons-material/Person';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 
+import { useTranslation } from 'next-i18next';
+
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
 		...(await serverSideTranslations(locale, ['common'])),
@@ -19,6 +21,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 
 const CS: NextPage = () => {
 	const device = useDeviceDetect();
+	const { t } = useTranslation('common');
 
 	// Form state
 	const [form, setForm] = useState({
@@ -35,18 +38,18 @@ const CS: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>CS PAGE MOBILE</h1>;
+		return <h1>{t('contact.mobile_title')}</h1>;
 	} else {
 		return (
 			<div id="cs-page">
 				{/* Hero Section */}
 				<div className="hero-section">
 					<div className="breadcrumb-box">
-						<Typography className="page-title">Contact</Typography>
+						<Typography className="page-title">{t('contact.title')}</Typography>
 						<div className="breadcrumb-links">
-							<span>Home</span>
+							<span>{t('contact.crumb_home')}</span>
 							<span className="separator">/</span>
-							<span>Contact</span>
+							<span>{t('contact.crumb_contact')}</span>
 						</div>
 					</div>
 				</div>
@@ -63,8 +66,8 @@ const CS: NextPage = () => {
 									<LocationOnIcon />
 								</div>
 								<div className="card-text">
-									<Typography className="card-title">Address</Typography>
-									<Typography className="card-desc">123 Shoe Street, Footwear City, FC 12345</Typography>
+									<Typography className="card-title">{t('contact.address_title')}</Typography>
+									<Typography className="card-desc">{t('contact.address_desc')}</Typography>
 								</div>
 							</div>
 							<div
@@ -75,8 +78,8 @@ const CS: NextPage = () => {
 									<EmailIcon />
 								</div>
 								<div className="card-text">
-									<Typography className="card-title">Email Us</Typography>
-									<Typography className="card-desc">support@shoez.com</Typography>
+									<Typography className="card-title">{t('contact.email_title')}</Typography>
+									<Typography className="card-desc">{t('contact.email_desc')}</Typography>
 								</div>
 							</div>
 							<div
@@ -87,8 +90,8 @@ const CS: NextPage = () => {
 									<PhoneIcon />
 								</div>
 								<div className="card-text">
-									<Typography className="card-title">Phone</Typography>
-									<Typography className="card-desc">+1 (555) 123-4567</Typography>
+									<Typography className="card-title">{t('contact.phone_title')}</Typography>
+									<Typography className="card-desc">{t('contact.phone_desc')}</Typography>
 								</div>
 							</div>
 						</div>
@@ -107,14 +110,14 @@ const CS: NextPage = () => {
 								></iframe>
 							) : (
 								<>
-									<Typography className="form-title">Send Us A Message</Typography>
+									<Typography className="form-title">{t('contact.form.title')}</Typography>
 									<form className="contact-form">
 										<div className="input-group">
 											<PersonIcon className="input-icon" />
 											<input
 												type="text"
 												name="name"
-												placeholder="Your Name"
+												placeholder={t('contact.form.name')}
 												value={form.name}
 												onChange={handleChange}
 											/>
@@ -124,7 +127,7 @@ const CS: NextPage = () => {
 											<input
 												type="email"
 												name="email"
-												placeholder="Your Email"
+												placeholder={t('contact.form.email')}
 												value={form.email}
 												onChange={handleChange}
 											/>
@@ -134,7 +137,7 @@ const CS: NextPage = () => {
 											<input
 												type="text"
 												name="phone"
-												placeholder="Phone Number"
+												placeholder={t('contact.form.phone')}
 												value={form.phone}
 												onChange={handleChange}
 											/>
@@ -144,7 +147,7 @@ const CS: NextPage = () => {
 											<input
 												type="text"
 												name="subject"
-												placeholder="Subject"
+												placeholder={t('contact.form.subject')}
 												value={form.subject}
 												onChange={handleChange}
 											/>
@@ -152,13 +155,13 @@ const CS: NextPage = () => {
 										<div className="input-group textarea-group">
 											<textarea
 												name="message"
-												placeholder="Message"
+												placeholder={t('contact.form.message')}
 												value={form.message}
 												onChange={handleChange}
 											></textarea>
 										</div>
 										<Button className="submit-btn" disableRipple>
-											Submit Message
+											{t('contact.form.submit')}
 										</Button>
 									</form>
 								</>

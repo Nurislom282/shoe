@@ -1,8 +1,10 @@
 import React from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { useTranslation } from 'next-i18next';
 
 const Adds = () => {
+    const { t } = useTranslation('common');
     const device = useDeviceDetect();
     const [mounted, setMounted] = React.useState(false);
 
@@ -26,7 +28,7 @@ const Adds = () => {
     if (!mounted) return null;
 
     if (device === 'mobile') {
-        return <Stack className={'adds'}>Mobile Adds</Stack>;
+        return <Stack className={'adds'}>{t('home.adds.mobile')}</Stack>;
     } else {
         return (
             <section className="brands-section">

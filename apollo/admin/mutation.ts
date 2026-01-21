@@ -17,7 +17,7 @@ export const UPDATE_MEMBER_BY_ADMIN = gql`
 			memberImage
 			memberAddress
 			memberDesc
-			memberProperties
+			memberProducts  # Fixed: was memberProperties
 			memberRank
 			memberArticles
 			memberPoints
@@ -34,63 +34,49 @@ export const UPDATE_MEMBER_BY_ADMIN = gql`
 `;
 
 /**************************
- *        PROPERTY        *
+ *        PRODUCT         *
  *************************/
 
-export const UPDATE_PROPERTY_BY_ADMIN = gql`
-	mutation UpdatePropertyByAdmin($input: PropertyUpdate!) {
-		updatePropertyByAdmin(input: $input) {
+export const UPDATE_PRODUCT_BY_ADMIN = gql`
+	mutation UpdateProductByAdmin($input: ProductUpdate!) {
+		updateProductByAdmin(input: $input) {
 			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
+			category
+			status
+			name
+			price
+			discountPrice
+			currency
+			brand
+			productViews
+			productLikes
+			images {
+				url
+			}
+			colors
+			stock {
+				total
+				sizes {
+					size
+					count
+				}
+			}
+			description
 			memberId
 			soldAt
 			deletedAt
-			constructedAt
 			createdAt
 			updatedAt
 		}
 	}
 `;
 
-export const REMOVE_PROPERTY_BY_ADMIN = gql`
-	mutation RemovePropertyByAdmin($input: String!) {
-		removePropertyByAdmin(propertyId: $input) {
+export const REMOVE_PRODUCT_BY_ADMIN = gql`
+	mutation RemoveProductByAdmin($productId: String!) {
+		removeProductByAdmin(productId: $productId) { # Fixed: argument name
 			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
+			name
+			status
 		}
 	}
 `;
@@ -118,19 +104,11 @@ export const UPDATE_BOARD_ARTICLE_BY_ADMIN = gql`
 `;
 
 export const REMOVE_BOARD_ARTICLE_BY_ADMIN = gql`
-	mutation RemoveBoardArticleByAdmin($input: String!) {
-		removeBoardArticleByAdmin(articleId: $input) {
+	mutation RemoveBoardArticleByAdmin($articleId: String!) {
+		removeBoardArticleByAdmin(articleId: $articleId) { # Fixed: argument name
 			_id
-			articleCategory
-			articleStatus
 			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
-			memberId
-			createdAt
-			updatedAt
+			articleStatus
 		}
 	}
 `;
@@ -140,16 +118,12 @@ export const REMOVE_BOARD_ARTICLE_BY_ADMIN = gql`
  *************************/
 
 export const REMOVE_COMMENT_BY_ADMIN = gql`
-	mutation RemoveCommentByAdmin($input: String!) {
-		removeCommentByAdmin(commentId: $input) {
+	mutation RemoveCommentByAdmin($commentId: String!) {
+		removeCommentByAdmin(CommentId: $commentId) { # Fixed: argument name is 'CommentId' (Capital C)
 			_id
 			commentStatus
 			commentGroup
 			commentContent
-			commentRefId
-			memberId
-			createdAt
-			updatedAt
 		}
 	}
 `;
