@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  shoenz:
+    container_name: shoenz
+    restart: always
+    image: node:22.15.1
+    ports:
+       - 4003:3009
+    environment:
+      - PORT=3009
+    volumes:
+      - ./:/usr/src/shoenz-next
+    working_dir: /usr/src/shoenz-next
+
+    networks:
+    - client-network
+
+    # For PRODUCTION
+    command: bash -c "yarn && yarn run build && yarn run start"
+
+networks:
+  client-network:
+    driver: bridge
+
+
+# shoenz: localhost:4003 <=> container:3009
+# shoenz-api: localhost:4004 <=> container:3010
+# shoenz-batch: localhost:4005 <=> container:3011

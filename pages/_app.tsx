@@ -49,7 +49,7 @@ import { useRouter } from 'next/router';
 const App = ({ Component, pageProps }: AppProps) => {
 	// @ts-ignore
 	const [theme, setTheme] = useState(createTheme(light));
-	const client = useApollo(pageProps.initialApolloState, pageProps.authToken);
+	const client = useApollo(pageProps.initialApolloState);
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);

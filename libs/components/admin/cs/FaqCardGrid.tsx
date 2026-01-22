@@ -44,11 +44,11 @@ export const FaqCardGrid = (props: FaqCardGridProps) => {
 
     if (!articles || articles.length === 0) {
         return (
-            <Box p={4} textAlign="center">
+            <div style={{ padding: '32px', textAlign: 'center' }}>
                 <Typography variant="body1" color="textSecondary">
                     No FAQs found.
                 </Typography>
-            </Box>
+            </div>
         );
     }
 
@@ -71,21 +71,23 @@ export const FaqCardGrid = (props: FaqCardGridProps) => {
                         }}
                     >
                         <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                            <Box
-                                sx={{
+                            <div
+                                style={{
                                     display: 'inline-block',
-                                    bgcolor: '#e3f2fd',
+                                    backgroundColor: '#e3f2fd',
                                     color: '#1565c0',
-                                    px: 1,
-                                    py: 0.5,
+                                    paddingLeft: '8px',
+                                    paddingRight: '8px',
+                                    paddingTop: '4px',
+                                    paddingBottom: '4px',
                                     borderRadius: '8px',
                                     fontSize: '0.75rem',
                                     fontWeight: 'bold',
-                                    mb: 2,
+                                    marginBottom: '16px',
                                 }}
                             >
                                 {article.faqCategory || 'General'}
-                            </Box>
+                            </div>
                             <Typography
                                 variant="h6"
                                 component="div"
@@ -112,19 +114,21 @@ export const FaqCardGrid = (props: FaqCardGridProps) => {
                                 py: 1.5,
                             }}
                         >
-                            <Box
-                                sx={{
-                                    bgcolor: article.faqStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
+                            <div
+                                style={{
+                                    backgroundColor: article.faqStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
                                     color: 'white',
-                                    px: 1,
-                                    py: 0.2,
+                                    paddingLeft: '8px',
+                                    paddingRight: '8px',
+                                    paddingTop: '1.6px',
+                                    paddingBottom: '1.6px',
                                     borderRadius: '10px',
                                     fontSize: '0.7rem',
                                     fontWeight: 'bold',
                                 }}
                             >
                                 {article.faqStatus || 'ACTIVE'}
-                            </Box>
+                            </div>
                             <IconButton
                                 size="small"
                                 onClick={(e: any) => menuIconClickHandler(e, article._id)}
@@ -163,7 +167,7 @@ export const FaqCardGrid = (props: FaqCardGridProps) => {
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
-                            <Box sx={{ p: 1 }}>
+                            <div style={{ padding: '8px' }}>
                                 <MenuItem onClick={() => console.log('Edit FAQ', article._id)}>
                                     <Stack direction="row" spacing={1} alignItems="center">
                                         <EditIcon fontSize="small" />
@@ -176,7 +180,7 @@ export const FaqCardGrid = (props: FaqCardGridProps) => {
                                         <Typography variant="body2">Delete</Typography>
                                     </Stack>
                                 </MenuItem>
-                            </Box>
+                            </div>
                         </Menu>
                     </Card>
                 </Grid>
