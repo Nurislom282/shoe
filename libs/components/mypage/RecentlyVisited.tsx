@@ -45,7 +45,7 @@ const RecentlyVisited: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR MY FAVORITES MOBILE</div>; // Keeping text as is or changing to RECENTLY VISITED? Left as is to match original mismatch or maybe it's controlled elsewhere. I'll stick to original logic but maybe fix text if I see it. Original said "MY FAVORITES MOBILE" inside RecentlyVisited? That's weird. I'll correct it to "RECENTLY VISITED".
+		return <div>SHOEZ RECENTLY VISITED MOBILE</div>; // Keeping text as is or changing to RECENTLY VISITED? Left as is to match original mismatch or maybe it's controlled elsewhere. I'll stick to original logic but maybe fix text if I see it. Original said "MY FAVORITES MOBILE" inside RecentlyVisited? That's weird. I'll correct it to "RECENTLY VISITED".
 	} else {
 		return (
 			<div id="my-favorites-page">

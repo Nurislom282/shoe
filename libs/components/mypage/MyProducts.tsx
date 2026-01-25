@@ -90,7 +90,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	}
 
 	if (device === 'mobile') {
-		return <div>NESTAR PRODUCTS MOBILE</div>;
+		return <div>SHOEZ PRODUCTS MOBILE</div>;
 	} else {
 		return (
 			<div id="my-property-page">

@@ -68,7 +68,7 @@ const Footer = () => {
 					</Stack>
 				</Stack>
 				<Stack className={'second'}>
-					<span>© Nestar - {t('All rights reserved')}. Nestar {moment().year()}</span>
+					<span>© ShoeZ - {t('All rights reserved')}. ShoeZ {moment().year()}</span>
 				</Stack>
 			</Stack>
 		);
@@ -78,7 +78,7 @@ const Footer = () => {
 				<Stack className={'main'}>
 					<Stack className={'left'}>
 						<Box component={'div'} className={'footer-box'}>
-							<img src="/img/logo/logoText.svg" alt="" className={'logo'} />
+							<img src="/img/logo/logoText.png" alt="" className={'logo'} />
 						</Box>
 					</Stack>
 					<Stack className={'right'}>

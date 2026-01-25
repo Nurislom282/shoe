@@ -153,7 +153,7 @@ const withAdminLayout = (Component: ComponentType) => {
 						className="aside"
 					>
 						<Stack className={'logo-box'} sx={{ p: 3, mb: 2 }}>
-							<img src={'/img/logo/logoText.svg'} alt={'logo'} style={{ filter: 'brightness(0) invert(1)' }} />
+							<img src={'/img/logo/logoText.png'} alt={'logo'} style={{ filter: 'brightness(0) invert(1)' }} />
 						</Stack>
 
 						<Stack
