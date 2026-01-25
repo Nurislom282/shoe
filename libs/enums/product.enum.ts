@@ -1,8 +1,15 @@
 export enum ProductType {
-	SHOE = 'SHOE',
-	SNEAKER = 'SNEAKER',
-	BOOT = 'BOOT',
-	SANDAL = 'SANDAL',
+
+	SNEAKERS = 'SNEAKERS',
+	BOOTS = 'BOOTS',
+	SANDALS = 'SANDALS',
+	SHOES = 'SHOES',
+	OXFORD = 'OXFORD',
+	FORMAL = 'FORMAL',
+	TURF = 'TURF',
+	HIGH_NECK = 'HIGH_NECK',
+	SPORTS_SHOE = 'SPORTS_SHOE',
+	OTHER = 'OTHER',
 }
 
 export enum ProductStatus {
@@ -21,4 +28,11 @@ export enum ProductLocation {
 	CHONJU = 'CHONJU',
 	DAEJON = 'DAEJON',
 	JEJU = 'JEJU',
+}
+
+export enum ProductSeason {
+	SPRING = 'SPRING',
+	SUMMER = 'SUMMER',
+	AUTUMN = 'AUTUMN',
+	WINTER = 'WINTER',
 }

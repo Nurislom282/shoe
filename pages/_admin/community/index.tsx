@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import withAdminLayout from '../../../libs/components/layout/LayoutAdmin';
 import { Box, Stack, MenuItem } from '@mui/material';
 import { List, ListItem } from '@mui/material';
@@ -22,6 +23,7 @@ import { T } from '../../../libs/types/common';
 import { Button } from '@mui/material';
 
 const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
+	const router = useRouter();
 	const [anchorEl, setAnchorEl] = useState<any>([]);
 	const [communityInquiry, setCommunityInquiry] = useState<AllBoardArticlesInquiry>(initialInquiry);
 	const [articles, setArticles] = useState<BoardArticle[]>([]);
@@ -233,7 +235,7 @@ const AdminCommunity: NextPage = ({ initialInquiry, ...props }: any) => {
 									color="primary"
 									startIcon={<AddCircleRoundedIcon />}
 									sx={{ height: '56px', borderRadius: '8px', textTransform: 'none', fontWeight: 'bold' }}
-									onClick={() => console.log('Add Article Clicked')}
+									onClick={() => router.push('/_admin/community/add')}
 								>
 									Add Article
 								</Button>

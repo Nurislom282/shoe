@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import {
     Button,
     Menu,
@@ -36,6 +37,7 @@ interface CommunityArticleListProps {
 const CommunityCardGrid = (props: CommunityArticleListProps) => {
     const { articles, anchorEl, menuIconClickHandler, menuIconCloseHandler, updateArticleHandler, removeArticleHandler } =
         props;
+    const router = useRouter();
 
     if (articles.length === 0) {
         return (
@@ -219,7 +221,7 @@ const CommunityCardGrid = (props: CommunityArticleListProps) => {
                                     <MenuItem
                                         onClick={() => {
                                             menuIconCloseHandler();
-                                            console.log('Edit clicked for', article._id);
+                                            router.push(`/_admin/community/${article._id}`);
                                         }}
                                     >
                                         <Typography variant={'body2'}>Edit Article</Typography>

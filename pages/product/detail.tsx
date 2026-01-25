@@ -18,6 +18,9 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
 import { Product } from '../../libs/types/product/product';
 
 import { TextField } from '@mui/material';
@@ -169,9 +172,9 @@ const ProductDetail = () => {
 
 	return (
 		<Fade in={true} timeout={1000}>
-			<Container maxWidth="lg" sx={{ pt: 12, pb: 10 }}>
+			<Container maxWidth="lg" sx={{ pt: 16, pb: 10 }}>
 				{/* Breadcrumbs */}
-				<Box mb={4}>
+				<div style={{ marginBottom: '32px' }}>
 					<Breadcrumbs aria-label="breadcrumb" separator="›">
 						<Link href="/" passHref style={{ textDecoration: 'none' }}>
 							<MuiLink underline="hover" color="text.secondary" sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
@@ -187,7 +190,7 @@ const ProductDetail = () => {
 							{product.name}
 						</Typography>
 					</Breadcrumbs>
-				</Box>
+				</div>
 
 				<Grid container spacing={5}>
 					{/* LEFT: GALLERY SECTION */}
@@ -219,6 +222,7 @@ const ProductDetail = () => {
 								{/* Zoom Overlay */}
 								<div style={zoomStyle} />
 							</div>
+
 
 							{/* Thumbnails */}
 							<div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
@@ -370,8 +374,8 @@ const ProductDetail = () => {
 				</Grid>
 
 				{/* BOTTOM: TABS SECTION */}
-				<Box sx={{ mt: 14, mb: 4 }}>
-					<Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 4, display: 'flex', justifyContent: 'center' }}>
+				<div style={{ marginTop: '112px', marginBottom: '32px' }}>
+					<div style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)', marginBottom: '32px', display: 'flex', justifyContent: 'center' }}>
 						{/* Custom Styling for Tabs would go here or use MUI Tabs */}
 						<Stack direction="row" spacing={4}>
 							{['Description', 'Specification', 'Reviews'].map((label, idx) => (
@@ -391,10 +395,10 @@ const ProductDetail = () => {
 								</Typography>
 							))}
 						</Stack>
-					</Box>
+					</div>
 
 					{tabValue === 0 && (
-						<Box maxWidth="md" mx="auto">
+						<div style={{ maxWidth: '900px', margin: '0 auto' }}>
 							<Typography variant="h5" fontWeight="bold" gutterBottom>Elevate Your Style</Typography>
 							<Typography variant="body1" color="text.secondary" paragraph>
 								{product.description}
@@ -402,11 +406,11 @@ const ProductDetail = () => {
 							<Typography variant="body1" color="text.secondary">
 								Designed for the modern urban explorer, featuring breathable materials and superior cushioning.
 							</Typography>
-						</Box>
+						</div>
 					)}
 
 					{tabValue === 1 && (
-						<Box maxWidth="md" mx="auto">
+						<div style={{ maxWidth: '900px', margin: '0 auto' }}>
 							<Typography variant="h6" gutterBottom>Product Specifications</Typography>
 							<Stack spacing={2}>
 								<Stack direction="row" justifyContent="space-between" sx={{ borderBottom: '1px solid #eee', pb: 1 }}>
@@ -422,13 +426,13 @@ const ProductDetail = () => {
 									<Typography color="text.secondary">{product.specifications?.weight || '0.8kg'}</Typography>
 								</Stack>
 							</Stack>
-						</Box>
+						</div>
 					)}
 
 					{tabValue === 2 && (
-						<Box maxWidth="md" mx="auto">
+						<div style={{ maxWidth: '900px', margin: '0 auto' }}>
 							{/* Review Form */}
-							<Box sx={{ mb: 5, p: 4, bgcolor: '#ffffff', borderRadius: '16px', border: '1px solid #e0e0e0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+							<div style={{ marginBottom: '40px', padding: '32px', backgroundColor: '#ffffff', borderRadius: '16px', border: '1px solid #e0e0e0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
 								<Typography variant="h6" gutterBottom fontWeight="800" sx={{ mb: 2 }}>Write a Review</Typography>
 								<Stack spacing={3}>
 									<Stack direction="row" spacing={2} alignItems="center">
@@ -481,7 +485,7 @@ const ProductDetail = () => {
 										Submit Review
 									</Button>
 								</Stack>
-							</Box>
+							</div>
 
 							{/* Comments List */}
 							<Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
@@ -489,7 +493,7 @@ const ProductDetail = () => {
 							</Stack>
 							<Stack spacing={3}>
 								{commentsData?.getComments?.list?.map((comment: any) => (
-									<Box key={comment._id} sx={{ p: 3, bgcolor: '#f9f9f9', borderRadius: '16px', transition: 'all 0.2s', '&:hover': { bgcolor: '#f0f0f0' } }}>
+									<div key={comment._id} style={{ padding: '24px', backgroundColor: '#f9f9f9', borderRadius: '16px', marginBottom: '16px', transition: 'all 0.2s' }}>
 										<Stack direction="row" justifyContent="space-between" mb={1}>
 											<Stack direction="row" alignItems="center" spacing={1}>
 												<Typography fontWeight="bold">{comment.memberData?.memberNick || 'User'}</Typography>
@@ -500,18 +504,18 @@ const ProductDetail = () => {
 										{/* Rating not available in comment schema yet */}
 										<Rating value={5} readOnly size="small" sx={{ mb: 1 }} />
 										<Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{comment.commentContent}</Typography>
-									</Box>
+									</div>
 								))}
 								{(!commentsData?.getComments?.list || commentsData.getComments.list.length === 0) && (
 									<Typography color="text.secondary" textAlign="center">No reviews yet. Be the first to write one!</Typography>
 								)}
 							</Stack>
-						</Box>
+						</div>
 					)}
-				</Box>
+				</div>
 
 				{/* FEATURED PRODUCTS PLACEHOLDER */}
-				<Box sx={{ mt: 10 }}>
+				<div style={{ marginTop: '80px' }}>
 					<Typography variant="h4" fontWeight="bold" mb={4} textAlign="center">Featured Products</Typography>
 					<Grid container spacing={3}>
 						{featuredProducts.map((p) => {
@@ -556,9 +560,10 @@ const ProductDetail = () => {
 							);
 						})}
 					</Grid>
-				</Box>
+				</div>
 
 				{/* Lightbox Modal (Simple Implementation) */}
+				{/* Lightbox Modal (Improvement Implementation) */}
 				{openLightbox && (
 					<div
 						style={{
@@ -572,11 +577,66 @@ const ProductDetail = () => {
 						}}
 						onClick={() => setOpenLightbox(false)}
 					>
+						{/* Close Button */}
+						<IconButton
+							onClick={() => setOpenLightbox(false)}
+							sx={{
+								position: 'absolute',
+								top: 20,
+								right: 20,
+								color: 'white',
+								backgroundColor: 'rgba(255,255,255,0.1)',
+								'&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
+							}}
+						>
+							<CloseIcon fontSize="large" />
+						</IconButton>
+
+						{/* Previous Button */}
+						<IconButton
+							onClick={(e: React.MouseEvent) => {
+								e.stopPropagation();
+								const total = product.images?.length || 0;
+								setSelectedImage((prev) => (prev - 1 + total) % total);
+							}}
+							sx={{
+								position: 'absolute',
+								left: 20,
+								color: 'white',
+								backgroundColor: 'rgba(255,255,255,0.1)',
+								'&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' },
+								display: (product.images?.length || 0) > 1 ? 'flex' : 'none'
+							}}
+						>
+							<ArrowBackIosIcon fontSize="large" />
+						</IconButton>
+
+
 						<img
 							src={mainImageSrc}
 							alt="Fullscreen"
-							style={{ maxHeight: '90%', maxWidth: '90%', objectFit: 'contain' }}
+							style={{ maxHeight: '90%', maxWidth: '80%', objectFit: 'contain' }}
+							onClick={(e: React.MouseEvent) => e.stopPropagation()}
 						/>
+
+						{/* Next Button */}
+						<IconButton
+							onClick={(e: React.MouseEvent) => {
+								e.stopPropagation();
+								const total = product.images?.length || 0;
+								setSelectedImage((prev) => (prev + 1) % total);
+							}}
+							sx={{
+								position: 'absolute',
+								right: 20,
+								color: 'white',
+								backgroundColor: 'rgba(255,255,255,0.1)',
+								'&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' },
+								display: (product.images?.length || 0) > 1 ? 'flex' : 'none'
+							}}
+						>
+							<ArrowForwardIosIcon fontSize="large" />
+						</IconButton>
 					</div>
 				)}
 

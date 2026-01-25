@@ -64,7 +64,7 @@ class LoggingWebSocket {
 function createIsomorphicLink() {
 	const graphqlUrl = process.env.NEXT_PUBLIC_API_GRAPHQL_URL ||
 		process.env.REACT_APP_API_GRAPHQL_URL ||
-		'http://localhost:3007/graphql';
+		'http://localhost:4004/graphql';
 
 	if (!graphqlUrl || graphqlUrl === 'undefined') {
 		console.error('GraphQL URL is not configured. Please set NEXT_PUBLIC_API_GRAPHQL_URL or REACT_APP_API_GRAPHQL_URL');
@@ -135,12 +135,12 @@ function createIsomorphicLink() {
 	if (typeof window !== 'undefined') {
 		const wsUrl = process.env.NEXT_PUBLIC_API_WS ||
 			process.env.REACT_APP_API_WS ||
-			'ws://127.0.0.1:3007';
+			'ws://127.0.0.1:4004';
 
 		const wsLink = new WebSocketLink({
 			uri: wsUrl,
 			options: {
-				reconnect: false,
+				reconnect: true,
 				timeout: 30000,
 				connectionParams: () => {
 					return { headers: getHeaders() };
@@ -197,6 +197,12 @@ function createIsomorphicLink() {
 					sweetErrorAlert(`Cannot connect to server at ${graphqlUrl}.\n\nPossible causes:\n1. Backend server is not running\n2. Wrong URL/port\n3. Firewall blocking the connection\n\nPlease check if your backend is running on port 3007.`);
 					return;
 				}
+
+				if (errorMessage.includes('Socket') || errorMessage.includes('socket')) {
+					console.warn('Socket error suppressed:', errorMessage);
+					return;
+				}
+
 
 				if (statusCode === 401) {
 					// Handle unauthorized error - don't show alert, let the component handle it

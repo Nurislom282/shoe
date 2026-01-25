@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import {
     Button,
     Menu,
@@ -38,6 +39,7 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
         updateProductHandler,
         removeProductHandler,
     } = props;
+    const router = useRouter();
 
     if (products.length === 0) {
         return (
@@ -186,8 +188,7 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                                     <MenuItem
                                         onClick={() => {
                                             menuIconCloseHandler();
-                                            // Mock edit redirect
-                                            console.log('Edit clicked for', product._id);
+                                            router.push(`/_admin/products/${product._id}`);
                                         }}
                                     >
                                         <Typography variant={'body2'}>Edit Product</Typography>

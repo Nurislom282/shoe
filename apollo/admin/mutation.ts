@@ -17,7 +17,7 @@ export const UPDATE_MEMBER_BY_ADMIN = gql`
 			memberImage
 			memberAddress
 			memberDesc
-			memberProducts  # Fixed: was memberProperties
+			memberProducts
 			memberRank
 			memberArticles
 			memberPoints
@@ -29,6 +29,35 @@ export const UPDATE_MEMBER_BY_ADMIN = gql`
 			createdAt
 			updatedAt
 			accessToken
+		}
+	}
+`;
+
+export const BLOCK_MEMBER = gql`
+	mutation BlockMember($memberId: String!) {
+		blockMember(memberId: $memberId) {
+			_id
+			memberStatus
+			memberBlocks
+		}
+	}
+`;
+
+export const UNBLOCK_MEMBER = gql`
+	mutation UnblockMember($memberId: String!) {
+		unblockMember(memberId: $memberId) {
+			_id
+			memberStatus
+			memberBlocks
+		}
+	}
+`;
+
+export const BULK_UPDATE_MEMBER_STATUS = gql`
+	mutation BulkUpdateMemberStatus($input: BulkMemberStatusUpdate!) {
+		bulkUpdateMemberStatus(input: $input) {
+			message
+			affectedCount
 		}
 	}
 `;
@@ -73,10 +102,30 @@ export const UPDATE_PRODUCT_BY_ADMIN = gql`
 
 export const REMOVE_PRODUCT_BY_ADMIN = gql`
 	mutation RemoveProductByAdmin($productId: String!) {
-		removeProductByAdmin(productId: $productId) { # Fixed: argument name
+		removeProductByAdmin(productId: $productId) {
 			_id
 			name
 			status
+		}
+	}
+`;
+
+export const BULK_UPDATE_PRODUCT_STATUS = gql`
+	mutation BulkUpdateProductStatus($input: BulkProductStatusUpdate!) {
+		bulkUpdateProductStatus(input: $input) {
+			message
+			affectedCount
+		}
+	}
+`;
+
+export const RESET_PRODUCT_STATS = gql`
+	mutation ResetProductStats($productId: String!) {
+		resetProductStats(productId: $productId) {
+			_id
+			name
+			productViews
+			productLikes
 		}
 	}
 `;
@@ -105,7 +154,7 @@ export const UPDATE_BOARD_ARTICLE_BY_ADMIN = gql`
 
 export const REMOVE_BOARD_ARTICLE_BY_ADMIN = gql`
 	mutation RemoveBoardArticleByAdmin($articleId: String!) {
-		removeBoardArticleByAdmin(articleId: $articleId) { # Fixed: argument name
+		removeBoardArticleByAdmin(articleId: $articleId) {
 			_id
 			articleTitle
 			articleStatus
@@ -119,7 +168,7 @@ export const REMOVE_BOARD_ARTICLE_BY_ADMIN = gql`
 
 export const REMOVE_COMMENT_BY_ADMIN = gql`
 	mutation RemoveCommentByAdmin($commentId: String!) {
-		removeCommentByAdmin(CommentId: $commentId) { # Fixed: argument name is 'CommentId' (Capital C)
+		removeCommentByAdmin(CommentId: $commentId) {
 			_id
 			commentStatus
 			commentGroup

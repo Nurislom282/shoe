@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import withAdminLayout from '../../../libs/components/layout/LayoutAdmin';
 import { Box, List, ListItem, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -22,6 +23,7 @@ import { T } from '../../../libs/types/common';
 import { Button } from '@mui/material';
 
 const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
+	const router = useRouter();
 	const [anchorEl, setAnchorEl] = useState<[] | HTMLElement[]>([]);
 	const [productsInquiry, setProductsInquiry] = useState<AllProductsInquiry>(initialInquiry);
 	const [products, setProducts] = useState<Product[]>([]);
@@ -248,7 +250,7 @@ const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 									variant="contained"
 									color="primary"
 									sx={{ height: '56px', borderRadius: '8px', textTransform: 'none', fontWeight: 'bold' }}
-									onClick={() => console.log('Add Property Clicked')}
+									onClick={() => router.push('/_admin/products/add')}
 								>
 									<AddRoundedIcon sx={{ mr: '8px' }} />
 									ADD PRODUCT

@@ -45,11 +45,11 @@ export const NoticeCardGrid = (props: NoticeCardGridProps) => {
 
     if (!notices || notices.length === 0) {
         return (
-            <Box p={4} textAlign="center">
+            <div style={{ padding: '32px', textAlign: 'center' }}>
                 <Typography variant="body1" color="textSecondary">
                     No notices found.
                 </Typography>
-            </Box>
+            </div>
         );
     }
 
@@ -72,21 +72,23 @@ export const NoticeCardGrid = (props: NoticeCardGridProps) => {
                         }}
                     >
                         <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                            <Box
-                                sx={{
+                            <div
+                                style={{
                                     display: 'inline-block',
-                                    bgcolor: '#f3e5f5',
+                                    backgroundColor: '#f3e5f5',
                                     color: '#7b1fa2',
-                                    px: 1,
-                                    py: 0.5,
+                                    paddingLeft: '8px',
+                                    paddingRight: '8px',
+                                    paddingTop: '4px',
+                                    paddingBottom: '4px',
                                     borderRadius: '8px',
                                     fontSize: '0.75rem',
                                     fontWeight: 'bold',
-                                    mb: 2,
+                                    marginBottom: '16px',
                                 }}
                             >
                                 {notice.noticeCategory || 'Notice'}
-                            </Box>
+                            </div>
                             <Typography
                                 variant="h6"
                                 component="div"
@@ -124,19 +126,21 @@ export const NoticeCardGrid = (props: NoticeCardGridProps) => {
                                 py: 1.5,
                             }}
                         >
-                            <Box
-                                sx={{
-                                    bgcolor: notice.noticeStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
+                            <div
+                                style={{
+                                    backgroundColor: notice.noticeStatus === 'ACTIVE' ? '#4caf50' : '#f44336',
                                     color: 'white',
-                                    px: 1,
-                                    py: 0.2,
+                                    paddingLeft: '8px',
+                                    paddingRight: '8px',
+                                    paddingTop: '1.6px',
+                                    paddingBottom: '1.6px',
                                     borderRadius: '10px',
                                     fontSize: '0.7rem',
                                     fontWeight: 'bold',
                                 }}
                             >
                                 {notice.noticeStatus || 'ACTIVE'}
-                            </Box>
+                            </div>
                             <IconButton
                                 size="small"
                                 onClick={(e: any) => menuIconClickHandler(e, notice._id)}
@@ -175,7 +179,7 @@ export const NoticeCardGrid = (props: NoticeCardGridProps) => {
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
-                            <Box sx={{ p: 1 }}>
+                            <div style={{ padding: '8px' }}>
                                 <MenuItem onClick={() => console.log('Edit Notice', notice._id)}>
                                     <Stack direction="row" spacing={1} alignItems="center">
                                         <EditIcon fontSize="small" />
@@ -188,7 +192,7 @@ export const NoticeCardGrid = (props: NoticeCardGridProps) => {
                                         <Typography variant="body2">Delete</Typography>
                                     </Stack>
                                 </MenuItem>
-                            </Box>
+                            </div>
                         </Menu>
                     </Card>
                 </Grid>

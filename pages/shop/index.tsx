@@ -83,16 +83,34 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 
 					switch (categoryStr) {
 						case 'Sneakers':
-							typeList = [ProductType.SNEAKER];
+							typeList = [ProductType.SNEAKERS];
 							break;
 						case 'Boots':
-							typeList = [ProductType.BOOT];
+							typeList = [ProductType.BOOTS];
 							break;
 						case 'Sandals':
-							typeList = [ProductType.SANDAL];
+							typeList = [ProductType.SANDALS];
 							break;
 						case 'Shoes':
-							typeList = [ProductType.SHOE];
+							typeList = [ProductType.SHOES];
+							break;
+						case 'Oxford':
+							typeList = [ProductType.OXFORD];
+							break;
+						case 'Formal':
+							typeList = [ProductType.FORMAL];
+							break;
+						case 'Turfs':
+							typeList = [ProductType.TURF];
+							break;
+						case 'High Neck':
+							typeList = [ProductType.HIGH_NECK];
+							break;
+						case 'Sports Shoe':
+							typeList = [ProductType.SPORTS_SHOE];
+							break;
+						case 'Other':
+							typeList = [ProductType.OTHER];
 							break;
 						default:
 							searchText = categoryStr;
@@ -217,6 +235,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		'Turfs',
 		'High Neck',
 		'Sports Shoe',
+		'Other',
 	];
 	const seasonNames = ['Spring', 'Summer', 'Autumn', 'Winter'];
 

@@ -143,13 +143,11 @@ export const CREATE_PRODUCT = gql`
 	mutation CreateProduct($input: ProductInput!) {
 		createProduct(input: $input) {
 			_id
-			category
-			status
 			name
+			season
 			brand
 			price
-			discountPrice
-			currency
+			category
 			stock {
 				total
 				sizes {
@@ -157,16 +155,11 @@ export const CREATE_PRODUCT = gql`
 					count
 				}
 			}
-			images
-			description
-			season
-			productViews
-			productLikes
-			productRank
-			memberId
-			soldAt
+			images {
+				url
+			}
+			status
 			createdAt
-			updatedAt
 		}
 	}
 `;

@@ -9,9 +9,9 @@ export interface ProductInput {
 	discountPrice?: number;
 	currency?: string;
 	brand?: string;
-	gender?: string[];
+	gender: string[];
 	season?: string;
-	images: string[]; // Keeping as string[] for upload results, or should it be ProductImage[]? User's AddProduct uses string[].
+	images: any[];
 	colors?: string[];
 	stock?: any; // Simplify for now or define strictly
 	description?: string;

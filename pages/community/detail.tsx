@@ -630,7 +630,7 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 								<Stack className="sidebar-section">
 									<Typography className="sidebar-title">Popular Tags</Typography>
 									<div className="tags-cloud">
-										<span className="tag-item">Shoes</span>
+
 										<span className="tag-item">Fashion</span>
 										<span className="tag-item">Style</span>
 										<span className="tag-item">Comfort</span>

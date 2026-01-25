@@ -46,9 +46,9 @@ const Blogs = () => {
             <div className="container">
                 <div className="blog-grid">
                     {blogs.length === 0 ? (
-                        <Box className="empty-list" sx={{ textAlign: 'center', width: '100%', py: 4 }}>
+                        <div className="empty-list" style={{ textAlign: 'center', width: '100%', padding: '32px 0' }}>
                             <Typography>{t('No blogs found.')}</Typography>
-                        </Box>
+                        </div>
                     ) : (
                         blogs.map((blog) => (
                             <div className="blog-card" key={blog._id}>

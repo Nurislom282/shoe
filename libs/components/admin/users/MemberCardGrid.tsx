@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import {
     Button,
     Menu,
@@ -30,6 +31,7 @@ interface MemberPanelListType {
 
 export const MemberCardGrid = (props: MemberPanelListType) => {
     const { members, anchorEl, menuIconClickHandler, menuIconCloseHandler, updateMemberHandler } = props;
+    const router = useRouter();
 
     if (members.length === 0) {
         return (
@@ -169,8 +171,7 @@ export const MemberCardGrid = (props: MemberPanelListType) => {
                                     <MenuItem
                                         onClick={() => {
                                             menuIconCloseHandler();
-                                            // Redirect to member detail page (mock or actual)
-                                            window.location.href = `/member?memberId=${member._id}`;
+                                            router.push(`/_admin/users/${member._id}`);
                                         }}
                                     >
                                         <Typography variant={'body2'}>Edit Profile</Typography>
