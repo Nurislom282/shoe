@@ -64,7 +64,7 @@ class LoggingWebSocket {
 function createIsomorphicLink() {
 	const graphqlUrl = process.env.NEXT_PUBLIC_API_GRAPHQL_URL ||
 		process.env.REACT_APP_API_GRAPHQL_URL ||
-		'http://localhost:4004/graphql';
+		'http://168.231.127.193:4004/graphql';
 
 	if (!graphqlUrl || graphqlUrl === 'undefined') {
 		console.error('GraphQL URL is not configured. Please set NEXT_PUBLIC_API_GRAPHQL_URL or REACT_APP_API_GRAPHQL_URL');
@@ -135,7 +135,7 @@ function createIsomorphicLink() {
 	if (typeof window !== 'undefined') {
 		const wsUrl = process.env.NEXT_PUBLIC_API_WS ||
 			process.env.REACT_APP_API_WS ||
-			'ws://127.0.0.1:4004';
+			'ws://168.231.127.193:4004';
 
 		const wsLink = new WebSocketLink({
 			uri: wsUrl,
