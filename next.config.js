@@ -2,12 +2,24 @@
 const nextConfig = {
 	reactStrictMode: true,
 	env: {
-		REACT_APP_API_URL: process.env.REACT_APP_API_URL || 'http://localhost:4004',
-		REACT_APP_API_GRAPHQL_URL: process.env.REACT_APP_API_GRAPHQL_URL || 'http://localhost:4004/graphql',
+		REACT_APP_API_URL: process.env.REACT_APP_API_URL || '',
+		REACT_APP_API_GRAPHQL_URL: process.env.REACT_APP_API_GRAPHQL_URL || '/graphql',
 		REACT_APP_API_WS: process.env.REACT_APP_API_WS || 'ws://localhost:4004',
 	},
 	images: {
 		domains: ['cdn.prod.website-files.com', 'localhost'],
+	},
+	async rewrites() {
+		return [
+			{
+				source: '/graphql',
+				destination: 'http://localhost:4004/graphql',
+			},
+			{
+				source: '/uploads/:path*',
+				destination: 'http://localhost:4004/uploads/:path*',
+			},
+		];
 	},
 };
 

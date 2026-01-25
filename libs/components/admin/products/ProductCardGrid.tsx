@@ -58,7 +58,7 @@ export const ProductCardGrid = (props: ProductPanelListType) => {
                     ? product.images[0].url.startsWith('http') || product.images[0].url.startsWith('/')
                         ? product.images[0].url
                         : `${REACT_APP_API_URL}/${product.images[0].url}`
-                    : '/img/logo/logo.png';
+                    : '/img/logo/logoText.png';
 
                 return (
                     <Grid item xs={12} sm={6} md={3} lg={2} key={product._id}>
