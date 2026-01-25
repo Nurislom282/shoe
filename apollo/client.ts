@@ -36,7 +36,9 @@ const tokenRefreshLink = new TokenRefreshLink({
 class LoggingWebSocket {
 	private socket: WebSocket;
 	constructor(url: string) {
-		this.socket = new WebSocket(`${url}?token=${getJwtToken()}`);
+		const token = getJwtToken();
+		const finalUrl = token ? `${url}?token=${token}` : url;
+		this.socket = new WebSocket(finalUrl);
 		socketVar(this.socket);
 
 		this.socket.onopen = () => {
