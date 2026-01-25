@@ -60,18 +60,22 @@ class LoggingWebSocket {
 		socketVar(this.socket);
 
 		this.socket.onopen = (ev) => {
+			console.log('[WebSocket] Connected successfully to', finalUrl);
 			if ((this as any).onopen) (this as any).onopen(ev);
 		};
 
 		this.socket.onmessage = (ev) => {
+			// console.log('[WebSocket] Message received'); 
 			if ((this as any).onmessage) (this as any).onmessage(ev);
 		};
 
 		this.socket.onerror = (ev) => {
+			console.error('[WebSocket] Error observed:', ev);
 			if ((this as any).onerror) (this as any).onerror(ev);
 		};
 
 		this.socket.onclose = (ev) => {
+			console.log(`[WebSocket] Closed. Code: ${ev.code}, Reason: ${ev.reason}, WasClean: ${ev.wasClean}`);
 			if ((this as any).onclose) (this as any).onclose(ev);
 		};
 	}
@@ -156,10 +160,19 @@ function createIsomorphicLink() {
 	});
 
 	// Only create WebSocket link on client side
+	// Only create WebSocket link on client side
 	if (typeof window !== 'undefined') {
-		const wsUrl = process.env.NEXT_PUBLIC_API_WS ||
-			process.env.REACT_APP_API_WS ||
-			'ws://168.231.127.193:3010';
+		const currentProtocol = window.location.protocol;
+		const isSecure = currentProtocol === 'https:';
+		const wsProtocol = isSecure ? 'wss:' : 'ws:';
+
+		let wsUrl = process.env.NEXT_PUBLIC_API_WS || process.env.REACT_APP_API_WS;
+
+		if (!wsUrl) {
+			wsUrl = `${wsProtocol}//168.231.127.193:3010`;
+		}
+
+		console.log(`[Apollo] WebSocket configured using protocol: ${wsProtocol} | URL: ${wsUrl}`);
 
 		const wsLink = new WebSocketLink({
 			uri: wsUrl,
@@ -169,6 +182,13 @@ function createIsomorphicLink() {
 				connectionParams: () => {
 					return { headers: getHeaders() };
 				},
+				connectionCallback: (err) => {
+					if (err) {
+						console.error('[Apollo] WebSocket connection callback error:', err);
+					} else {
+						console.log('[Apollo] WebSocket connection callback success');
+					}
+				}
 			},
 			webSocketImpl: LoggingWebSocket,
 		});
