@@ -35,22 +35,44 @@ const tokenRefreshLink = new TokenRefreshLink({
 // Custom WebSocket client
 class LoggingWebSocket {
 	private socket: WebSocket;
+
 	constructor(url: string) {
 		const token = getJwtToken();
-		const finalUrl = token ? `${url}?token=${token}` : url;
+		if (!token) {
+			// Prevent connection if no token to avoid network errors
+			// Simulate a connecting state that eventually closes to trigger retry
+			this.socket = {
+				send: () => { },
+				close: () => { },
+				readyState: 0, // CONNECTING
+			} as any;
+
+			setTimeout(() => {
+				if ((this as any).onclose) {
+					(this as any).onclose({ code: 1000, reason: 'No token', wasClean: true });
+				}
+			}, 5000);
+			return;
+		}
+
+		const finalUrl = `${url}?token=${token}`;
 		this.socket = new WebSocket(finalUrl);
 		socketVar(this.socket);
 
-		this.socket.onopen = () => {
-			// WebSocket connection established
+		this.socket.onopen = (ev) => {
+			if ((this as any).onopen) (this as any).onopen(ev);
 		};
 
-		this.socket.onmessage = () => {
-			// WebSocket message received
+		this.socket.onmessage = (ev) => {
+			if ((this as any).onmessage) (this as any).onmessage(ev);
 		};
 
-		this.socket.onerror = () => {
-			// WebSocket error occurred
+		this.socket.onerror = (ev) => {
+			if ((this as any).onerror) (this as any).onerror(ev);
+		};
+
+		this.socket.onclose = (ev) => {
+			if ((this as any).onclose) (this as any).onclose(ev);
 		};
 	}
 
@@ -66,7 +88,7 @@ class LoggingWebSocket {
 function createIsomorphicLink() {
 	const graphqlUrl = process.env.NEXT_PUBLIC_API_GRAPHQL_URL ||
 		process.env.REACT_APP_API_GRAPHQL_URL ||
-		'http://168.231.127.193:4004/graphql';
+		'http://168.231.127.193:3010/graphql';
 
 	if (!graphqlUrl || graphqlUrl === 'undefined') {
 		console.error('GraphQL URL is not configured. Please set NEXT_PUBLIC_API_GRAPHQL_URL or REACT_APP_API_GRAPHQL_URL');
@@ -137,7 +159,7 @@ function createIsomorphicLink() {
 	if (typeof window !== 'undefined') {
 		const wsUrl = process.env.NEXT_PUBLIC_API_WS ||
 			process.env.REACT_APP_API_WS ||
-			'ws://168.231.127.193:4004';
+			'ws://168.231.127.193:3010';
 
 		const wsLink = new WebSocketLink({
 			uri: wsUrl,
