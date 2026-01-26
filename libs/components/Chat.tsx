@@ -127,12 +127,9 @@ const Chat = () => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		connectChat();
-	}, []);
-
-	useEffect(() => {
-		if (socket && activeTab === 'community') {
-			socket.onmessage = (msg) => {
+		const client = connectChat();
+		if (client && activeTab === 'community') {
+			client.onmessage = (msg) => {
 				const data = JSON.parse(msg.data);
 
 				switch (data.event) {
