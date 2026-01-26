@@ -15,7 +15,7 @@ import { Member } from '../types/member/member';
 import { Messages, REACT_APP_API_URL } from '../config';
 import { sweetErrorAlert, sweetTopSuccessAlert } from '../sweetAlert';
 import { CREATE_SUPPORT_INQUIRY } from '../../apollo/user/mutation';
-import { connectChat, sendMessage, socket } from './chat.socket';
+import { disconnectChat, sendMessage, subscribeToChat } from './chat.socket';
 
 interface MessagePayload {
 	event: string;
@@ -127,28 +127,32 @@ const Chat = () => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		const client = connectChat();
-		if (client && activeTab === 'community') {
-			client.onmessage = (msg) => {
-				const data = JSON.parse(msg.data);
+		const unsubscribe = subscribeToChat((data: any) => {
+			switch (data.event) {
+				case 'info':
+					const newInfo: InfoPayload = data;
+					setOnlineUsers(data.totalClients);
+					break;
+				case 'getMessages':
+					const list: MessagePayload[] = data.list;
+					setMessagesList(list);
+					break;
+				case 'message':
+					const newMessage: MessagePayload = { ...data, timestamp: new Date() };
+					setMessagesList((prev) => {
+						// Optional: Deduplicate if we did optimistic updates
+						// For now we trust the server echo order
+						return [...prev, newMessage];
+					});
+					break;
+			}
+		});
 
-				switch (data.event) {
-					case 'info':
-						const newInfo: InfoPayload = data;
-						setOnlineUsers(data.totalClients);
-						break;
-					case 'getMessages':
-						const list: MessagePayload[] = data.list;
-						setMessagesList(list);
-						break;
-					case 'message':
-						const newMessage: MessagePayload = { ...data, timestamp: new Date() };
-						setMessagesList((prev) => [...prev, newMessage]);
-						break;
-				}
-			};
-		}
-	}, [activeTab]);
+		return () => {
+			unsubscribe();
+			disconnectChat();
+		};
+	}, []);
 
 	// Initialize support bot with welcome message
 	useEffect(() => {
@@ -306,11 +310,6 @@ const Chat = () => {
 						{activeTab === 'community' ? (
 							<Box component="div" sx={{ display: 'flex', alignItems: 'center' }}>
 								{t('chat.tabs.community')}
-								{mounted && !socket && (
-									<Typography variant="caption" sx={{ color: '#ff4d4f', ml: 1, fontSize: '10px' }}>
-										{t('chat.disconnected')}
-									</Typography>
-								)}
 							</Box>
 						) : t('chat.tabs.support')}
 					</div>
@@ -355,7 +354,16 @@ const Chat = () => {
 											? `${REACT_APP_API_URL}/${memberData?.memberImage}`
 											: '/img/profile/defaultUser.svg';
 
-										return memberData?._id === user?._id ? (
+										// If memberData is null/undefined, it's a guest or system message.
+										// If user?._id exists, check against it. If user is null (guest), own messages might rely on local echo or session matching (difficult without ID).
+										// For now, if memberData is missing, we assume it's 'Guest'.
+										// To distinguish "My Guest Message" from "Other Guest Message" is hard without a session ID.
+										// But typically backend returns the sender info.
+
+										const isMe = user?._id && memberData?._id === user._id;
+										const senderName = memberData?.memberNick || 'Guest';
+
+										return isMe ? (
 											<Box
 												key={index}
 												component={'div'}
@@ -376,10 +384,10 @@ const Chat = () => {
 											</Box>
 										) : (
 											<Box key={index} flexDirection={'row'} style={{ display: 'flex' }} sx={{ m: '10px 0px' }} component={'div'}>
-												<Avatar alt={memberData?.memberNick || 'user'} src={memberImage} sx={{ width: 32, height: 32 }} />
+												<Avatar alt={senderName} src={memberImage} sx={{ width: 32, height: 32 }} />
 												<div style={{ display: 'flex', flexDirection: 'column', marginLeft: '8px' }}>
 													<Typography variant="caption" sx={{ fontSize: '10px', color: '#666', mb: 0.5 }}>
-														{memberData?.memberNick || 'Anonymous'}
+														{senderName}
 													</Typography>
 													<div className={'msg-left'}>{text}</div>
 													{timestamp && (
