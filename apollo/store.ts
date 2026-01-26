@@ -27,8 +27,7 @@ export const userVar = makeVar<CustomJwtPayload>({
 	memberFollowings: 0,
 });
 
-// @ts-ignore
-export const socketVar = makeVar<WebSocket>();
+
 
 export const cartVar = makeVar<number>(0);
 

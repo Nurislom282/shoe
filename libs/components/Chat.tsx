@@ -10,11 +10,12 @@ import { useRouter } from 'next/router';
 import ScrollableFeed from 'react-scrollable-feed';
 import { RippleBadge } from '../../scss/MaterialTheme/styled';
 import { useReactiveVar, useMutation } from '@apollo/client';
-import { socketVar, userVar } from '../../apollo/store';
+import { userVar } from '../../apollo/store';
 import { Member } from '../types/member/member';
 import { Messages, REACT_APP_API_URL } from '../config';
 import { sweetErrorAlert, sweetTopSuccessAlert } from '../sweetAlert';
 import { CREATE_SUPPORT_INQUIRY } from '../../apollo/user/mutation';
+import { connectChat, sendMessage, socket } from './chat.socket';
 
 interface MessagePayload {
 	event: string;
@@ -54,7 +55,7 @@ const Chat = () => {
 	const [isBotTyping, setIsBotTyping] = useState(false);
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
-	const socket = useReactiveVar(socketVar);
+	// const socket = useReactiveVar(socketVar);
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
@@ -126,6 +127,10 @@ const Chat = () => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
+		connectChat();
+	}, []);
+
+	useEffect(() => {
 		if (socket && activeTab === 'community') {
 			socket.onmessage = (msg) => {
 				const data = JSON.parse(msg.data);
@@ -146,7 +151,7 @@ const Chat = () => {
 				}
 			};
 		}
-	}, [socket, activeTab]);
+	}, [activeTab]);
 
 	// Initialize support bot with welcome message
 	useEffect(() => {
@@ -195,10 +200,8 @@ const Chat = () => {
 		}
 
 		if (activeTab === 'community') {
-			if (socket) {
-				socket.send(JSON.stringify({ event: 'message', data: messageInput }));
-				setMessageInput('');
-			}
+			sendMessage(JSON.stringify({ event: 'message', data: messageInput }));
+			setMessageInput('');
 		} else {
 			// Support bot chat
 			const userMessage: SupportBotMessage = {

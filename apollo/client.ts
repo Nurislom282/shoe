@@ -1,13 +1,10 @@
 import { useMemo } from 'react';
 import { ApolloClient, ApolloLink, InMemoryCache, split, from, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
 import { getJwtToken } from '../libs/auth';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { sweetErrorAlert } from '../libs/sweetAlert';
-import { socketVar } from './store';
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function getHeaders(): HeadersInit {
@@ -32,67 +29,12 @@ const tokenRefreshLink = new TokenRefreshLink({
 	handleError: () => { },
 } as any);
 
-// Custom WebSocket client
-class LoggingWebSocket {
-	private socket: WebSocket;
 
-	constructor(url: string) {
-		const token = getJwtToken();
-		if (!token) {
-			// Prevent connection if no token to avoid network errors
-			// Simulate a connecting state that eventually closes to trigger retry
-			this.socket = {
-				send: () => { },
-				close: () => { },
-				readyState: 0, // CONNECTING
-			} as any;
-
-			setTimeout(() => {
-				if ((this as any).onclose) {
-					(this as any).onclose({ code: 1000, reason: 'No token', wasClean: true });
-				}
-			}, 5000);
-			return;
-		}
-
-		const finalUrl = `${url}?token=${token}`;
-		this.socket = new WebSocket(finalUrl);
-		socketVar(this.socket);
-
-		this.socket.onopen = (ev) => {
-			console.log('[WebSocket] Connected successfully to', finalUrl);
-			if ((this as any).onopen) (this as any).onopen(ev);
-		};
-
-		this.socket.onmessage = (ev) => {
-			// console.log('[WebSocket] Message received'); 
-			if ((this as any).onmessage) (this as any).onmessage(ev);
-		};
-
-		this.socket.onerror = (ev) => {
-			console.error('[WebSocket] Error observed:', ev);
-			if ((this as any).onerror) (this as any).onerror(ev);
-		};
-
-		this.socket.onclose = (ev) => {
-			console.log(`[WebSocket] Closed. Code: ${ev.code}, Reason: ${ev.reason}, WasClean: ${ev.wasClean}`);
-			if ((this as any).onclose) (this as any).onclose(ev);
-		};
-	}
-
-	send(data: string | ArrayBuffer | SharedArrayBuffer | Blob | ArrayBufferView) {
-		this.socket.send(data);
-	}
-
-	close() {
-		this.socket.close();
-	}
-}
 
 function createIsomorphicLink() {
 	const graphqlUrl = process.env.NEXT_PUBLIC_API_GRAPHQL_URL ||
 		process.env.REACT_APP_API_GRAPHQL_URL ||
-		'http://168.231.127.193:3010/graphql';
+		'http://168.231.127.193:4004/graphql';
 
 	if (!graphqlUrl || graphqlUrl === 'undefined') {
 		console.error('GraphQL URL is not configured. Please set NEXT_PUBLIC_API_GRAPHQL_URL or REACT_APP_API_GRAPHQL_URL');
@@ -159,40 +101,9 @@ function createIsomorphicLink() {
 		fetch,
 	});
 
-	// Only create WebSocket link on client side
-	// Only create WebSocket link on client side
+
+
 	if (typeof window !== 'undefined') {
-		const currentProtocol = window.location.protocol;
-		const isSecure = currentProtocol === 'https:';
-		const wsProtocol = isSecure ? 'wss:' : 'ws:';
-
-		let wsUrl = process.env.NEXT_PUBLIC_API_WS || process.env.REACT_APP_API_WS;
-
-		if (!wsUrl) {
-			wsUrl = `${wsProtocol}//168.231.127.193:3010`;
-		}
-
-		console.log(`[Apollo] WebSocket configured using protocol: ${wsProtocol} | URL: ${wsUrl}`);
-
-		const wsLink = new WebSocketLink({
-			uri: wsUrl,
-			options: {
-				reconnect: true,
-				timeout: 30000,
-				connectionParams: () => {
-					return { headers: getHeaders() };
-				},
-				connectionCallback: (err) => {
-					if (err) {
-						console.error('[Apollo] WebSocket connection callback error:', err);
-					} else {
-						console.log('[Apollo] WebSocket connection callback success');
-					}
-				}
-			},
-			webSocketImpl: LoggingWebSocket,
-		});
-
 		const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
 			if (graphQLErrors) {
 				graphQLErrors.forEach(({ message, extensions, path }) => {
@@ -263,16 +174,7 @@ function createIsomorphicLink() {
 			}
 		});
 
-		const splitLink = split(
-			({ query }) => {
-				const definition = getMainDefinition(query);
-				return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
-			},
-			wsLink,
-			authLink.concat(httpLink),
-		);
-
-		return from([errorLink, tokenRefreshLink, splitLink]);
+		return from([errorLink, tokenRefreshLink, authLink.concat(httpLink)]);
 	}
 
 	// Server-side: return HTTP link only
