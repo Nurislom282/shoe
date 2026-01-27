@@ -1,0 +1,21 @@
+@import '../variables.scss';
+@import '../reset.scss';
+
+#mobile-wrap {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    ul,
+    li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+}

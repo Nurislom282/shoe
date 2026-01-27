@@ -17,7 +17,8 @@ export function connectChat() {
 
     const token = getJwtToken() || '';
 
-    let wsUrl = process.env.NEXT_PUBLIC_API_WS;
+    let wsUrl = process.env.NEXT_PUBLIC_API_WS || process.env.REACT_APP_API_WS;
+
     if (!wsUrl) {
         if (typeof window !== 'undefined') {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -27,6 +28,7 @@ export function connectChat() {
         }
     }
 
+    console.log('[CHAT] Connecting to:', wsUrl);
     socket = new WebSocket(`${wsUrl}?token=${token}`);
 
     socket.onopen = () => {

@@ -1,0 +1,399 @@
+@import '../variables.scss';
+
+#mobile-wrap {
+    .home-page {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    // Statistics Section
+    .statistics-section {
+        background: #fff;
+        padding: 40px 20px;
+        border-bottom: 1px solid #e5e7eb;
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+
+            .stat-item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 15px;
+                background: #f9fafb;
+                border-radius: 12px;
+
+                .stat-icon {
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #fff;
+                    border-radius: 50%;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+                    svg {
+                        font-size: 24px;
+                        color: #e63e00;
+                    }
+                }
+
+                .stat-content {
+                    flex: 1;
+
+                    h3 {
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: #1a1a1a;
+                        margin: 0 0 4px 0;
+                        text-transform: uppercase;
+                        font-family: $font;
+                    }
+
+                    p {
+                        font-size: 12px;
+                        color: #666;
+                        margin: 0;
+                        font-family: $font;
+                    }
+                }
+            }
+        }
+    }
+
+    // About Section
+    .about-section {
+        padding: 60px 20px;
+        background: #fff;
+
+        .about-content {
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .about-images {
+            width: 100%;
+            height: 300px;
+            
+            // Simplified animation/display for mobile
+            .shoe-item {
+                &.shoe-3 {
+                    width: 200px;
+                    height: 200px;
+                }
+            }
+            .shoe-orbit {
+                transform: translate(-50%, -50%) scale(0.6);
+            }
+        }
+
+        .about-text {
+            text-align: center;
+            width: 100%;
+
+            h2 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            p {
+                font-size: 14px;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+
+            .about-button {
+                padding: 12px 30px;
+                font-size: 14px;
+            }
+        }
+    }
+
+    // Latest Collection (Latest.tsx)
+    .collection-latest-section {
+        padding: 40px 20px;
+        background: #f8f9fa;
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+
+            .title {
+                font-size: 24px;
+                font-weight: 800;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+                color: #666;
+            }
+        }
+
+        .collection-content {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .category-sidebar {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 20px;
+
+            ul {
+                display: flex;
+                gap: 15px;
+                padding-bottom: 10px;
+
+                li {
+                    white-space: nowrap;
+                    padding: 8px 16px;
+                    background: #fff;
+                    border-radius: 20px;
+                    font-size: 13px;
+                    border: 1px solid #eee;
+
+                    &.active {
+                        background: #e63e00;
+                        color: #fff;
+                        border-color: #e63e00;
+                    }
+                }
+            }
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+
+            .collection-shoe-card {
+                background: #fff;
+                border-radius: 12px;
+                padding: 15px;
+                
+                .card-image {
+                    height: 250px;
+                    width: 100%;
+                    position: relative;
+                    margin-bottom: 15px;
+                    background: #f9f9f9;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        max-width: 80%;
+                        max-height: 80%;
+                        object-fit: contain;
+                    }
+                }
+
+                .card-info {
+                    .shoe-title {
+                        font-size: 16px;
+                        font-weight: 700;
+                    }
+                    .shoe-price {
+                        color: #e63e00;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+    }
+
+    // Offer Section
+    .offer-section {
+        padding: 40px 20px;
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+
+            .main-title {
+                font-size: 24px;
+                font-weight: 800;
+            }
+            .subtitle {
+                font-size: 14px;
+                color: #666;
+            }
+        }
+
+        .offer-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .offer-col {
+                width: 100%;
+                
+                &.stacked {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+            }
+
+            .offer-card {
+                position: relative;
+                border-radius: 12px;
+                overflow: hidden;
+                height: 200px;
+                
+                &.small {
+                    height: 180px;
+                }
+
+                img.bg-img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    padding: 20px;
+
+                    .content {
+                        color: #fff;
+                        h3 {
+                            font-size: 20px;
+                            font-weight: 700;
+                        }
+                        p {
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Our Collection
+    .our-collection-section {
+        padding: 40px 20px;
+        background: #fff;
+
+        .collection-header {
+            text-align: center;
+            margin: 0 0 30px 0;
+
+            h2 {
+                font-size: 24px;
+            }
+            p {
+                font-size: 14px;
+            }
+        }
+
+        .collection-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            
+            .collection-card {
+                min-height: auto;
+                padding: 20px;
+
+                .card-image img {
+                    max-height: 180px;
+                }
+            }
+        }
+    }
+
+    // Blogs Section
+    .blogs-section {
+        padding: 40px 20px;
+
+        .blogs-header {
+            text-align: center;
+            margin: 0 0 30px 0;
+            
+            h2 {
+                font-size: 24px;
+            }
+            p {
+                font-size: 14px;
+            }
+        }
+
+        .blog-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+
+            .blog-card {
+                .card-image {
+                    height: 200px;
+                }
+                .card-content {
+                    padding: 20px;
+                    h3 {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Banner Section
+    .banner-section {
+        padding: 40px 20px;
+
+        .banner-wrapper {
+            flex-direction: column;
+            padding: 30px 20px;
+            text-align: center;
+            background: linear-gradient(90deg, #e63e2d 0%, #eb5e4f 100%);
+
+            .banner-content {
+                margin-bottom: 30px;
+                max-width: 100%;
+
+                h2 {
+                    font-size: 28px;
+                    color: #fff;
+                }
+                .subtitle {
+                    color: rgba(255,255,255,0.8);
+                }
+
+                .input-box {
+                    flex-direction: row;
+                    padding: 5px 5px 5px 15px;
+                    
+                    input {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .banner-image img {
+                height: 200px;
+                transform: rotate(-15deg);
+                margin: 0;
+            }
+        }
+    }
+    
+    // Adds/Brands
+    .adds {
+        padding: 20px;
+        text-align: center;
+        background: #f1f1f1;
+        font-size: 14px;
+        color: #666;
+    }
+}

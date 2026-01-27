@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { useReactiveVar } from '@apollo/client';
 import { cartItemsVar, cartVar } from '../../apollo/store';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
@@ -12,6 +13,7 @@ const Checkout: NextPage = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('card');
+    const device = useDeviceDetect();
 
     const [form, setForm] = useState({
         firstName: '',
@@ -59,6 +61,81 @@ const Checkout: NextPage = () => {
             });
         }, 1500);
     };
+
+    if (device === 'mobile') {
+        if (cartItems.length === 0) {
+            return (
+                <div className="basket-page">
+                    <div className="basket-items">
+                        <div className="empty-cart">
+                            <p>Your cart is empty.</p>
+                            <button
+                                className="checkout-btn"
+                                style={{ background: '#1a1a1a', marginTop: '20px' }}
+                                onClick={() => router.push('/shop')}
+                            >
+                                Return to Shop
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="checkout-page">
+                <h2>Checkout</h2>
+                <div className="checkout-form">
+                    <div className="form-group">
+                        <label>Shipping Info</label>
+                        <input type="text" name="firstName" placeholder="First Name" value={form.firstName} onChange={handleChange} style={{ marginBottom: '10px' }} />
+                        <input type="text" name="lastName" placeholder="Last Name" value={form.lastName} onChange={handleChange} style={{ marginBottom: '10px' }} />
+                        <input type="text" name="address" placeholder="Address" value={form.address} onChange={handleChange} style={{ marginBottom: '10px' }} />
+                        <input type="text" name="city" placeholder="City" value={form.city} onChange={handleChange} />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Contact Info</label>
+                        <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} style={{ marginBottom: '10px' }} />
+                        <input type="tel" name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
+                    </div>
+
+                    <div className="payment-methods">
+                        <label style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', display: 'block' }}>Payment Method</label>
+                        <div
+                            className={`payment-option ${paymentMethod === 'card' ? 'selected' : ''}`}
+                            onClick={() => setPaymentMethod('card')}
+                        >
+                            <input type="radio" checked={paymentMethod === 'card'} readOnly />
+                            <label>Credit Card</label>
+                        </div>
+                        <div
+                            className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}
+                            onClick={() => setPaymentMethod('cod')}
+                        >
+                            <input type="radio" checked={paymentMethod === 'cod'} readOnly />
+                            <label>Cash on Delivery</label>
+                        </div>
+                    </div>
+
+                    <div className="summary-section" style={{ background: '#f9f9f9', padding: '15px', borderRadius: '8px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                            <span>Subtotal</span>
+                            <span>${calculateTotal().toFixed(2)}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: '16px', marginTop: '10px' }}>
+                            <span>Total</span>
+                            <span>${calculateTotal().toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <button className="place-order-btn" onClick={handlePlaceOrder} disabled={loading}>
+                        {loading ? 'Processing...' : 'Place Order'}
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     if (cartItems.length === 0) {
         return (

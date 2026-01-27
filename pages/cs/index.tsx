@@ -38,7 +38,39 @@ const CS: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>{t('contact.mobile_title')}</h1>;
+		return (
+			<div className="cs-page-mobile">
+				<h2>{t('contact.title')}</h2>
+
+				<div className="contact-cards">
+					<div className="card">
+						<div className="icon"><LocationOnIcon /></div>
+						<h3>{t('contact.address_title')}</h3>
+						<p>{t('contact.address_desc')}</p>
+					</div>
+					<div className="card">
+						<div className="icon"><EmailIcon /></div>
+						<h3>{t('contact.email_title')}</h3>
+						<p>{t('contact.email_desc')}</p>
+					</div>
+					<div className="card">
+						<div className="icon"><PhoneIcon /></div>
+						<h3>{t('contact.phone_title')}</h3>
+						<p>{t('contact.phone_desc')}</p>
+					</div>
+				</div>
+
+				<div className="contact-form">
+					<h3>{t('contact.form.title')}</h3>
+					<input type="text" placeholder={t('contact.form.name')} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+					<input type="email" placeholder={t('contact.form.email')} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+					<input type="text" placeholder={t('contact.form.phone')} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+					<input type="text" placeholder={t('contact.form.subject')} value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} />
+					<textarea placeholder={t('contact.form.message')} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+					<button>{t('contact.form.submit')}</button>
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<div id="cs-page">

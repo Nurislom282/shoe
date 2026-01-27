@@ -319,7 +319,93 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>COMMUNITY DETAIL PAGE MOBILE</div>;
+		return (
+			<div className="community-detail-page">
+				<div className="article-hero">
+					<img
+						src={
+							boardArticle?.articleImage
+								? (boardArticle.articleImage.startsWith('/') ? boardArticle.articleImage : `${REACT_APP_API_URL}/${boardArticle?.articleImage}`)
+								: '/img/community/articleImg.png'
+						}
+						alt="Article Hero"
+					/>
+					<div className="overlay">
+						<span className="category">{articleCategory || 'NEWS'}</span>
+						<h1>{boardArticle?.articleTitle}</h1>
+					</div>
+				</div>
+
+				<div className="article-meta">
+					<div className="author" onClick={() => goMemberPage(boardArticle?.memberData?._id)}>
+						<img src={getCommentMemberImage(boardArticle?.memberData?.memberImage)} alt="" />
+						<span>{boardArticle?.memberData?.memberNick}</span>
+					</div>
+					<span className="date">
+						<Moment format={'MMM DD, YYYY'}>{boardArticle?.createdAt}</Moment>
+					</span>
+				</div>
+
+				<div className="article-content">
+					<ToastViewerComponent markdown={boardArticle?.articleContent} className={'ytb_play'} />
+				</div>
+
+				<div className="article-actions">
+					<div
+						className={`action-btn ${boardArticle?.meLiked && boardArticle?.meLiked[0]?.myFavorite ? 'active' : ''}`}
+						onClick={() => likeBoardArticleHandler(user, boardArticle?._id)}
+					>
+						{boardArticle?.meLiked && boardArticle?.meLiked[0]?.myFavorite ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+						<span>{boardArticle?.articleLikes}</span>
+					</div>
+					<div className="action-btn">
+						<VisibilityIcon />
+						<span>{boardArticle?.articleViews}</span>
+					</div>
+				</div>
+
+				<div className="comments-section">
+					<h3>Comments ({total})</h3>
+					{comments?.map((commentData) => (
+						<div className="comment-item" key={commentData._id}>
+							<div className="comment-header">
+								<span className="user" onClick={() => goMemberPage(commentData?.memberData?._id)}>
+									{commentData?.memberData?.memberNick}
+								</span>
+								<span className="time">
+									<Moment fromNow>{commentData?.createdAt}</Moment>
+								</span>
+							</div>
+							<div className="comment-body">
+								{commentData.commentContent}
+							</div>
+							{commentData?.memberId === user?._id && (
+								<div style={{ textAlign: 'right', marginTop: '5px' }}>
+									<IconButton size="small" onClick={() => {
+										setUpdatedCommentId(commentData?._id);
+										updateButtonHandler(commentData?._id, CommentStatus.DELETE);
+									}}>
+										<DeleteForeverIcon fontSize="small" />
+									</IconButton>
+								</div>
+							)}
+						</div>
+					))}
+
+					<div className="comment-input-area">
+						<input
+							type="text"
+							placeholder="Add a comment..."
+							value={comment}
+							onChange={(e) => setComment(e.target.value)}
+						/>
+						<button onClick={createCommentHandler}>
+							<EditIcon fontSize="small" />
+						</button>
+					</div>
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<div id="community-detail-page">

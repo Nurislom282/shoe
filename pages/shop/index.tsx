@@ -1,7 +1,7 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { NextPage } from 'next';
-import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography, Slider, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography, Slider, Checkbox, FormControlLabel, SwipeableDrawer, IconButton } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 
@@ -12,6 +12,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import CloseIcon from '@mui/icons-material/Close';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { GET_PRODUCTS } from '../../apollo/user/query';
 import { useMutation, useQuery } from '@apollo/client';
@@ -253,7 +255,170 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 	];
 
 	if (device === 'mobile') {
-		return <h1>PROPERTIES MOBILE</h1>;
+		return (
+			<div className="shop-page">
+				{/* Mobile Hero */}
+				<section className="shop-hero" style={{
+					backgroundImage: `url('/img/banner/shoes.jpg')`,
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
+				}}>
+					<div className="hero-content">
+						<h1>SHOP</h1>
+						<div className="breadcrumb">
+							<Link href="/">Home</Link>
+							<span>/</span>
+							<span>Shop</span>
+						</div>
+					</div>
+				</section>
+
+				{/* Controls */}
+				<div className="mobile-controls">
+					<button className="filter-btn" onClick={() => setMobileMenuOpen(true)}>
+						<FilterListIcon />
+						Filter
+					</button>
+					<div className="result-count">
+						{total} Products
+					</div>
+				</div>
+
+				{/* Products Grid */}
+				<div className="products-section">
+					<div className="products-grid">
+						{products.length > 0 ? (
+							products.map((product) => (
+								<div
+									key={product._id}
+									className="product-card"
+									onClick={() => router.push(`/product/detail?id=${product._id}`)}
+								>
+									<div className="product-image-wrapper">
+										<img
+											src={(() => {
+												const url = product.images?.[0]?.url;
+												if (!url) return '/img/logo/logoText.svg';
+												if (url.startsWith('http')) return url;
+												if (url.startsWith('localhost')) return `http://${url}`;
+												return `${REACT_APP_API_URL}/${url}`;
+											})()}
+											alt={product.name}
+										/>
+										{/* Simple Logic for Sale Badge */}
+										{product.price < 100 && <span className="sale-badge">Sale</span>}
+									</div>
+									<div className="product-info">
+										<h3 className="product-name">{product.name}</h3>
+										<div className="product-category">{product.category}</div>
+										<p className="product-price">$ {product.price.toLocaleString()}</p>
+									</div>
+								</div>
+							))
+						) : (
+							<div className="no-products">No products found</div>
+						)}
+					</div>
+
+					<div className="pagination">
+						<Pagination
+							count={Math.ceil(total / filter.limit)}
+							page={filter.page}
+							shape="rounded"
+							color="primary"
+							size="small"
+							onChange={handlePaginationChange}
+						/>
+					</div>
+				</div>
+
+				{/* Filter Drawer */}
+				<SwipeableDrawer
+					anchor="right"
+					open={mobileMenuOpen}
+					onClose={() => setMobileMenuOpen(false)}
+					onOpen={() => setMobileMenuOpen(true)}
+					className="mobile-filter-drawer"
+				>
+					<div style={{ padding: '20px', width: '300px' }}>
+						<div className="filter-header">
+							<h3>Filters</h3>
+							<IconButton onClick={() => setMobileMenuOpen(false)}>
+								<CloseIcon />
+							</IconButton>
+						</div>
+
+						{/* Categories */}
+						<div className="filter-section">
+							<h4>Categories</h4>
+							<ul className="category-list">
+								{categories.map((category, index) => (
+									<li key={index}>
+										<div
+											className={router.query.category === category ? 'active' : ''}
+											onClick={() => {
+												router.push({
+													pathname: '/shop',
+													query: { ...router.query, page: 1, category: category },
+												}, undefined, { scroll: false });
+												setMobileMenuOpen(false);
+											}}
+										>
+											{category}
+										</div>
+									</li>
+								))}
+							</ul>
+						</div>
+
+						{/* Seasons */}
+						<div className="filter-section">
+							<h4>Seasons</h4>
+							<div className="checkbox-group" style={{ display: 'flex', flexDirection: 'column' }}>
+								{seasonNames.map((season) => (
+									<FormControlLabel
+										key={season}
+										control={
+											<Checkbox
+												checked={(seasons as any)[season]}
+												onChange={handleSeasonChange}
+												name={season}
+												size="small"
+												sx={{ color: '#ff4757', '&.Mui-checked': { color: '#ff4757' } }}
+											/>
+										}
+										label={season}
+									/>
+								))}
+							</div>
+						</div>
+
+						{/* Price */}
+						<div className="filter-section">
+							<h4>Price Range</h4>
+							<Slider
+								value={priceRange}
+								onChange={handlePriceChange}
+								onChangeCommitted={handlePriceChangeCommitted}
+								valueLabelDisplay="auto"
+								min={0}
+								max={2000}
+								sx={{ color: '#ff4757' }}
+							/>
+							<div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+								<span>${priceRange[0]}</span>
+								<span>${priceRange[1]}</span>
+							</div>
+						</div>
+
+						{/* Apply Button */}
+						<button className="apply-btn" onClick={() => setMobileMenuOpen(false)}>
+							Show Results
+						</button>
+					</div>
+				</SwipeableDrawer>
+			</div>
+		);
 	} else {
 		return (
 			<div className="shop-page">

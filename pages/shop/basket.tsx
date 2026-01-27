@@ -1,7 +1,9 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { cartItemsVar, cartVar } from '../../apollo/store';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { DeleteOutline, Add, Remove } from '@mui/icons-material';
 import Image from 'next/image';
@@ -9,7 +11,9 @@ import Link from 'next/link';
 import Swal from 'sweetalert2';
 
 const Basket: NextPage = () => {
+    const router = useRouter();
     const cartItems = useReactiveVar(cartItemsVar);
+    const device = useDeviceDetect();
 
     const updateQuantity = (id: string | number, change: number) => {
         const currentItems = [...cartItemsVar()];
@@ -56,6 +60,67 @@ const Basket: NextPage = () => {
     const calculateTotal = () => {
         return cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     };
+
+    if (device === 'mobile') {
+        return (
+            <div className="basket-page">
+                <div className="basket-items">
+                    <h2>Shopping Cart ({cartItems.length})</h2>
+                    {cartItems.length === 0 ? (
+                        <div className="empty-cart">
+                            <p>Your cart is empty.</p>
+                        </div>
+                    ) : (
+                        cartItems.map((item) => (
+                            <div key={item.id} className="cart-item">
+                                <div className="item-image">
+                                    <Image
+                                        src={item.image.startsWith('http')
+                                            ? item.image
+                                            : `${process.env.REACT_APP_API_URL}/${item.image}`
+                                        }
+                                        alt={item.name}
+                                        width={80}
+                                        height={80}
+                                    />
+                                </div>
+                                <div className="item-info">
+                                    <h3>{item.name}</h3>
+                                    <p className="item-price">${item.price.toFixed(2)}</p>
+                                    <div className="item-controls">
+                                        <div className="item-quantity">
+                                            <button onClick={() => updateQuantity(item.id, -1)}><Remove fontSize="small" /></button>
+                                            <span>{item.quantity}</span>
+                                            <button onClick={() => updateQuantity(item.id, 1)}><Add fontSize="small" /></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="item-remove">
+                                    <button onClick={() => removeItem(item.id)}>
+                                        <DeleteOutline color="action" />
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                <div className="basket-summary-fixed">
+                    <div className="total-info">
+                        <div className="label">Total</div>
+                        <div className="value">${calculateTotal().toFixed(2)}</div>
+                    </div>
+                    <button
+                        className="checkout-btn"
+                        disabled={cartItems.length === 0}
+                        onClick={() => router.push('/shop/checkout')}
+                    >
+                        Checkout
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="basket-page">

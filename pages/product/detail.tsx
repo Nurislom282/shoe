@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useQuery, useMutation } from '@apollo/client';
 import { Messages, REACT_APP_API_URL } from '../../libs/config';
@@ -32,6 +33,7 @@ import { Pagination, Navigation } from 'swiper';
 
 const ProductDetail = () => {
 	const router = useRouter();
+	const device = useDeviceDetect();
 	const { id } = router.query;
 	const [selectedImage, setSelectedImage] = useState<number>(0);
 
@@ -169,6 +171,84 @@ const ProductDetail = () => {
 			pointerEvents: 'none', // Allow clicks to pass through to lightbox
 		});
 	};
+
+	if (device === 'mobile') {
+		return (
+			<div className="product-detail-page">
+				{/* Mobile Gallery */}
+				<div className="product-gallery">
+					<div className="back-btn" onClick={() => router.back()}>
+						<ArrowBackIosIcon fontSize="small" sx={{ ml: 1, color: '#333' }} />
+					</div>
+					<Swiper
+						modules={[Pagination]}
+						pagination={{ clickable: true }}
+						className="swiper"
+					>
+						{product.images?.map((img, index) => (
+							<SwiperSlide key={index}>
+								<img
+									src={(() => {
+										const url = img.url;
+										if (url.startsWith('http')) return url;
+										if (url.startsWith('localhost')) return `http://${url}`;
+										return `${REACT_APP_API_URL}/${url}`;
+									})()}
+									alt={product.name}
+								/>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</div>
+
+				<div className="product-info">
+					<div className="category">{product.category || 'SNEAKERS'}</div>
+					<h1 className="title">{product.name}</h1>
+
+					<div className="rating-row">
+						<Rating value={product.rating || 5} readOnly size="small" />
+						<span className="count">({product.reviewsCount || 0} reviews)</span>
+					</div>
+
+					<div className="price-row">
+						<span className="current-price">$ {product.price?.toLocaleString()} USD</span>
+						{product.price && <span className="old-price">$ {(product.price * 1.2).toFixed(0)} USD</span>}
+					</div>
+
+					<div className="options-section">
+						<h4>Colors</h4>
+						<div className="colors-grid">
+							{product.colors?.map((color, index) => (
+								<div
+									key={index}
+									className={`color-option ${selectedImage === index ? 'active' : ''}`}
+									onClick={() => setSelectedImage(index)}
+								>
+									{color}
+								</div>
+							))}
+						</div>
+					</div>
+
+					<div className="description">
+						{product.description}
+					</div>
+				</div>
+
+				{/* Sticky Bottom Bar */}
+				<div className="sticky-bottom-bar">
+					<div className="quantity-selector">
+						<button onClick={() => setQuantity(Math.max(1, quantity - 1))}><RemoveIcon fontSize="small" /></button>
+						<span>{quantity}</span>
+						<button onClick={() => setQuantity(quantity + 1)}><AddIcon fontSize="small" /></button>
+					</div>
+					<button className="add-to-cart-btn" onClick={handleAddToCart}>
+						Add to Cart
+					</button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<Fade in={true} timeout={1000}>

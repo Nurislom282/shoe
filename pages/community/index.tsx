@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import EditIcon from '@mui/icons-material/Edit';
 import { Stack, Tab, Typography, Button, Pagination } from '@mui/material';
 import CommunityCard from '../../libs/components/common/CommunityCard';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
@@ -153,7 +154,87 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 	};
 
 	if (device === 'mobile') {
-		return <h1>COMMUNITY PAGE MOBILE</h1>;
+		return (
+			<div className="community-page">
+				<TabContext value={searchCommunity.search.articleCategory}>
+					<div className="category-tabs">
+						<TabList onChange={tabChangeHandler} aria-label="blog category tabs" variant="scrollable" scrollButtons={false}>
+							<Tab value={'FREE'} label={'Board'} />
+							<Tab value={'RECOMMEND'} label={'Recs'} />
+							<Tab value={'NEWS'} label={'News'} />
+							<Tab value={'HUMOR'} label={'Humor'} />
+						</TabList>
+					</div>
+
+					<div className="articles-list">
+						{totalCount ? (
+							boardArticles?.map((boardArticle: BoardArticle) => {
+								const imagePath = boardArticle?.articleImage
+									? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${boardArticle?.articleImage}`
+									: '/img/community/articleImg.png';
+
+								return (
+									<div
+										key={boardArticle?._id}
+										className="article-card"
+										onClick={() => {
+											router.push({
+												pathname: '/community/detail',
+												query: { id: boardArticle?._id, articleCategory: boardArticle?.articleCategory ?? 'FREE' }
+											});
+										}}
+									>
+										<div className="card-image">
+											<img src={imagePath} alt={boardArticle?.articleTitle} />
+											<span className="category-tag">{boardArticle?.articleCategory}</span>
+										</div>
+										<div className="card-content">
+											<h3>{boardArticle?.articleTitle}</h3>
+											<div className="meta">
+												<span className="date">{new Date(boardArticle?.createdAt).toLocaleDateString('en-US')}</span>
+												<span className="views">See More</span>
+											</div>
+										</div>
+									</div>
+								);
+							})
+						) : (
+							<div className="no-data">
+								<p>No Articles found!</p>
+							</div>
+						)}
+						{totalCount > 0 && (
+							<Stack spacing={2} alignItems="center" mt={2}>
+								<Pagination
+									count={Math.ceil(totalCount / searchCommunity.limit)}
+									page={searchCommunity.page}
+									shape="rounded"
+									color="primary"
+									size='small'
+									onChange={paginationHandler}
+								/>
+							</Stack>
+						)}
+					</div>
+				</TabContext>
+
+				<div
+					className="write-btn-fixed"
+					onClick={() => {
+						if (!user?._id) sweetMixinErrorAlert('You are not authorized!').then();
+						else
+							router.push({
+								pathname: '/mypage',
+								query: {
+									category: 'writeArticle',
+								},
+							});
+					}}
+				>
+					<EditIcon />
+				</div>
+			</div>
+		);
 	} else {
 		return (
 			<div id="community-list-page">
