@@ -1,6 +1,6 @@
-export const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4004';
-export const REACT_APP_API_GRAPHQL_URL = process.env.REACT_APP_API_GRAPHQL_URL || 'http://localhost:4004/graphql';
-export const REACT_APP_API_WS = process.env.REACT_APP_API_WS || 'ws://localhost:4004';
+export const REACT_APP_API_URL = process.env.REACT_APP_API_URL || '';
+export const REACT_APP_API_GRAPHQL_URL = process.env.REACT_APP_API_GRAPHQL_URL || '/graphql';
+export const REACT_APP_API_WS = process.env.REACT_APP_API_WS || '/ws';
 
 export const availableOptions = ['propertyBarter', 'propertyRent'];
 
