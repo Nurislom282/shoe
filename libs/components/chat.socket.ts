@@ -21,9 +21,9 @@ export function connectChat() {
     if (!wsUrl) {
         if (typeof window !== 'undefined') {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            wsUrl = `${protocol}//168.231.127.193:4004`;
+            wsUrl = `${protocol}//${window.location.host}/ws`;
         } else {
-            wsUrl = 'ws://168.231.127.193:4004';
+            wsUrl = 'ws://localhost:4004';
         }
     }
 

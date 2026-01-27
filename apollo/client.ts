@@ -34,7 +34,7 @@ const tokenRefreshLink = new TokenRefreshLink({
 function createIsomorphicLink() {
 	const graphqlUrl = process.env.NEXT_PUBLIC_API_GRAPHQL_URL ||
 		process.env.REACT_APP_API_GRAPHQL_URL ||
-		'http://168.231.127.193:4004/graphql';
+		'/graphql';
 
 	if (!graphqlUrl || graphqlUrl === 'undefined') {
 		console.error('GraphQL URL is not configured. Please set NEXT_PUBLIC_API_GRAPHQL_URL or REACT_APP_API_GRAPHQL_URL');
