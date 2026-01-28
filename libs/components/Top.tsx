@@ -213,7 +213,7 @@ const Top = () => {
 							<Link href={'/'}>
 								<div className={'logo-text'}>
 									<img
-										src="/img/logo/logoText.png"
+										src="/img/logo/shoe-logo.png"
 										alt="ShoeZ"
 										style={{ width: 'auto', height: '40px' }}
 									/>

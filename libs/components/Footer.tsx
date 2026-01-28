@@ -20,7 +20,7 @@ const Footer = () => {
 				<Stack className={'main'}>
 					<Stack className={'left'}>
 						<Box component={'div'} className={'footer-box'}>
-							<img src="/img/logo/logoWhite.svg" alt="" className={'logo'} />
+							<img src="/img/logo/shoe-logo.png" alt="" className={'logo'} />
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
 							<span>{t('total free customer care')}</span>
@@ -78,7 +78,7 @@ const Footer = () => {
 				<Stack className={'main'}>
 					<Stack className={'left'}>
 						<Box component={'div'} className={'footer-box'}>
-							<img src="/img/logo/logoText.png" alt="" className={'logo'} />
+							<img src="/img/logo/shoe-logo.png" alt="" className={'logo'} />
 						</Box>
 					</Stack>
 					<Stack className={'right'}>
