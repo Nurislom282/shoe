@@ -16,6 +16,7 @@ import '../scss/mobile/product-detail.scss';
 import '../scss/mobile/checkout.scss';
 import '../scss/mobile/community.scss';
 import '../scss/mobile/mypage.scss';
+import '../scss/mobile/about.scss';
 import '../scss/pc/globalLoader.scss';
 import '../scss/pc/homepage/homepage.scss';
 import '../scss/pc/homepage/collection.scss';

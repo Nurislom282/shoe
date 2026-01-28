@@ -1,0 +1,133 @@
+@import '../variables.scss';
+
+#mobile-wrap {
+    .about-page {
+        width: 100%;
+        background-color: #fff;
+        padding-bottom: 60px;
+
+        // Common Section Styles
+        .section {
+            padding: 40px 20px;
+
+            .container {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .tag {
+                color: #ff5e3a;
+                font-family: $font;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 15px;
+                display: block;
+            }
+
+            .title {
+                color: #181A20;
+                font-family: $font;
+                font-size: 28px;
+                font-weight: 700;
+                line-height: 1.2;
+                margin-bottom: 20px;
+            }
+
+            .description {
+                color: #555;
+                font-family: $font;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        }
+
+        // Banner Section
+        .banner {
+            height: 250px;
+            padding: 0;
+            margin-bottom: 0;
+
+            .banner-text {
+                padding: 15px 30px;
+                min-width: auto;
+                width: 90%;
+                border-radius: 15px 15px 0 0;
+
+                h1 {
+                    font-size: 24px;
+                }
+            }
+        }
+
+        // Mission Section
+        .mission-section {
+            padding-top: 40px;
+
+            .container {
+                .content-left {
+                    width: 100%;
+                    padding-right: 0;
+                    margin-bottom: 40px;
+                }
+
+                .content-right {
+                    width: 100%;
+                }
+            }
+        }
+
+        // Numbers Section
+        .numbers-section {
+            padding: 40px 20px;
+
+            .stats-grid {
+                flex-direction: column;
+                gap: 20px;
+
+                .stat-item {
+                    width: 100%;
+                }
+            }
+        }
+
+        // Partners Section
+        .partners-section {
+            .logos-grid {
+                flex-wrap: wrap;
+                gap: 10px;
+
+                .partner-box {
+                    height: 100px;
+                    flex: 1 1 45%; // 2 per row
+                }
+            }
+        }
+
+        // Team Section
+        .team-section {
+            .team-grid {
+                .team-card {
+                    margin-bottom: 30px;
+
+                    .image-wrapper {
+                        height: 300px;
+                    }
+                }
+            }
+        }
+
+        // FAQ Section
+        .faq-section {
+            .faq-list {
+                .faq-item {
+                    .question {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@ import Hero from '../libs/components/homepage/Hero';
 import OurCollectionBox from '../libs/components/homepage/ourcollectionbox';
 import Blogs from '../libs/components/homepage/blogs';
 import Banner from '../libs/components/homepage/banner';
-import CollectionLatest from '../libs/components/homepage/collectionletast';
+// import CollectionLatest from '../libs/components/homepage/collectionletast';
 import Adds from '../libs/components/homepage/adds';
 
 const Home: NextPage = () => {
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 				<About />
 				<Latest />
 				<Offer />
-				<CollectionLatest />
+				{/* <CollectionLatest /> */}
 				<OurCollectionBox />
 				<Blogs />
 				<Banner />

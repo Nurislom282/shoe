@@ -150,384 +150,383 @@ const About: NextPage = () => {
 		{ question: t('about_page.faqs.q5'), answer: t('about_page.faqs.a5') }
 	];
 
-	if (device === 'mobile') {
-		return <div>{t('about_page.mobile')}</div>;
-	} else {
-		return (
-			<Stack className={'about-page'}>
-				{/* banner About Page */}
-				<Stack className={"section banner"}>
-					<div className={'banner-image'}>
-						<img src="/img/banner/about.jpg" alt="" />
-					</div>
-					<Stack className={"container"}>
-						<div className={"banner-text"}>
-							<h1>{t('about_page.title')}</h1>
-							<Link href="/">{t('about_page.home')}</Link>
-							<p>{t('about_page.crumb')}</p>
-						</div>
-					</Stack>
-				</Stack>
+	// Removed mobile check to allow responsive design to handle layout
 
-				{/* Mission Section */}
-				<Stack className={'section mission-section'}>
-					<Stack className={'container'}>
-						<div className={'content-left'}>
-							<FadeInWhenVisible>
-								<span className={'tag'}>{t('about_page.tag_about')}</span>
-								<h2 className={'title'}>{t('about_page.mission_title')}</h2>
-								<p className={'description'}>
-									{t('about_page.mission_desc')}
-								</p>
-								{/* <div className={'signature'}>
+	return (
+		<Stack className={'about-page'}>
+			{/* banner About Page */}
+			<Stack className={"section banner"}>
+				<div className={'banner-image'}>
+					<img src="/img/banner/about.jpg" alt="" />
+				</div>
+				<Stack className={"container"}>
+					<div className={"banner-text"}>
+						<h1>{t('about_page.title')}</h1>
+						<Link href="/">{t('about_page.home')}</Link>
+						<p>{t('about_page.crumb')}</p>
+					</div>
+				</Stack>
+			</Stack>
+
+			{/* Mission Section */}
+			<Stack className={'section mission-section'}>
+				<Stack className={'container'}>
+					<div className={'content-left'}>
+						<FadeInWhenVisible>
+							<span className={'tag'}>{t('about_page.tag_about')}</span>
+							<h2 className={'title'}>{t('about_page.mission_title')}</h2>
+							<p className={'description'}>
+								{t('about_page.mission_desc')}
+							</p>
+							{/* <div className={'signature'}>
 									<img src="/img/icons/sort.svg" alt="Signature" style={{ width: 50, opacity: 0.5 }} />
 								</div> */}
-							</FadeInWhenVisible>
-						</div>
+						</FadeInWhenVisible>
+					</div>
 
-						{/* Two Image Grid */}
-						<div ref={containerRef} style={{
-							display: 'grid',
-							gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-							gap: '40px',
-							position: 'relative',
-							marginTop: '80px',
-							maxWidth: '1000px',
-							margin: '80px auto 0'
-						}}>
-							{/* Image 1 - Black Nike Shoe */}
-							<FadeInWhenVisible animation="animate__fadeInDown">
-								<div style={{
-									position: 'relative',
-									transform: image1Transform,
-									transition: 'transform 0.1s ease-out',
-									willChange: 'transform'
-								}}>
-									<div style={{
-										background: 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)',
-										borderRadius: '20px',
-										overflow: 'hidden',
-										aspectRatio: '4/5',
-										position: 'relative',
-										boxShadow: '0 20px 50px rgba(0,0,0,0.15)'
-									}}>
-										<img
-											src="/img/about/aim.png"
-											alt="Shoe Representation"
-											style={{
-												width: '100%',
-												height: '100%',
-												objectFit: 'cover'
-											}}
-										/>
-									</div>
-								</div>
-							</FadeInWhenVisible>
-
-							{/* Image 2 - Turquoise Shoe with Peach */}
-							<FadeInWhenVisible animation="animate__fadeInUp">
-								<div style={{
-									position: 'relative',
-									transform: image2Transform,
-									transition: 'transform 0.1s ease-out',
-									willChange: 'transform'
-								}}>
-									<div style={{
-										background: 'linear-gradient(135deg, #f5f0e8 0%, #e8dfd5 100%)',
-										borderRadius: '20px',
-										overflow: 'hidden',
-										aspectRatio: '4/5',
-										position: 'relative',
-										boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)'
-									}}>
-										<img
-											src="/img/about/about-1.jpg"
-											alt="Shoe Representation"
-											style={{
-												width: '100%',
-												height: '100%',
-												objectFit: 'cover'
-											}}
-										/>
-									</div>
-								</div>
-							</FadeInWhenVisible>
-						</div>
-					</Stack>
-				</Stack>
-
-				{/* Numbers Section */}
-				<div style={{
-					padding: '80px 20px',
-					background: '#fafafa',
-					fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-				}}>
-					<div ref={sectionRef} style={{
-						maxWidth: '1400px',
-						margin: '0 auto',
+					{/* Two Image Grid */}
+					<div ref={containerRef} style={{
 						display: 'grid',
 						gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
 						gap: '40px',
-						alignItems: 'center'
+						position: 'relative',
+						marginTop: '80px',
+						maxWidth: '1000px',
+						margin: '80px auto 0'
 					}}>
-						<div style={{
-							position: 'relative',
-							aspectRatio: '1',
-							borderRadius: '24px',
-							overflow: 'hidden',
-							background: 'linear-gradient(135deg, #d97742 0%, #e89965 50%, #f4c898 100%)',
-							boxShadow: '0 20px 60px rgba(217, 119, 66, 0.3)',
-							transform: isVisible ? 'scale(1)' : 'scale(0.9)',
-							opacity: isVisible ? 1 : 0,
-							transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
-						}}>
-							<img
-								src="/img/about/number.png"
-								alt="Our Numbers"
-								style={{
-									width: '100%',
-									height: '100%',
-									objectFit: 'cover'
-								}}
-							/>
-						</div>
-
-						{/* Right Side - Numbers */}
-						<div style={{
-							padding: '40px 20px'
-						}}>
-							<p style={{
-								color: '#d97742',
-								fontSize: '14px',
-								textTransform: 'uppercase',
-								letterSpacing: '2px',
-								marginBottom: '16px',
-								fontWeight: '700',
-								opacity: isVisible ? 1 : 0,
-								transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-								transition: 'all 0.6s ease 0.2s'
-							}}>
-								{t('about_page.tag_numbers')}
-							</p>
-
-							<h2 style={{
-								fontSize: 'clamp(32px, 5vw, 48px)',
-								fontWeight: '800',
-								color: '#1a1a1a',
-								marginBottom: '24px',
-								opacity: isVisible ? 1 : 0,
-								transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-								transition: 'all 0.6s ease 0.3s'
-							}}>
-								{t('about_page.numbers_title')}
-							</h2>
-
-							<p style={{
-								fontSize: '16px',
-								color: '#666',
-								marginBottom: '50px',
-								lineHeight: '1.6',
-								opacity: isVisible ? 1 : 0,
-								transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-								transition: 'all 0.6s ease 0.4s'
-							}}>
-								{t('about_page.numbers_desc')}
-							</p>
-
-							{/* Stats Grid */}
+						{/* Image 1 - Black Nike Shoe */}
+						<FadeInWhenVisible animation="animate__fadeInDown">
 							<div style={{
-								display: 'grid',
-								gridTemplateColumns: 'repeat(2, 1fr)',
-								gap: '40px'
+								position: 'relative',
+								transform: image1Transform,
+								transition: 'transform 0.1s ease-out',
+								willChange: 'transform'
 							}}>
-								{/* Stat 1 */}
 								<div style={{
-									opacity: isVisible ? 1 : 0,
-									transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-									transition: 'all 0.6s ease 0.5s'
+									background: 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)',
+									borderRadius: '20px',
+									overflow: 'hidden',
+									aspectRatio: '4/5',
+									position: 'relative',
+									boxShadow: '0 20px 50px rgba(0,0,0,0.15)'
 								}}>
-									<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-										<RollingNumber number={99.9} isVisible={isVisible} /><span style={{ color: '#d97742' }}>%</span>
-									</div>
-									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										{t('about_page.satisfaction')}
-									</h3>
-									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										{t('about_page.satisfaction_desc')}
-									</p>
+									<img
+										src="/img/about/aim.png"
+										alt="Shoe Representation"
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover'
+										}}
+									/>
 								</div>
+							</div>
+						</FadeInWhenVisible>
 
-								{/* Stat 2 */}
+						{/* Image 2 - Turquoise Shoe with Peach */}
+						<FadeInWhenVisible animation="animate__fadeInUp">
+							<div style={{
+								position: 'relative',
+								transform: image2Transform,
+								transition: 'transform 0.1s ease-out',
+								willChange: 'transform'
+							}}>
 								<div style={{
-									opacity: isVisible ? 1 : 0,
-									transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-									transition: 'all 0.6s ease 0.6s'
+									background: 'linear-gradient(135deg, #f5f0e8 0%, #e8dfd5 100%)',
+									borderRadius: '20px',
+									overflow: 'hidden',
+									aspectRatio: '4/5',
+									position: 'relative',
+									boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)'
 								}}>
-									<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-										<RollingNumber number={8.1} isVisible={isVisible} /><span style={{ color: '#d97742' }}>M</span>
-									</div>
-									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										{t('about_page.users')}
-									</h3>
-									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										{t('about_page.users_desc')}
-									</p>
+									<img
+										src="/img/about/about-1.jpg"
+										alt="Shoe Representation"
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover'
+										}}
+									/>
 								</div>
+							</div>
+						</FadeInWhenVisible>
+					</div>
+				</Stack>
+			</Stack>
 
-								{/* Stat 3 */}
-								<div style={{
-									opacity: isVisible ? 1 : 0,
-									transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-									transition: 'all 0.6s ease 0.7s'
-								}}>
-									<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-										<span style={{ color: '#d97742' }}>$</span><RollingNumber number={5.99} isVisible={isVisible} />
-									</div>
-									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										{t('about_page.capital')}
-									</h3>
-									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										{t('about_page.capital_desc')}
-									</p>
-								</div>
+			{/* Numbers Section */}
+			<div style={{
+				padding: '80px 20px',
+				background: '#fafafa',
+				fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+			}}>
+				<div ref={sectionRef} style={{
+					maxWidth: '1400px',
+					margin: '0 auto',
+					display: 'grid',
+					gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+					gap: '40px',
+					alignItems: 'center'
+				}}>
+					<div style={{
+						position: 'relative',
+						aspectRatio: '1',
+						borderRadius: '24px',
+						overflow: 'hidden',
+						background: 'linear-gradient(135deg, #d97742 0%, #e89965 50%, #f4c898 100%)',
+						boxShadow: '0 20px 60px rgba(217, 119, 66, 0.3)',
+						transform: isVisible ? 'scale(1)' : 'scale(0.9)',
+						opacity: isVisible ? 1 : 0,
+						transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
+					}}>
+						<img
+							src="/img/about/number.png"
+							alt="Our Numbers"
+							style={{
+								width: '100%',
+								height: '100%',
+								objectFit: 'cover'
+							}}
+						/>
+					</div>
 
-								{/* Stat 4 */}
-								<div style={{
-									opacity: isVisible ? 1 : 0,
-									transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-									transition: 'all 0.6s ease 0.8s'
-								}}>
-									<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-										<RollingNumber number={100} isVisible={isVisible} />
-									</div>
-									<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
-										{t('about_page.growth')}
-									</h3>
-									<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
-										{t('about_page.growth_desc')}
-									</p>
+					{/* Right Side - Numbers */}
+					<div style={{
+						padding: '40px 20px'
+					}}>
+						<p style={{
+							color: '#d97742',
+							fontSize: '14px',
+							textTransform: 'uppercase',
+							letterSpacing: '2px',
+							marginBottom: '16px',
+							fontWeight: '700',
+							opacity: isVisible ? 1 : 0,
+							transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+							transition: 'all 0.6s ease 0.2s'
+						}}>
+							{t('about_page.tag_numbers')}
+						</p>
+
+						<h2 style={{
+							fontSize: 'clamp(32px, 5vw, 48px)',
+							fontWeight: '800',
+							color: '#1a1a1a',
+							marginBottom: '24px',
+							opacity: isVisible ? 1 : 0,
+							transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+							transition: 'all 0.6s ease 0.3s'
+						}}>
+							{t('about_page.numbers_title')}
+						</h2>
+
+						<p style={{
+							fontSize: '16px',
+							color: '#666',
+							marginBottom: '50px',
+							lineHeight: '1.6',
+							opacity: isVisible ? 1 : 0,
+							transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+							transition: 'all 0.6s ease 0.4s'
+						}}>
+							{t('about_page.numbers_desc')}
+						</p>
+
+						{/* Stats Grid */}
+						<div style={{
+							display: 'grid',
+							gridTemplateColumns: 'repeat(2, 1fr)',
+							gap: '40px'
+						}}>
+							{/* Stat 1 */}
+							<div style={{
+								opacity: isVisible ? 1 : 0,
+								transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+								transition: 'all 0.6s ease 0.5s'
+							}}>
+								<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+									<RollingNumber number={99.9} isVisible={isVisible} /><span style={{ color: '#d97742' }}>%</span>
 								</div>
+								<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
+									{t('about_page.satisfaction')}
+								</h3>
+								<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
+									{t('about_page.satisfaction_desc')}
+								</p>
+							</div>
+
+							{/* Stat 2 */}
+							<div style={{
+								opacity: isVisible ? 1 : 0,
+								transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+								transition: 'all 0.6s ease 0.6s'
+							}}>
+								<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+									<RollingNumber number={8.1} isVisible={isVisible} /><span style={{ color: '#d97742' }}>M</span>
+								</div>
+								<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
+									{t('about_page.users')}
+								</h3>
+								<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
+									{t('about_page.users_desc')}
+								</p>
+							</div>
+
+							{/* Stat 3 */}
+							<div style={{
+								opacity: isVisible ? 1 : 0,
+								transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+								transition: 'all 0.6s ease 0.7s'
+							}}>
+								<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+									<span style={{ color: '#d97742' }}>$</span><RollingNumber number={5.99} isVisible={isVisible} />
+								</div>
+								<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
+									{t('about_page.capital')}
+								</h3>
+								<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
+									{t('about_page.capital_desc')}
+								</p>
+							</div>
+
+							{/* Stat 4 */}
+							<div style={{
+								opacity: isVisible ? 1 : 0,
+								transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+								transition: 'all 0.6s ease 0.8s'
+							}}>
+								<div style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: '800', color: '#1a1a1a', lineHeight: '1', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+									<RollingNumber number={100} isVisible={isVisible} />
+								</div>
+								<h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
+									{t('about_page.growth')}
+								</h3>
+								<p style={{ fontSize: '14px', color: '#666', lineHeight: '1.5' }}>
+									{t('about_page.growth_desc')}
+								</p>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 
-				{/* Partners Section */}
-				<Stack className={'section partners-section'}>
-					<Stack className={'container'}>
-						<FadeInWhenVisible>
-							<h3 className={'section-title'}>{t('about_page.partners_title')}</h3>
-						</FadeInWhenVisible>
-						<div className={'logos-grid'}>
-							{[
-								"/img/icons/brands/amazon.svg",
-								"/img/icons/brands/amd.svg",
-								"/img/icons/brands/cisco.svg",
-								"/img/icons/brands/dropcam.svg",
-								"/img/icons/brands/logitech.svg",
-								"/img/icons/brands/spotify.svg"
-							].map((src, i) => (
-								<div key={i} className="partner-box">
-									<FadeInWhenVisible delay={i * 100}>
-										<img src={src} alt={`Partner ${i}`} />
-									</FadeInWhenVisible>
-								</div>
-							))}
-						</div>
-					</Stack>
-				</Stack>
-
-				{/* Team Section */}
-				<Stack className={'section team-section'}>
-					<Stack className={'container'}>
-						<FadeInWhenVisible>
-							<div className={'header'}>
-								<span className={'tag'}>{t('about_page.tag_team')}</span>
-								<h2 className={'title'}>{t('about_page.team_title')}</h2>
-								<p className={'description'}>{t('about_page.team_desc')}</p>
+			{/* Partners Section */}
+			<Stack className={'section partners-section'}>
+				<Stack className={'container'}>
+					<FadeInWhenVisible>
+						<h3 className={'section-title'}>{t('about_page.partners_title')}</h3>
+					</FadeInWhenVisible>
+					<div className={'logos-grid'}>
+						{[
+							"/img/icons/brands/amazon.svg",
+							"/img/icons/brands/amd.svg",
+							"/img/icons/brands/cisco.svg",
+							"/img/icons/brands/dropcam.svg",
+							"/img/icons/brands/logitech.svg",
+							"/img/icons/brands/spotify.svg"
+						].map((src, i) => (
+							<div key={i} className="partner-box">
+								<FadeInWhenVisible delay={i * 100}>
+									<img src={src} alt={`Partner ${i}`} />
+								</FadeInWhenVisible>
 							</div>
-						</FadeInWhenVisible>
-					</Stack>
-					<Stack className={'container'}>
-						<div className={'team-grid'}>
-							<Swiper
-								className={'team-swiper'}
-								modules={[Autoplay, Pagination, Navigation]}
-								spaceBetween={30}
-								slidesPerView={3}
-								loop={true}
-								autoplay={{ delay: 3000, disableOnInteraction: false }}
-								pagination={{ clickable: true }}
-								breakpoints={{
-									320: { slidesPerView: 1, spaceBetween: 20 },
-									768: { slidesPerView: 2, spaceBetween: 30 },
-									1024: { slidesPerView: 3, spaceBetween: 30 },
-								}}
-							>
-								{data?.getAgents?.list?.map((member: any) => (
-									<SwiperSlide key={member._id}>
-										<FadeInWhenVisible delay={0}>
-											<div className={'team-card'}>
-												<div className={'image-wrapper'}>
-													<img
-														src={member.memberImage ? `${REACT_APP_API_URL}/${member.memberImage}` : "/img/profile/defaultUser.svg"}
-														alt={member.memberNick}
-													/>
-													<div className={'overlay'}>
-														<div className={'overlay-content'}>
-															<span className={'badge'}>{member.memberType}</span>
-															<p className={'quote'}>&quot;{member.memberDesc || "No description provided."}&quot;</p>
-														</div>
+						))}
+					</div>
+				</Stack>
+			</Stack>
+
+			{/* Team Section */}
+			<Stack className={'section team-section'}>
+				<Stack className={'container'}>
+					<FadeInWhenVisible>
+						<div className={'header'}>
+							<span className={'tag'}>{t('about_page.tag_team')}</span>
+							<h2 className={'title'}>{t('about_page.team_title')}</h2>
+							<p className={'description'}>{t('about_page.team_desc')}</p>
+						</div>
+					</FadeInWhenVisible>
+				</Stack>
+				<Stack className={'container'}>
+					<div className={'team-grid'}>
+						<Swiper
+							className={'team-swiper'}
+							modules={[Autoplay, Pagination, Navigation]}
+							spaceBetween={30}
+							slidesPerView={3}
+							loop={true}
+							autoplay={{ delay: 3000, disableOnInteraction: false }}
+							pagination={{ clickable: true }}
+							breakpoints={{
+								320: { slidesPerView: 1, spaceBetween: 20 },
+								768: { slidesPerView: 2, spaceBetween: 30 },
+								1024: { slidesPerView: 3, spaceBetween: 30 },
+							}}
+						>
+							{data?.getAgents?.list?.map((member: any) => (
+								<SwiperSlide key={member._id}>
+									<FadeInWhenVisible delay={0}>
+										<div className={'team-card'}>
+											<div className={'image-wrapper'}>
+												<img
+													src={member.memberImage ? `${REACT_APP_API_URL}/${member.memberImage}` : "/img/profile/defaultUser.svg"}
+													alt={member.memberNick}
+												/>
+												<div className={'overlay'}>
+													<div className={'overlay-content'}>
+														<span className={'badge'}>{member.memberType}</span>
+														<p className={'quote'}>&quot;{member.memberDesc || "No description provided."}&quot;</p>
 													</div>
 												</div>
-												<div className={'info'}>
-													<h4>{member.memberNick}</h4>
-													<span>{member.memberType}</span>
-												</div>
 											</div>
-										</FadeInWhenVisible>
-									</SwiperSlide>
-								))}
-							</Swiper>
-						</div>
-					</Stack>
-
-				</Stack>
-
-				{/* FAQ Section */}
-				<Stack className={'section faq-section'}>
-					<Stack className={'container'}>
-						<FadeInWhenVisible>
-							<div className={'header'}>
-								<span className={'tag'}>{t('about_page.tag_faq')}</span>
-								<h2 className={'title'}>{t('about_page.faq_title')}</h2>
-							</div>
-						</FadeInWhenVisible>
-						<Stack className={'faq-list'}>
-							{faqs.map((faq, index) => (
-								<FadeInWhenVisible key={index} delay={index * 100}>
-									<Accordion className={'faq-item'} disableGutters elevation={0}>
-										<AccordionSummary expandIcon={<ExpandMoreIcon aria-label="Expand" />} aria-controls={`panel${index}-content`} id={`panel${index}-header`}>
-											<Typography className={'question'}>{faq.question}</Typography>
-										</AccordionSummary>
-										<AccordionDetails>
-											<Typography className={'answer'}>
-												{faq.answer}
-											</Typography>
-										</AccordionDetails>
-									</Accordion>
-								</FadeInWhenVisible>
+											<div className={'info'}>
+												<h4>{member.memberNick}</h4>
+												<span>{member.memberType}</span>
+											</div>
+										</div>
+									</FadeInWhenVisible>
+								</SwiperSlide>
 							))}
-						</Stack>
-					</Stack>
+						</Swiper>
+					</div>
 				</Stack>
 
-				{/* ADD Section */}
-				<Adds />
-			</Stack >
-		);
-	}
-};
+			</Stack>
+
+			{/* FAQ Section */}
+			<Stack className={'section faq-section'}>
+				<Stack className={'container'}>
+					<FadeInWhenVisible>
+						<div className={'header'}>
+							<span className={'tag'}>{t('about_page.tag_faq')}</span>
+							<h2 className={'title'}>{t('about_page.faq_title')}</h2>
+						</div>
+					</FadeInWhenVisible>
+					<Stack className={'faq-list'}>
+						{faqs.map((faq, index) => (
+							<FadeInWhenVisible key={index} delay={index * 100}>
+								<Accordion className={'faq-item'} disableGutters elevation={0}>
+									<AccordionSummary expandIcon={<ExpandMoreIcon aria-label="Expand" />} aria-controls={`panel${index}-content`} id={`panel${index}-header`}>
+										<Typography className={'question'}>{faq.question}</Typography>
+									</AccordionSummary>
+									<AccordionDetails>
+										<Typography className={'answer'}>
+											{faq.answer}
+										</Typography>
+									</AccordionDetails>
+								</Accordion>
+							</FadeInWhenVisible>
+						))}
+					</Stack>
+				</Stack>
+			</Stack>
+
+			{/* ADD Section */}
+			<Adds />
+		</Stack >
+	);
+}
+
 
 export const getStaticProps = async ({ locale }: { locale: string }) => {
 	const { serverSideTranslations } = await import('next-i18next/serverSideTranslations');
