@@ -17,7 +17,7 @@ import { LIKE_TARGET_BOARD_ARTICLE } from '../../apollo/user/mutation';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { GET_BOARD_ARTICLES } from '../../apollo/user/query';
 import { userVar } from '../../apollo/store';
-import { Messages } from '../../libs/config';
+import { Messages, REACT_APP_API_URL } from '../../libs/config';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -170,7 +170,7 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 						{totalCount ? (
 							boardArticles?.map((boardArticle: BoardArticle) => {
 								const imagePath = boardArticle?.articleImage
-									? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${boardArticle?.articleImage}`
+									? `${REACT_APP_API_URL}/${boardArticle?.articleImage}`
 									: '/img/community/articleImg.png';
 
 								return (
@@ -282,7 +282,7 @@ const Community: NextPage = ({ initialInput, ...props }: T) => {
 									{totalCount ? (
 										boardArticles?.map((boardArticle: BoardArticle, index) => {
 											const imagePath = boardArticle?.articleImage
-												? `${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/${boardArticle?.articleImage}`
+												? `${REACT_APP_API_URL}/${boardArticle?.articleImage}`
 												: '/img/community/articleImg.png';
 
 											return (

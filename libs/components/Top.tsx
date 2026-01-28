@@ -119,6 +119,28 @@ const Top = () => {
 	};
 
 	const searchInputRef = useRef<HTMLInputElement>(null);
+	const basketTimeout = useRef<any>(null);
+
+	// TIMEOUT HANDLERS
+	const handleBasketEnter = () => {
+		if (basketTimeout.current) clearTimeout(basketTimeout.current);
+		setHoverBasket(true);
+	};
+
+	const handleBasketLeave = () => {
+		basketTimeout.current = setTimeout(() => {
+			setHoverBasket(false);
+		}, 60000 * 2); // 2 minutes delay
+	};
+
+	const toggleBasket = () => {
+		if (hoverBasket) {
+			if (basketTimeout.current) clearTimeout(basketTimeout.current);
+			setHoverBasket(false);
+		} else {
+			handleBasketEnter();
+		}
+	};
 
 	useEffect(() => {
 		if (searchOpen) {
@@ -159,12 +181,12 @@ const Top = () => {
 					<Stack className={'container'}>
 						<Box component={'div'} className={'topbar-left'}>
 							<MailOutlineOutlinedIcon className={'icon'} />
-							<span>nxshoez@webflow.com</span>
+							<span>shoez@webflow.com</span>
 							<LocalPhoneOutlinedIcon className={'icon'} />
-							<span>+555 555 5555</span>
+							<span>+998 93 651 81 23</span>
 						</Box>
 						<Box component={'div'} className={'topbar-right'}>
-							<Link href={'/property'}>
+							<Link href={'/shop'}>
 								<div className={'on-sale'}>
 									<span>On Sale</span>
 									<WhatshotIcon className={'icon-fire'} />
@@ -272,10 +294,10 @@ const Top = () => {
 							<div
 								className="basket-hover-wrapper"
 								style={{ position: 'relative' }}
-								onMouseEnter={() => setHoverBasket(true)}
-								onMouseLeave={() => setHoverBasket(false)}
+								onMouseEnter={handleBasketEnter}
+								onMouseLeave={handleBasketLeave}
 							>
-								<Box component={'div'} className={'basket-icon'} style={{ cursor: 'pointer' }}>
+								<Box component={'div'} className={'basket-icon'} style={{ cursor: 'pointer' }} onClick={toggleBasket}>
 									<Badge color="error" badgeContent={cartCount} overlap="circular">
 										<ShoppingCartOutlinedIcon className={'icon'} />
 									</Badge>

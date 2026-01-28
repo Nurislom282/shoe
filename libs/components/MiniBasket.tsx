@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { DeleteOutline } from '@mui/icons-material';
 import Swal from 'sweetalert2';
+import { REACT_APP_API_URL } from '../../libs/config';
 
 interface MiniBasketProps {
     open: boolean;
@@ -42,7 +43,7 @@ const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
     if (!open) return null;
 
     return (
-        <div className={`mini-basket-menu ${open ? 'open' : ''}`} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+        <div className={`mini-basket-menu ${open ? 'open' : ''}`} onMouseEnter={() => setOpen(true)}>
             <div className="basket-header">
                 {t('My Cart')} ({cartTotal})
             </div>
@@ -59,7 +60,7 @@ const MiniBasket = ({ open, setOpen }: MiniBasketProps) => {
                                 <Image
                                     src={item.image.startsWith('http')
                                         ? item.image
-                                        : `${process.env.REACT_APP_API_URL}/${item.image}`
+                                        : `${REACT_APP_API_URL}/${item.image}`
                                     }
                                     alt={item.name}
                                     width={60}
